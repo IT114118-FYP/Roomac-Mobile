@@ -1,123 +1,75 @@
-import React, { Component, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	StyleSheet,
 	Image,
 	Text,
-	TouchableOpacity,
 	StatusBar,
 	Platform,
 	ScrollView,
 	FlatList,
 	Dimensions,
+	TouchableOpacity,
+	RefreshControl,
 } from "react-native";
 import ImageHeaderScrollView, {
 	TriggeringView,
 } from "react-native-image-header-scroll-view";
 import * as Animatable from "react-native-animatable";
-import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
-import colors from "../themes/colors";
-import presetStyles, { sizing } from "../themes/presetStyles";
-import TimeSlot from "../components/TimeSlot";
-import { axiosInstance } from "../api/config";
+import * as Location from "expo-location";
+import MapView, { Marker } from "react-native-maps";
+import {
+	MaterialIcons,
+	MaterialCommunityIcons,
+	FontAwesome5,
+} from "@expo/vector-icons";
 import moment from "moment";
 
-const MIN_HEIGHT = Platform.OS === "ios" ? 70 : 55;
+import colors from "../themes/colors";
+import presetStyles, { sizing } from "../themes/presetStyles";
+import Timeslot from "../components/Timeslot";
+import { axiosInstance } from "../api/config";
+import { getDistance } from "geolib";
+import routes from "../navigations/routes";
 const MAX_HEIGHT = 200;
 
 const { width } = Dimensions.get("window");
 
 const TIMESLOT_WIDTH = width * sizing(0.2);
 
-class ImageHeaderWrapper extends Component {
-	render() {
-		return (
-			<View style={styles.container}>
-				<ImageHeaderScrollView
-					maxHeight={MAX_HEIGHT}
-					minHeight={MIN_HEIGHT}
-					useNativeDriver
-					minOverlayOpacity={0.1}
-					maxOverlayOpacity={0.4}
-					renderHeader={() => (
-						<Image
-							source={{
-								uri: this.props.imageUrl,
-							}}
-							style={styles.image}
-						/>
-					)}
-					renderForeground={() => (
-						<View
-							style={{
-								height: MAX_HEIGHT,
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							<Text style={styles.headerTitle}>
-								{this.props.headerTitle}
-							</Text>
-						</View>
-					)}
-					renderFixedForeground={() => {
-						<View style={styles.navTitleView}>
-							<Text style={styles.navTitle}>
-								{this.props.headerTitle}
-							</Text>
-						</View>;
-					}}
-				>
-					<StatusBar barStyle="light-content" animated={true} />
-					<TriggeringView
-						style={{
-							backgroundColor: "red",
-						}}
-						// onHide={() =>
-						// 	this.navigationTitleView.current.fadeInUp(200)
-						// }
-						// onDisplay={() =>
-						// 	this.navigationTitleView.current.fadeOut(100)
-						// }
-					>
-						{/* <Text style={styles.title}>
-							{this.props.headerTitle}
-						</Text> */}
-					</TriggeringView>
-					{this.props.children}
-				</ImageHeaderScrollView>
-			</View>
-		);
-	}
-}
-
 function DetailedResourcesScreen({ route, navigation }) {
 	const { item } = route.params;
 	const [isLoading, setLoading] = useState(true);
 	const [timeslot, setTimeslot] = useState({});
+	const [distance, setDistance] = useState(null);
+	const [location, setLocation] = useState();
 
-	const closeTimeindicator = () => {
-		const diff = moment(item.closing_time, "HH:mm:ss").diff(
-			moment(),
-			"hours"
+	const getLocation = async () => {
+		const { status } = await Location.requestPermissionsAsync();
+		if (status !== "granted") return;
+		const { coords } = await Location.getLastKnownPositionAsync({});
+		const dist = getDistance(
+			{
+				latitude: Number(item.branch.lat),
+				longitude: Number(item.branch.lng),
+			},
+			{
+				latitude: coords.latitude,
+				longitude: coords.longitude,
+			}
 		);
-		if (diff > 0) {
-			return `${Math.abs(diff)} hours before closing`;
-		} else {
-			return "closed";
-		}
+		setDistance(Math.round((dist / 1000 + Number.EPSILON) * 100) / 100);
 	};
 
 	useEffect(() => {
+		getLocation();
 		fetchTimeslot();
-		console.log(moment(item.closing_time, "HH:mm:ss").diff(moment()));
 	}, []);
 
 	const fetchTimeslot = () => {
 		setLoading(true);
 		const startDate = moment().format("YYYY-MM-DD");
 		const endDate = moment().add(10, "days").format("YYYY-MM-DD");
-
 		axiosInstance
 			.get(
 				`/api/resources/${item.id}/bookings?start=${startDate}&end=${endDate}`
@@ -143,7 +95,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 						});
 					}
 				}
-				// console.log(events);
+				console.log(events);
 				setTimeslot(events);
 				setLoading(false);
 			})
@@ -153,11 +105,15 @@ function DetailedResourcesScreen({ route, navigation }) {
 	};
 
 	return (
-		<ScrollView>
-			{/* <ImageHeaderWrapper
-                imageUrl={item.image_url}
-                headerTitle={`${item.number} ${item.title_en}`}
-            > */}
+		<ScrollView
+			refreshControl={
+				<RefreshControl
+					refreshing={isLoading}
+					onRefresh={fetchTimeslot}
+					title="pull to refresh"
+				/>
+			}
+		>
 			<StatusBar barStyle="light-content" animated={true} />
 			<Image
 				source={{
@@ -183,7 +139,8 @@ function DetailedResourcesScreen({ route, navigation }) {
 							marginLeft: sizing(2),
 						}}
 					>
-						{item.branch.title_en} • 6.17 km away
+						{item.branch.title_en}
+						{distance !== null && ` • ${distance} km away`}
 					</Text>
 				</View>
 				<View style={[presetStyles.row, { marginTop: sizing(1.5) }]}>
@@ -200,7 +157,12 @@ function DetailedResourcesScreen({ route, navigation }) {
 					>
 						{moment(item.opening_time, "HH:mm:ss").format("H:mm")} -{" "}
 						{moment(item.closing_time, "HH:mm:ss").format("H:mm")} •{" "}
-						{closeTimeindicator()}
+						{moment().isBetween(
+							moment(item.opening_time, "HH:mm:ss"),
+							moment(item.closing_time, "HH:mm:ss")
+						)
+							? "opened"
+							: "closed"}
 					</Text>
 				</View>
 				<View style={[presetStyles.row, { marginTop: sizing(2) }]}>
@@ -232,6 +194,18 @@ function DetailedResourcesScreen({ route, navigation }) {
 					>
 						Availability
 					</Animatable.Text>
+					<Animatable.Text
+						animation="fadeIn"
+						style={[
+							styles.marginHorizontal,
+							{
+								marginTop: sizing(1),
+								color: colors.textSecondary,
+							},
+						]}
+					>
+						Press on the prefered timeslot to create your booking.
+					</Animatable.Text>
 					<FlatList
 						horizontal
 						snapToInterval={TIMESLOT_WIDTH + sizing(6)}
@@ -240,27 +214,159 @@ function DetailedResourcesScreen({ route, navigation }) {
 						pagingEnabled
 						data={timeslot}
 						keyExtractor={(item) => `${item.date}`}
-						renderItem={({ item }) => (
+						renderItem={({ item: flatlistItem, index }) => (
 							<Animatable.View
 								style={styles.wrapper}
 								animation={{
 									0: {
 										opacity: 0,
-										scale: 0.5,
 									},
 									1: {
 										opacity: 1,
-										scale: 1,
 									},
 								}}
+								delay={index * 150 + 100}
+								key={flatlistItem.id}
 							>
-								<TimeSlot data={item} />
+								<Timeslot
+									data={flatlistItem}
+									navigation={navigation}
+									onPress={(timeslot) =>
+										navigation.navigate(
+											routes.CREATE_BOOKING,
+											{
+												timeslot,
+												item,
+												date: flatlistItem.date,
+											}
+										)
+									}
+								/>
 							</Animatable.View>
 						)}
 					/>
 				</>
 			)}
-			{/* </ImageHeaderWrapper> */}
+			<TouchableOpacity
+				style={[
+					presetStyles.marginHorizontal,
+					presetStyles.row,
+					{
+						alignItems: "center",
+						marginTop: sizing(4),
+						borderWidth: 1,
+						borderRadius: sizing(2),
+						borderColor: colors.textSecondary,
+						padding: sizing(4),
+					},
+				]}
+			>
+				<FontAwesome5
+					name="building"
+					size={sizing(6)}
+					color={colors.textSecondary}
+					style={{
+						marginRight: sizing(4),
+					}}
+				/>
+				<View style={{ flex: 1 }}>
+					<Text
+						style={[
+							presetStyles.listHeader,
+							{
+								color: colors.textPrimary,
+							},
+						]}
+					>
+						Campus Info
+					</Text>
+					<Text
+						style={{
+							color: colors.textSecondary,
+						}}
+					>
+						Learn more about {item.branch.title_en} Campus
+					</Text>
+				</View>
+				<MaterialCommunityIcons
+					name="chevron-right"
+					size={sizing(6)}
+					color={colors.textSecondary}
+				/>
+			</TouchableOpacity>
+			<TouchableOpacity
+				onPress={() => {
+					console.log(location);
+				}}
+				style={[
+					presetStyles.marginHorizontal,
+					presetStyles.row,
+					{
+						alignItems: "center",
+						marginTop: sizing(4),
+						borderWidth: 1,
+						borderRadius: sizing(2),
+						borderColor: colors.textSecondary,
+						padding: sizing(4),
+					},
+				]}
+			>
+				<MaterialCommunityIcons
+					name="message-text"
+					size={sizing(6)}
+					color={colors.textSecondary}
+					style={{
+						marginRight: sizing(4),
+					}}
+				/>
+				<View style={{ flex: 1 }}>
+					<Text
+						style={[
+							presetStyles.listHeader,
+							{
+								color: colors.textPrimary,
+							},
+						]}
+					>
+						Contact Admin
+					</Text>
+					<Text
+						style={{
+							color: colors.textSecondary,
+						}}
+					>
+						Feel free to contact admin if help is needed
+					</Text>
+				</View>
+				<MaterialCommunityIcons
+					name="chevron-right"
+					size={sizing(6)}
+					color={colors.textSecondary}
+				/>
+			</TouchableOpacity>
+			{/* <View style={styles.mapContainer}>
+				<MapView
+					style={{
+						width: width - sizing(6),
+						height: width - sizing(6),
+					}}
+					initialRegion={{
+						latitude: Number(item.branch.lat),
+						longitude: Number(item.branch.lng),
+						latitudeDelta: 0.0922,
+						longitudeDelta: 0.0421,
+					}}
+				>
+					<Marker
+						coordinate={{
+							latitude: Number(item.branch.lat),
+							longitude: Number(item.branch.lng),
+						}}
+						title={item.branch.title_en}
+						description={item.branch.title_en}
+					/>
+				</MapView>
+			</View> */}
 		</ScrollView>
 	);
 }
@@ -272,6 +378,7 @@ const styles = StyleSheet.create({
 	detailContainer: {
 		marginHorizontal: sizing(6),
 		marginTop: sizing(4),
+		flexDirection: "row",
 	},
 	image: {
 		height: MAX_HEIGHT,
@@ -281,9 +388,14 @@ const styles = StyleSheet.create({
 		fontSize: 24,
 		fontWeight: "500",
 		// margin: 15,
+		flex: 1,
 	},
 	marginHorizontal: {
 		marginHorizontal: sizing(6),
+	},
+	mapContainer: {
+		alignItems: "center",
+		padding: sizing(6),
 	},
 });
 

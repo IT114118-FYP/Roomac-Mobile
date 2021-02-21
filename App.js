@@ -19,8 +19,9 @@ export default function App() {
 
 	const restoreToken = async () => {
 		const token = await authStorage.getToken();
-		if (!token) return;
-		fetchUser();
+		if (token) {
+			fetchUser();
+		} else return;
 	};
 
 	const fetchUser = () =>

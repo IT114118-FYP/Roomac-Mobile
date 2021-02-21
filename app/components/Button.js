@@ -1,29 +1,28 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
-import { useFormikContext } from "formik";
 import colors from "../themes/colors";
+import { sizing } from "../themes/presetStyles";
 
-function Button({ title, style }) {
-	const { handleSubmit } = useFormikContext();
+function Button({ title, onPress, style, titleStyle }) {
 	return (
-		<TouchableOpacity style={styles.container} onPress={handleSubmit}>
-			<Text style={styles.title}>{title}</Text>
+		<TouchableOpacity style={[styles.container, style]} onPress={onPress}>
+			<Text style={[styles.title, titleStyle]}>{title}</Text>
 		</TouchableOpacity>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: colors.Cyber_Grape,
+		backgroundColor: colors.primary,
 		justifyContent: "center",
 		alignItems: "center",
 		padding: 16,
-		borderRadius: 10,
+		borderRadius: sizing(2),
 	},
 	title: {
-		fontSize: 18,
-		fontWeight: "700",
-		color: "white",
+		fontSize: sizing(4),
+		fontWeight: "600",
+		color: colors.backgroundSecondary,
 	},
 });
 

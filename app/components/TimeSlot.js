@@ -11,12 +11,13 @@ import moment from "moment";
 
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
+import routes from "../navigations/routes";
 
 const { width } = Dimensions.get("window");
 
 const WIDTH = width * sizing(0.2);
 
-function TimeSlot({ data }) {
+function Timeslot({ data, navigation, onPress }) {
 	// console.log(data.date);
 	return (
 		<View style={styles.wrapper}>
@@ -43,6 +44,9 @@ function TimeSlot({ data }) {
 									? styles.available
 									: styles.unavailable,
 							]}
+							key={item.id}
+							onPress={() => onPress(item)}
+							disabled={!item.available}
 						>
 							<Text style={styles.timeslotTitle}>
 								{moment(item.start, "HH:mm:ss").format("H:mm")}
@@ -94,4 +98,4 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default TimeSlot;
+export default Timeslot;

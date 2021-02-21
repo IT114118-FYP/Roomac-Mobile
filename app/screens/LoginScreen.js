@@ -6,7 +6,7 @@ import LottieView from "lottie-react-native";
 import Constants from "expo-constants";
 import * as SecureStore from "expo-secure-store";
 
-import Button from "../components/Button";
+import LoginButton from "../components/LoginButton";
 import Screen from "../components/Screen";
 import Textfield from "../components/Textfield";
 import colors from "../themes/colors";
@@ -62,7 +62,7 @@ function LoginScreen(props) {
 							placeholder="Password"
 							style={styles.password}
 						/>
-						<Button title="Sign In" />
+						<LoginButton title="Sign In" />
 					</View>
 				</Formik>
 			</View>
