@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "heroku-prebuild": "npm install -g expo-cli"
+    "heroku-prebuild": "npm install -g expo-cli; npm install -g ngrok"
   },
   "dependencies": {
     "@react-native-community/masked-view": "0.1.10",
