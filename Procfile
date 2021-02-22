@@ -1,1 +1,1 @@
-node expo-heroku.js
+web: node expo-heroku.js
