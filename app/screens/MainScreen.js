@@ -58,7 +58,6 @@ function MainScreen({ navigation }) {
 		axiosInstance
 			.get(`/api/categories/${selectedCategory}`)
 			.then(({ data }) => {
-				console.log(data);
 				setResources(data);
 				setLoading(false);
 			})
@@ -218,7 +217,7 @@ function MainScreen({ navigation }) {
 					</TouchableOpacity>
 				</SafeAreaView>
 			</Modal>
-			<Modal
+			{/* <Modal
 				visible={isLoading}
 				animationType="fade"
 				style={styles.loadingAnimation}
@@ -227,7 +226,7 @@ function MainScreen({ navigation }) {
 					source={require("../../assets/preloader.json")}
 					autoPlay
 				/>
-			</Modal>
+			</Modal> */}
 		</Screen>
 	);
 }

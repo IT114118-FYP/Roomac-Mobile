@@ -25,12 +25,13 @@ export default function App() {
 		axiosInstance
 			.get(`/api/users/me`)
 			.then(({ data }) => {
-				console.log(data);
 				setUser(data);
 				setIsReady(true);
 			})
-			.catch((error) => console.log(error))
-			.finally(() => setIsReady(true));
+			.catch((error) => {
+				console.log(error);
+				alert("Something went wrong!");
+			});
 
 	useEffect(() => {
 		restoreToken();
@@ -44,12 +45,12 @@ export default function App() {
 				</NavigationContainer>
 			) : (
 				<LottieView
-					source={require("./assets/loading.json")}
+					source={require("./assets/roomac-animation.json")}
 					style={{
 						flex: 1,
 					}}
 					autoPlay
-					loop={false}
+					loop
 				/>
 			)}
 		</AuthContext.Provider>

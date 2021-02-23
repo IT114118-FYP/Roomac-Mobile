@@ -7,10 +7,8 @@ import {
 	Dimensions,
 	Animated,
 	Platform,
-	// Button,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
-import * as Calendar from "expo-calendar";
 
 import Button from "../components/Button";
 import Screen from "../components/Screen";
@@ -22,8 +20,9 @@ import {
 	ConfirmBooking,
 	SelectTime,
 	TermsAndConditions,
+	BookingResults,
 } from "./create-booking-procedure";
-import BookingResults from "./create-booking-procedure/BookingResults";
+import routes from "../navigations/routes";
 
 const { width } = Dimensions.get("window");
 
@@ -91,6 +90,9 @@ function CreateBookingScreen({ route, navigation }) {
 			case 2:
 				addBooking();
 				scrollToIndex(i + 1);
+				break;
+			case 3:
+				navigation.replace(routes.VIEW_BOOKINGS);
 				break;
 			default:
 				scrollToIndex(i + 1);
@@ -243,7 +245,7 @@ function CreateBookingScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
 	container: {
-		marginHorizontal: sizing(6),
+		marginHorizontal: sizing(8),
 		marginTop: sizing(12),
 	},
 	title: {

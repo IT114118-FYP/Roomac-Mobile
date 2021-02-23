@@ -1,13 +1,12 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
+import colors from "../themes/colors";
 import MainScreen from "../screens/MainScreen";
 import DetailedResourcesScreen from "../screens/DetailedResourcesScreen";
-
-import { enableScreens } from "react-native-screens";
 import CreateBookingScreen from "../screens/CreateBookingScreen";
-import colors from "../themes/colors";
-enableScreens();
+import ViewBookingsScreen from "../screens/ViewBookingsScreen";
+import routes from "./routes";
 
 const Stack = createStackNavigator();
 
@@ -15,25 +14,35 @@ export function AppNavigator() {
 	return (
 		<Stack.Navigator initialRouteName="Home">
 			<Stack.Screen
-				name="Home"
+				name={routes.HOME}
 				component={MainScreen}
 				options={{
 					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
-				name="DetailedResources"
+				name={routes.DETAILED_RESOURCES}
 				component={DetailedResourcesScreen}
 				options={{
 					headerBackTitleVisible: false,
 					headerTitle: false,
 					headerTransparent: true,
-					headerTintColor: "#FFF",
+					headerTintColor: colors.backgroundPrimary,
 				}}
 			/>
 			<Stack.Screen
-				name="CreateBooking"
+				name={routes.CREATE_BOOKING}
 				component={CreateBookingScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.textPrimary,
+				}}
+			/>
+			<Stack.Screen
+				name={routes.VIEW_BOOKINGS}
+				component={ViewBookingsScreen}
 				options={{
 					headerBackTitleVisible: false,
 					headerTitle: false,

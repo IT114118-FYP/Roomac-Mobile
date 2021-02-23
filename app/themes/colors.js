@@ -10,4 +10,5 @@ export default {
 	Azure: "#f2fdff",
 	Powder_Blue: "#9ad4d6",
 	Oxford_Blue: "#101935",
+	Light_Orange: "#f1b90e",
 };

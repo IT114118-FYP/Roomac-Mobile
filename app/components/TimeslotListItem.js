@@ -23,7 +23,12 @@ export default TimeslotListItem = ({ timeslot, location }) => {
 					height: sizing(2),
 					width: sizing(2),
 					borderRadius: sizing(2),
-					backgroundColor: colors.secondary,
+					backgroundColor: moment(
+						timeslot.start,
+						"HH:mm:ss"
+					).isBefore(moment("12:00", "H:mm"), "hour")
+						? colors.secondary
+						: colors.Light_Orange,
 					marginRight: sizing(2),
 				}}
 			/>
