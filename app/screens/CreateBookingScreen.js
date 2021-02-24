@@ -23,6 +23,7 @@ import {
 	BookingResults,
 } from "./create-booking-procedure";
 import routes from "../navigations/routes";
+import { DrawerActions } from "@react-navigation/native";
 
 const { width } = Dimensions.get("window");
 
@@ -92,7 +93,7 @@ function CreateBookingScreen({ route, navigation }) {
 				scrollToIndex(i + 1);
 				break;
 			case 3:
-				navigation.replace(routes.VIEW_BOOKINGS);
+				navigation.dispatch(DrawerActions.jumpTo(routes.VIEW_BOOKINGS));
 				break;
 			default:
 				scrollToIndex(i + 1);

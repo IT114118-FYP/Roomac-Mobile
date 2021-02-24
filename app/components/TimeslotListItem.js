@@ -4,7 +4,7 @@ import moment from "moment";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
 
-export default TimeslotListItem = ({ timeslot, location }) => {
+export default function TimeslotListItem({ timeslot, location }) {
 	return (
 		<View
 			style={[
@@ -45,4 +45,4 @@ export default TimeslotListItem = ({ timeslot, location }) => {
 			</Text>
 		</View>
 	);
-};
+}

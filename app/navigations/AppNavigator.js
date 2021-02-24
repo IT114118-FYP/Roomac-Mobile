@@ -10,7 +10,7 @@ import routes from "./routes";
 
 const Stack = createStackNavigator();
 
-export function AppNavigator() {
+export default function AppNavigator() {
 	return (
 		<Stack.Navigator initialRouteName="Home">
 			<Stack.Screen
@@ -33,16 +33,6 @@ export function AppNavigator() {
 			<Stack.Screen
 				name={routes.CREATE_BOOKING}
 				component={CreateBookingScreen}
-				options={{
-					headerBackTitleVisible: false,
-					headerTitle: false,
-					headerTransparent: true,
-					headerTintColor: colors.textPrimary,
-				}}
-			/>
-			<Stack.Screen
-				name={routes.VIEW_BOOKINGS}
-				component={ViewBookingsScreen}
 				options={{
 					headerBackTitleVisible: false,
 					headerTitle: false,

@@ -8,6 +8,7 @@ import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
+import AppDrawer from "./app/navigations/AppDrawer";
 
 export default function App() {
 	const [user, setUser] = useState();
@@ -41,7 +42,7 @@ export default function App() {
 		<AuthContext.Provider value={{ user, setUser }}>
 			{isReady ? (
 				<NavigationContainer theme={navigationTheme}>
-					{user ? <AppNavigator /> : <LoginScreen />}
+					{user ? <AppDrawer /> : <LoginScreen />}
 				</NavigationContainer>
 			) : (
 				<LottieView

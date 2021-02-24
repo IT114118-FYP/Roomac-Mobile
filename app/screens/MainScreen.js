@@ -10,7 +10,6 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 } from "react-native";
-import LottieView from "lottie-react-native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
@@ -81,7 +80,29 @@ function MainScreen({ navigation }) {
 					/>
 				}
 			>
-				<Text style={styles.username}>Welcome, {user.first_name}</Text>
+				<View
+					style={[
+						presetStyles.row,
+						{
+							marginBottom: sizing(2.5),
+							marginLeft: sizing(6),
+						},
+					]}
+				>
+					<TouchableOpacity
+						style={styles.drawerToggle}
+						onPress={navigation.toggleDrawer}
+					>
+						<Feather
+							name="menu"
+							color={colors.textPrimary}
+							size={sizing(5.5)}
+						/>
+					</TouchableOpacity>
+					<Text style={styles.username}>
+						Welcome, {user.first_name}
+					</Text>
+				</View>
 				<View style={[styles.searchBar, presetStyles.shadow]}>
 					<Feather
 						name="search"
@@ -233,11 +254,12 @@ function MainScreen({ navigation }) {
 
 const styles = StyleSheet.create({
 	container: {},
+	drawerToggle: {
+		marginRight: sizing(3),
+	},
 	username: {
 		fontSize: 20,
 		fontWeight: "600",
-		marginBottom: 10,
-		marginLeft: 24,
 	},
 	searchIcon: {
 		margin: 2,
