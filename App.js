@@ -10,6 +10,7 @@ import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
 import { set } from "react-native-reanimated";
+import { Modal } from "react-native";
 
 export default function App() {
 	const [user, setUser] = useState();
@@ -17,11 +18,11 @@ export default function App() {
 
 	const restoreToken = async () => {
 		const token = await authStorage.getToken();
-		console.log(Boolean(token));
 		if (token) {
 			fetchUser();
+		} else {
+			setIsReady(true);
 		}
-		setIsReady(true);
 	};
 
 	const fetchUser = () =>
