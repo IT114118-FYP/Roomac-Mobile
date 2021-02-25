@@ -3,7 +3,7 @@ import { axiosInstance } from "../api/config";
 import AuthContext from "./context";
 import authStorage from "./storage";
 
-export default useAuth = () => {
+export default function useAuth() {
 	const { user, setUser } = useContext(AuthContext);
 
 	const logIn = (authToken) => {
@@ -12,8 +12,8 @@ export default useAuth = () => {
 	};
 
 	const logOut = () => {
-		setUser(null);
 		authStorage.removeToken();
+		setUser(null);
 	};
 
 	const fetchUser = () =>
@@ -22,4 +22,4 @@ export default useAuth = () => {
 		});
 
 	return { user, setUser, logIn, logOut };
-};
+}

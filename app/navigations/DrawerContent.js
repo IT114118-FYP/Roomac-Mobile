@@ -10,8 +10,11 @@ import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import routes from "./routes";
 import { sizing } from "../themes/presetStyles";
+import useAuth from "../auth/useAuth";
 
 function DrawerContent(props) {
+	const { logOut } = useAuth();
+
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<View
@@ -39,7 +42,7 @@ function DrawerContent(props) {
 					}}
 				></View>
 			</View>
-			<DrawerContentScrollView>
+			<DrawerContentScrollView style={{ flex: 1 }}>
 				<DrawerItem
 					icon={({ color, size }) => (
 						<MaterialCommunityIcons
@@ -56,17 +59,46 @@ function DrawerContent(props) {
 				<DrawerItem
 					icon={({ color, size }) => (
 						<MaterialCommunityIcons
-							name="plus"
+							name="clipboard-text"
 							color={color}
 							size={size}
 						/>
 					)}
-					label={routes.VIEW_BOOKINGS}
+					label="My Bookings"
 					onPress={() => {
 						props.navigation.navigate(routes.VIEW_BOOKINGS);
 					}}
 				/>
 			</DrawerContentScrollView>
+			<View
+				style={{
+					alignItems: "center",
+					justifyContent: "center",
+					marginBottom: sizing(4),
+				}}
+			>
+				<View
+					style={{
+						backgroundColor: "grey",
+						height: 1,
+						width: "70%",
+					}}
+				></View>
+			</View>
+			<DrawerItem
+				style={{
+					marginBottom: sizing(10),
+				}}
+				icon={({ color, size }) => (
+					<MaterialCommunityIcons
+						name="logout"
+						color={color}
+						size={size}
+					/>
+				)}
+				label="Logout"
+				onPress={() => logOut()}
+			/>
 		</SafeAreaView>
 	);
 }
