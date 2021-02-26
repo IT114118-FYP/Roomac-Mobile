@@ -17,8 +17,7 @@ const { width } = Dimensions.get("window");
 
 const WIDTH = width * sizing(0.2);
 
-function Timeslot({ data, navigation, onPress }) {
-	// console.log(data.date);
+function Timeslot({ data, onPress }) {
 	return (
 		<View style={styles.wrapper}>
 			<Text style={styles.date}>
@@ -40,13 +39,22 @@ function Timeslot({ data, navigation, onPress }) {
 						<TouchableOpacity
 							style={[
 								styles.timeslot,
-								item.available
+								moment(item.start, "HH:mm:ss").isBefore(
+									moment()
+								)
+									? styles.past
+									: item.available
 									? styles.available
 									: styles.unavailable,
 							]}
 							key={item.id}
 							onPress={() => onPress(item)}
-							disabled={!item.available}
+							disabled={
+								!item.available ||
+								moment(item.start, "HH:mm:ss").isBefore(
+									moment()
+								)
+							}
 						>
 							<Text style={styles.timeslotTitle}>
 								{moment(item.start, "HH:mm:ss").format("H:mm")}
@@ -86,6 +94,9 @@ const styles = StyleSheet.create({
 		borderRadius: sizing(0.5),
 		alignItems: "center",
 		justifyContent: "center",
+	},
+	past: {
+		backgroundColor: colors.textSecondary,
 	},
 	available: {
 		backgroundColor: "#32cd80",

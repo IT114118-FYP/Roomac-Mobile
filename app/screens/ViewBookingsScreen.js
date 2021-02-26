@@ -5,6 +5,7 @@ import {
 	Text,
 	ScrollView,
 	TouchableOpacity,
+	RefreshControl,
 } from "react-native";
 import moment from "moment";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -18,31 +19,40 @@ import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 
 const TimeSection = ({ data, title }) => (
-	<Animatable.View animation="fadeInUp" style={styles.section}>
-		<Text style={styles.header}>{title}</Text>
-		{data.map((item, index) => (
-			<Animatable.View
-				animation="fadeInUp"
-				delay={index * 100}
-				key={item.id}
-				style={styles.bookingListItem}
-			>
-				<ViewBookingListItem
-					bookingData={item}
-					date={moment(item.start_time).format("LL")}
-					period={`${moment(item.start_time).format(
-						"H:mm"
-					)} - ${moment(item.end_time).format("H:mm")}`}
-					location={item.resource.title_en}
-				/>
+	<>
+		{data.length !== 0 && (
+			<Animatable.View animation="fadeInUp" style={styles.section}>
+				<Text style={styles.header}>{title}</Text>
+				{data.map((item, index) => (
+					<Animatable.View
+						animation="fadeInUp"
+						delay={index * 100}
+						key={item.id}
+						style={styles.bookingListItem}
+					>
+						<ViewBookingListItem
+							bookingData={item}
+							date={moment(item.start_time).format("LL")}
+							period={`${moment(item.start_time).format(
+								"H:mm"
+							)} - ${moment(item.end_time).format("H:mm")}`}
+							location={
+								Boolean(item.resource.title_en)
+									? `${item.resource.number} • ${item.resource.title_en}`
+									: item.resource.number
+							}
+						/>
+					</Animatable.View>
+				))}
 			</Animatable.View>
-		))}
-	</Animatable.View>
+		)}
+	</>
 );
 
 function ViewBookingsScreen({ navigation }) {
 	const { user } = useAuth();
 	const [isLoading, setLoading] = useState(false);
+	const [activeBooking, setActiveBooking] = useState(null);
 	const [upcoming, setUpcoming] = useState([]);
 	const [history, setHistory] = useState([]);
 
@@ -57,7 +67,11 @@ function ViewBookingsScreen({ navigation }) {
 				var upcomingData = [];
 				var historyData = [];
 				bookings.forEach((booking) => {
-					if (moment(booking.start_time).isAfter(current)) {
+					if (
+						moment().isBetween(booking.start_time, booking.end_time)
+					) {
+						setActiveBooking(booking);
+					} else if (moment(booking.start_time).isAfter(current)) {
 						upcomingData.push(booking);
 					} else {
 						historyData.push(booking);
@@ -85,7 +99,16 @@ function ViewBookingsScreen({ navigation }) {
 
 	return (
 		<Screen>
-			<ScrollView style={styles.container}>
+			<ScrollView
+				style={styles.container}
+				refreshControl={
+					<RefreshControl
+						refreshing={isLoading}
+						onRefresh={fetchUserBookings}
+						title="pull to refresh"
+					/>
+				}
+			>
 				<TouchableOpacity
 					style={styles.drawerToggle}
 					onPress={navigation.toggleDrawer}
@@ -100,6 +123,39 @@ function ViewBookingsScreen({ navigation }) {
 				<Text style={styles.title}>My Bookings</Text>
 				{!isLoading && (
 					<>
+						{Boolean(activeBooking) && (
+							<Animatable.View
+								animation="fadeInUp"
+								style={styles.section}
+							>
+								<Text style={styles.header}>Active</Text>
+								<Animatable.View
+									animation="fadeInUp"
+									// delay={100}
+									style={styles.bookingListItem}
+								>
+									<ViewBookingListItem
+										active
+										bookingData={activeBooking}
+										date={moment(
+											activeBooking.start_time
+										).format("LL")}
+										period={`${moment(
+											activeBooking.start_time
+										).format("H:mm")} - ${moment(
+											activeBooking.end_time
+										).format("H:mm")}`}
+										location={
+											Boolean(
+												activeBooking.resource.title_en
+											)
+												? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
+												: activeBooking.resource.number
+										}
+									/>
+								</Animatable.View>
+							</Animatable.View>
+						)}
 						<TimeSection data={upcoming} title="Upcoming" />
 						<TimeSection data={history} title="History" />
 					</>

@@ -5,6 +5,7 @@ import {
 	Text,
 	TouchableOpacity,
 	SafeAreaView,
+	Alert,
 } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -97,7 +98,19 @@ function DrawerContent(props) {
 					/>
 				)}
 				label="Logout"
-				onPress={() => logOut()}
+				onPress={() => {
+					Alert.alert(
+						"Log out",
+						"Are you sure you want to log out?",
+						[
+							{
+								text: "Cancel",
+								style: "cancel",
+							},
+							{ text: "Log out", onPress: () => logOut() },
+						]
+					);
+				}}
 			/>
 		</SafeAreaView>
 	);
