@@ -8,7 +8,7 @@ import {
 	RefreshControl,
 } from "react-native";
 import moment from "moment";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
 import { axiosInstance } from "../api/config";
@@ -18,11 +18,16 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 
-const TimeSection = ({ data, title }) => (
+const historyOptions = [7, 30, 90];
+
+const TimeSection = ({ data, title, children }) => (
 	<>
 		{data.length !== 0 && (
 			<Animatable.View animation="fadeInUp" style={styles.section}>
-				<Text style={styles.header}>{title}</Text>
+				<View style={presetStyles.row}>
+					<Text style={styles.header}>{title}</Text>
+					{children}
+				</View>
 				{data.map((item, index) => (
 					<Animatable.View
 						animation="fadeInUp"
@@ -52,6 +57,7 @@ const TimeSection = ({ data, title }) => (
 function ViewBookingsScreen({ navigation }) {
 	const { user } = useAuth();
 	const [isLoading, setLoading] = useState(false);
+	const [historyOptionsIndex, setHistoryOptionsIndex] = useState(0);
 	const [activeBooking, setActiveBooking] = useState(null);
 	const [upcoming, setUpcoming] = useState([]);
 	const [history, setHistory] = useState([]);
@@ -59,7 +65,9 @@ function ViewBookingsScreen({ navigation }) {
 	const fetchUserBookings = () => {
 		setLoading(true);
 		axiosInstance(
-			`/api/users/${user.id}/bookings?start=2021-02-25&end=2021-02-30`
+			`/api/users/${user.id}/bookings?start=${moment()
+				.subtract(historyOptions[historyOptionsIndex], "days")
+				.format("YYYY-MM-DD")}&end=${moment().format("YYYY-MM-DD")}`
 		)
 			.then(({ data: bookings }) => {
 				// console.log(bookings);
@@ -95,7 +103,7 @@ function ViewBookingsScreen({ navigation }) {
 
 	useEffect(() => {
 		fetchUserBookings();
-	}, []);
+	}, [historyOptionsIndex]);
 
 	return (
 		<Screen>
@@ -157,7 +165,35 @@ function ViewBookingsScreen({ navigation }) {
 							</Animatable.View>
 						)}
 						<TimeSection data={upcoming} title="Upcoming" />
-						<TimeSection data={history} title="History" />
+						<TimeSection data={history} title="History">
+							<TouchableOpacity
+								style={presetStyles.row}
+								onPress={() =>
+									setHistoryOptionsIndex(
+										historyOptionsIndex >=
+											historyOptions.length - 1
+											? 0
+											: historyOptionsIndex + 1
+									)
+								}
+							>
+								<FontAwesome
+									name="exchange"
+									size={sizing(3)}
+									color={colors.textSecondary}
+								/>
+								<Text
+									style={{
+										marginLeft: sizing(2),
+										color: colors.textSecondary,
+										fontSize: sizing(3.5),
+									}}
+								>
+									Past {historyOptions[historyOptionsIndex]}{" "}
+									days
+								</Text>
+							</TouchableOpacity>
+						</TimeSection>
 					</>
 				)}
 			</ScrollView>
@@ -181,6 +217,7 @@ const styles = StyleSheet.create({
 	header: {
 		fontSize: sizing(3.5),
 		color: colors.textSecondary,
+		flex: 1,
 	},
 	section: {
 		marginBottom: sizing(4),
