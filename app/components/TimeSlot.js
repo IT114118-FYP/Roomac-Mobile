@@ -39,9 +39,10 @@ function Timeslot({ data, onPress }) {
 						<TouchableOpacity
 							style={[
 								styles.timeslot,
-								moment(item.start, "HH:mm:ss").isBefore(
-									moment()
-								)
+								moment(
+									`${data.date} ${item.start}`,
+									"YYYY-MM-DD HH:mm:ss"
+								).isBefore(moment())
 									? styles.past
 									: item.available
 									? styles.available

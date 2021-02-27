@@ -113,6 +113,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 					title="pull to refresh"
 				/>
 			}
+			style={styles.container}
 		>
 			<StatusBar barStyle="light-content" animated={true} />
 			<Image
@@ -247,53 +248,42 @@ function DetailedResourcesScreen({ route, navigation }) {
 					/>
 				</>
 			)}
-			<TouchableOpacity
+			<Text
 				style={[
 					presetStyles.marginHorizontal,
-					presetStyles.row,
+					presetStyles.listHeader,
 					{
-						alignItems: "center",
-						marginTop: sizing(4),
-						borderWidth: 1,
-						borderRadius: sizing(2),
-						borderColor: colors.textSecondary,
-						padding: sizing(4),
+						marginTop: sizing(6),
 					},
 				]}
 			>
-				<FontAwesome5
-					name="building"
-					size={sizing(6)}
-					color={colors.textSecondary}
+				Campus Location ({item.branch.title_en})
+			</Text>
+			<View style={styles.mapContainer}>
+				<MapView
+					scrollEnabled={false}
+					showsUserLocation
 					style={{
-						marginRight: sizing(4),
+						width: "100%",
+						height: 200,
 					}}
-				/>
-				<View style={{ flex: 1 }}>
-					<Text
-						style={[
-							presetStyles.listHeader,
-							{
-								color: colors.textPrimary,
-							},
-						]}
-					>
-						Campus Info
-					</Text>
-					<Text
-						style={{
-							color: colors.textSecondary,
+					initialRegion={{
+						latitude: Number(item.branch.lat),
+						longitude: Number(item.branch.lng),
+						latitudeDelta: 0.0922,
+						longitudeDelta: 0.0421,
+					}}
+				>
+					<Marker
+						coordinate={{
+							latitude: Number(item.branch.lat),
+							longitude: Number(item.branch.lng),
 						}}
-					>
-						Learn more about {item.branch.title_en} Campus
-					</Text>
-				</View>
-				<MaterialCommunityIcons
-					name="chevron-right"
-					size={sizing(6)}
-					color={colors.textSecondary}
-				/>
-			</TouchableOpacity>
+						title={item.branch.title_en}
+						description={item.branch.title_en}
+					/>
+				</MapView>
+			</View>
 			<TouchableOpacity
 				onPress={() => {
 					console.log(location);
@@ -303,7 +293,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 					presetStyles.row,
 					{
 						alignItems: "center",
-						marginTop: sizing(4),
+						marginVertical: sizing(6),
 						borderWidth: 1,
 						borderRadius: sizing(2),
 						borderColor: colors.textSecondary,
@@ -344,29 +334,6 @@ function DetailedResourcesScreen({ route, navigation }) {
 					color={colors.textSecondary}
 				/>
 			</TouchableOpacity>
-			{/* <View style={styles.mapContainer}>
-				<MapView
-					style={{
-						width: width - sizing(6),
-						height: width - sizing(6),
-					}}
-					initialRegion={{
-						latitude: Number(item.branch.lat),
-						longitude: Number(item.branch.lng),
-						latitudeDelta: 0.0922,
-						longitudeDelta: 0.0421,
-					}}
-				>
-					<Marker
-						coordinate={{
-							latitude: Number(item.branch.lat),
-							longitude: Number(item.branch.lng),
-						}}
-						title={item.branch.title_en}
-						description={item.branch.title_en}
-					/>
-				</MapView>
-			</View> */}
 		</ScrollView>
 	);
 }
@@ -395,7 +362,8 @@ const styles = StyleSheet.create({
 	},
 	mapContainer: {
 		alignItems: "center",
-		padding: sizing(6),
+		marginHorizontal: sizing(6),
+		marginVertical: sizing(3),
 	},
 });
 
