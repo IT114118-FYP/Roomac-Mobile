@@ -52,9 +52,9 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label={routes.HOME}
+					label="Home"
 					onPress={() => {
-						props.navigation.navigate(routes.HOME);
+						props.navigation.navigate(routes.navigators.HOME);
 					}}
 				/>
 				<DrawerItem
@@ -67,7 +67,7 @@ function DrawerContent(props) {
 					)}
 					label="My Bookings"
 					onPress={() => {
-						props.navigation.navigate(routes.VIEW_BOOKINGS);
+						props.navigation.navigate(routes.navigators.BOOKINGS);
 					}}
 				/>
 			</DrawerContentScrollView>

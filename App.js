@@ -1,16 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 
-import { AppNavigator } from "./app/navigations/AppNavigator";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
-import { set } from "react-native-reanimated";
-import { Modal } from "react-native";
 
 export default function App() {
 	const [user, setUser] = useState();

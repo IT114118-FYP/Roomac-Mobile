@@ -52,9 +52,10 @@ function Timeslot({ data, onPress }) {
 							onPress={() => onPress(item)}
 							disabled={
 								!item.available ||
-								moment(item.start, "HH:mm:ss").isBefore(
-									moment()
-								)
+								moment(
+									`${data.date} ${item.start}`,
+									"YYYY-MM-DD HH:mm:ss"
+								).isBefore(moment())
 							}
 						>
 							<Text style={styles.timeslotTitle}>

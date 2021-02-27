@@ -67,7 +67,9 @@ function ViewBookingsScreen({ navigation }) {
 		axiosInstance(
 			`/api/users/${user.id}/bookings?start=${moment()
 				.subtract(historyOptions[historyOptionsIndex], "days")
-				.format("YYYY-MM-DD")}&end=${moment().format("YYYY-MM-DD")}`
+				.format("YYYY-MM-DD")}&end=${moment()
+				.add(10, "days")
+				.format("YYYY-MM-DD")}`
 		)
 			.then(({ data: bookings }) => {
 				// console.log(bookings);

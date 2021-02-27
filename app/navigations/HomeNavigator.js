@@ -10,18 +10,18 @@ import routes from "./routes";
 
 const Stack = createStackNavigator();
 
-export default function AppNavigator() {
+export default function HomeNavigator() {
 	return (
 		<Stack.Navigator initialRouteName="Home">
 			<Stack.Screen
-				name={routes.HOME}
+				name={routes.screens.HOME}
 				component={MainScreen}
 				options={{
 					headerShown: false,
 				}}
 			/>
 			<Stack.Screen
-				name={routes.DETAILED_RESOURCES}
+				name={routes.screens.DETAILED_RESOURCES}
 				component={DetailedResourcesScreen}
 				options={{
 					headerBackTitleVisible: false,
@@ -31,7 +31,7 @@ export default function AppNavigator() {
 				}}
 			/>
 			<Stack.Screen
-				name={routes.CREATE_BOOKING}
+				name={routes.screens.CREATE_BOOKING}
 				component={CreateBookingScreen}
 				options={{
 					headerBackTitleVisible: false,

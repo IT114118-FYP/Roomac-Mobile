@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -11,6 +11,7 @@ import {
 	Dimensions,
 	TouchableOpacity,
 	RefreshControl,
+	Animated,
 } from "react-native";
 import ImageHeaderScrollView, {
 	TriggeringView,
@@ -113,15 +114,14 @@ function DetailedResourcesScreen({ route, navigation }) {
 					title="pull to refresh"
 				/>
 			}
-			style={styles.container}
 		>
-			<StatusBar barStyle="light-content" animated={true} />
 			<Image
 				source={{
 					uri: item.image_url,
 				}}
 				style={styles.image}
 			/>
+			<StatusBar barStyle="light-content" animated={true} />
 			<View style={styles.detailContainer}>
 				<Text
 					style={styles.title}
@@ -234,7 +234,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 									navigation={navigation}
 									onPress={(timeslot) =>
 										navigation.navigate(
-											routes.CREATE_BOOKING,
+											routes.screens.CREATE_BOOKING,
 											{
 												timeslot,
 												item,

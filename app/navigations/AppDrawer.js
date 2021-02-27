@@ -1,12 +1,10 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import DrawerContent from "./DrawerContent";
 import routes from "./routes";
-import AppNavigator from "./AppNavigator";
-import ViewBookingsScreen from "../screens/ViewBookingsScreen";
-import colors from "../themes/colors";
+import HomeNavigator from "./HomeNavigator";
+import BookingsNavigator from "./BookingsNavigator";
 
 const Drawer = createDrawerNavigator();
 
@@ -15,21 +13,14 @@ function AppDrawer(props) {
 		<Drawer.Navigator
 			drawerContent={(props) => <DrawerContent {...props} />}
 		>
-			<Drawer.Screen name={routes.HOME} component={AppNavigator} />
 			<Drawer.Screen
-				name={routes.VIEW_BOOKINGS}
-				component={ViewBookingsScreen}
+				name={routes.navigators.HOME}
+				component={HomeNavigator}
 			/>
-			{/* <Drawer.Screen
-				name={routes.VIEW_BOOKINGS}
-				component={ViewBookingsScreen}
-				options={{
-					headerBackTitleVisible: false,
-					headerTitle: false,
-					headerTransparent: true,
-					headerTintColor: colors.textPrimary,
-				}}
-			/> */}
+			<Drawer.Screen
+				name={routes.navigators.BOOKINGS}
+				component={BookingsNavigator}
+			/>
 		</Drawer.Navigator>
 	);
 }
