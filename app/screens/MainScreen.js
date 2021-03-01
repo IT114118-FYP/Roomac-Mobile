@@ -68,10 +68,44 @@ function MainScreen({ navigation }) {
 
 	return (
 		<Screen style={styles.container}>
+			<View
+				style={[
+					presetStyles.row,
+					{
+						marginBottom: sizing(2.5),
+						marginLeft: sizing(6),
+						paddingTop: sizing(6),
+					},
+				]}
+			>
+				<TouchableOpacity
+					style={styles.drawerToggle}
+					onPress={navigation.toggleDrawer}
+				>
+					<Feather
+						name="menu"
+						color={colors.textPrimary}
+						size={sizing(5.5)}
+					/>
+				</TouchableOpacity>
+				<Text style={styles.username}>Welcome, {user.first_name}</Text>
+			</View>
+			<View style={[styles.searchBar, presetStyles.shadow]}>
+				<Feather
+					name="search"
+					size={16}
+					color={colors.textSecondary}
+					style={styles.searchIcon}
+				/>
+				<Text
+					style={{
+						color: colors.textSecondary,
+					}}
+				>
+					help me find a resource
+				</Text>
+			</View>
 			<ScrollView
-				contentContainerStyle={{
-					paddingTop: 24,
-				}}
 				refreshControl={
 					<RefreshControl
 						refreshing={isLoading}
@@ -80,44 +114,6 @@ function MainScreen({ navigation }) {
 					/>
 				}
 			>
-				<View
-					style={[
-						presetStyles.row,
-						{
-							marginBottom: sizing(2.5),
-							marginLeft: sizing(6),
-						},
-					]}
-				>
-					<TouchableOpacity
-						style={styles.drawerToggle}
-						onPress={navigation.toggleDrawer}
-					>
-						<Feather
-							name="menu"
-							color={colors.textPrimary}
-							size={sizing(5.5)}
-						/>
-					</TouchableOpacity>
-					<Text style={styles.username}>
-						Welcome, {user.first_name}
-					</Text>
-				</View>
-				<View style={[styles.searchBar, presetStyles.shadow]}>
-					<Feather
-						name="search"
-						size={16}
-						color={colors.textSecondary}
-						style={styles.searchIcon}
-					/>
-					<Text
-						style={{
-							color: colors.textSecondary,
-						}}
-					>
-						help me find a resource
-					</Text>
-				</View>
 				{!isLoading && (
 					<View style={styles.categories}>
 						<Text

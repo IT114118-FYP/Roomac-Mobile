@@ -31,6 +31,7 @@ export default function App() {
 			})
 			.catch((error) => {
 				console.log(error);
+				authStorage.removeToken();
 				alert("Something went wrong!");
 			});
 

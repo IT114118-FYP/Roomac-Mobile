@@ -17,10 +17,11 @@ import ViewBookingListItem from "../components/ViewBookingListItem";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
+import routes from "../navigations/routes";
 
 const historyOptions = [7, 30, 90];
 
-const TimeSection = ({ data, title, children }) => (
+const TimeSection = ({ data, title, children, navigation }) => (
 	<>
 		{data.length !== 0 && (
 			<Animatable.View animation="fadeInUp" style={styles.section}>
@@ -45,6 +46,14 @@ const TimeSection = ({ data, title, children }) => (
 								Boolean(item.resource.title_en)
 									? `${item.resource.number} • ${item.resource.title_en}`
 									: item.resource.number
+							}
+							onPress={() =>
+								navigation.navigate(
+									routes.screens.BOOKING_DETAILS,
+									{
+										item,
+									}
+								)
 							}
 						/>
 					</Animatable.View>
@@ -109,6 +118,17 @@ function ViewBookingsScreen({ navigation }) {
 
 	return (
 		<Screen>
+			<TouchableOpacity
+				style={styles.drawerToggle}
+				onPress={navigation.toggleDrawer}
+			>
+				<Feather
+					name="menu"
+					color={colors.textPrimary}
+					size={sizing(5.5)}
+				/>
+			</TouchableOpacity>
+			<Text style={styles.title}>My Bookings</Text>
 			<ScrollView
 				style={styles.container}
 				refreshControl={
@@ -119,18 +139,6 @@ function ViewBookingsScreen({ navigation }) {
 					/>
 				}
 			>
-				<TouchableOpacity
-					style={styles.drawerToggle}
-					onPress={navigation.toggleDrawer}
-					style={styles.drawerToggle}
-				>
-					<Feather
-						name="menu"
-						color={colors.textPrimary}
-						size={sizing(5.5)}
-					/>
-				</TouchableOpacity>
-				<Text style={styles.title}>My Bookings</Text>
 				{!isLoading && (
 					<>
 						{Boolean(activeBooking) && (
@@ -162,12 +170,28 @@ function ViewBookingsScreen({ navigation }) {
 												? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
 												: activeBooking.resource.number
 										}
+										onPress={() =>
+											navigation.navigate(
+												routes.screens.BOOKING_DETAILS,
+												{
+													item: activeBooking,
+												}
+											)
+										}
 									/>
 								</Animatable.View>
 							</Animatable.View>
 						)}
-						<TimeSection data={upcoming} title="Upcoming" />
-						<TimeSection data={history} title="History">
+						<TimeSection
+							data={upcoming}
+							title="Upcoming"
+							navigation={navigation}
+						/>
+						<TimeSection
+							data={history}
+							title="History"
+							navigation={navigation}
+						>
 							<TouchableOpacity
 								style={presetStyles.row}
 								onPress={() =>
@@ -209,12 +233,14 @@ const styles = StyleSheet.create({
 	},
 	drawerToggle: {
 		marginTop: sizing(5),
+		paddingHorizontal: sizing(6),
 	},
 	title: {
 		fontSize: sizing(8),
 		fontWeight: "600",
 		color: colors.Oxford_Blue,
 		marginVertical: sizing(6),
+		paddingHorizontal: sizing(6),
 	},
 	header: {
 		fontSize: sizing(3.5),

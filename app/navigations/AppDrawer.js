@@ -5,6 +5,8 @@ import DrawerContent from "./DrawerContent";
 import routes from "./routes";
 import HomeNavigator from "./HomeNavigator";
 import BookingsNavigator from "./BookingsNavigator";
+import CampusNavigator from "./CampusNavigator";
+import SettingsNavigator from "./SettingsNavigator";
 
 const Drawer = createDrawerNavigator();
 
@@ -20,6 +22,14 @@ function AppDrawer(props) {
 			<Drawer.Screen
 				name={routes.navigators.BOOKINGS}
 				component={BookingsNavigator}
+			/>
+			<Drawer.Screen
+				name={routes.navigators.CAMPUS}
+				component={CampusNavigator}
+			/>
+			<Drawer.Screen
+				name={routes.navigators.SETTINGS}
+				component={SettingsNavigator}
 			/>
 		</Drawer.Navigator>
 	);

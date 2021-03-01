@@ -261,7 +261,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 			</Text>
 			<View style={styles.mapContainer}>
 				<MapView
-					scrollEnabled={false}
+					// scrollEnabled={false}
 					showsUserLocation
 					style={{
 						width: "100%",
