@@ -21,5 +21,5 @@ export default function useAuth() {
 			setUser(data);
 		});
 
-	return { user, setUser, logIn, logOut };
+	return { user, setUser, logIn, logOut, fetchUser };
 }

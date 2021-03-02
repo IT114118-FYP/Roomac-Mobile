@@ -6,6 +6,7 @@ export default {
 		VIEW_BOOKINGS: "ViewBookings",
 		BOOKING_DETAILS: "BookingDetails",
 		SETTINGS: "Settings",
+		PROFILE_SETTINGS: "ProfileSettings",
 	},
 	navigators: {
 		HOME: "Home",

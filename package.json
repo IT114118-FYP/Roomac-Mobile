@@ -19,6 +19,7 @@
     "expo-app-loading": "^1.0.1",
     "expo-calendar": "~8.6.0",
     "expo-constants": "~9.3.3",
+    "expo-image-picker": "~9.2.0",
     "expo-linear-gradient": "~8.4.0",
     "expo-location": "~10.0.0",
     "expo-secure-store": "~9.3.0",

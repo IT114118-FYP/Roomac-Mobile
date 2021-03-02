@@ -4,62 +4,62 @@ import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
 
+export function ChevronRight() {
+	return (
+		<MaterialCommunityIcons
+			name="chevron-right"
+			size={sizing(5)}
+			color={colors.textSecondary}
+		/>
+	);
+}
+
 function SettingsItem({
 	title,
-	iconColor,
-	iconName,
-	enter,
-	provider = "MaterialIcons",
+	description,
+	LeftComponent,
+	RightComponent,
+	onPress,
 }) {
 	return (
-		<TouchableOpacity style={[presetStyles.row, styles.container]}>
-			<View
-				style={[
-					styles.icon,
-					{
-						backgroundColor: iconColor,
-					},
-				]}
-			>
-				{provider === "MaterialIcons" && (
-					<MaterialIcons
-						name={iconName}
-						size={sizing(5.5)}
-						color={colors.backgroundSecondary}
-					/>
-				)}
-				{provider === "MaterialCommunityIcons" && (
-					<MaterialIcons
-						name={iconName}
-						size={sizing(5.5)}
-						color={colors.backgroundSecondary}
-					/>
+		<TouchableOpacity
+			style={[presetStyles.row, styles.container]}
+			onPress={onPress}
+		>
+			{LeftComponent && (
+				<View style={styles.left}>
+					<LeftComponent />
+				</View>
+			)}
+			<View style={styles.textContainer}>
+				<Text style={styles.title}>{title}</Text>
+				{description && (
+					<Text style={styles.description}>{description}</Text>
 				)}
 			</View>
-			<Text style={styles.title}>{title}</Text>
-			{enter && (
-				<MaterialCommunityIcons
-					name="chevron-right"
-					size={sizing(5.5)}
-					color={colors.textSecondary}
-				/>
-			)}
+			{RightComponent && <RightComponent />}
 		</TouchableOpacity>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		// marginBottom: sizing(4),
+		paddingVertical: sizing(4),
 	},
-	icon: {
-		borderRadius: sizing(2),
-		padding: sizing(1.5),
+	left: {
+		marginRight: sizing(3.5),
+	},
+	textContainer: {
+		flex: 1,
 	},
 	title: {
-		flex: 1,
-		marginLeft: sizing(3),
 		color: colors.textPrimary,
+		fontSize: sizing(4),
+	},
+	description: {
+		marginTop: sizing(1),
+		color: colors.textSecondary,
+		fontSize: sizing(3),
 	},
 });
 

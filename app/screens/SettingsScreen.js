@@ -22,37 +22,75 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
-import SettingsItem from "../components/SettingsItem";
+import SettingsItem, { ChevronRight } from "../components/SettingsItem";
 
-const AVATAR = 150;
-
-const data = [
-	{
-		id: 0,
-		title: "Change Language",
-		iconColor: "gray",
-		iconName: "language",
-		enter: true,
-	},
-	{
-		id: 1,
-		title: "Terms & Condition",
-		iconColor: "#f5b300",
-		iconName: "library-books",
-		enter: true,
-	},
-	{
-		id: 2,
-		title: "Log out",
-		iconColor: "red",
-		iconName: "logout",
-		provider: "MaterialCommunityIcons",
-		// enter: true,
-	},
-];
+const AVATAR = 75;
 
 function SettingsScreen({ navigation }) {
 	const { user } = useAuth();
+
+	const UserIcon = () => (
+		<View>
+			{Boolean(user.image_url) ? (
+				<Image
+					source={{ url: user.image_url }}
+					style={{
+						borderRadius: AVATAR,
+						height: AVATAR,
+						width: AVATAR,
+					}}
+				/>
+			) : (
+				<View
+					style={{
+						backgroundColor: colors.Powder_Blue,
+						height: AVATAR,
+						width: AVATAR,
+						marginBottom: sizing(4),
+						borderRadius: AVATAR,
+						justifyContent: "center",
+						alignItems: "center",
+					}}
+				>
+					<Text
+						style={{
+							color: colors.backgroundSecondary,
+							fontSize: sizing(10),
+							fontWeight: "600",
+						}}
+					>
+						{`${user.first_name[0]}${user.last_name[0]}`}
+					</Text>
+				</View>
+			)}
+		</View>
+	);
+
+	const data = [
+		{
+			id: 0,
+			title: `${user.first_name}, ${user.last_name}`,
+			description: user.email,
+			LeftComponent: UserIcon,
+			RightComponent: ChevronRight,
+			onPress: () => navigation.navigate(routes.screens.PROFILE_SETTINGS),
+		},
+		{
+			id: 1,
+			title: "Change Language",
+			RightComponent: ChevronRight,
+		},
+		{
+			id: 2,
+			title: "Terms & Condition",
+			RightComponent: ChevronRight,
+		},
+		{
+			id: 3,
+			title: "Log out",
+		},
+	];
+
 	return (
 		<Screen>
 			<TouchableOpacity
@@ -66,118 +104,22 @@ function SettingsScreen({ navigation }) {
 				/>
 			</TouchableOpacity>
 			<Text style={styles.title}>Settings</Text>
-			<ScrollView>
-				<View
-					style={{
-						alignItems: "center",
-						justifyContent: "center",
-						marginBottom: sizing(6),
-					}}
-				>
-					{Boolean(user.image_url) ? (
-						<ImageBackground
-							source={{ url: user.image_url }}
-							imageStyle={{
-								borderRadius: AVATAR,
-							}}
-							style={{
-								marginBottom: sizing(4),
-								height: AVATAR,
-								width: AVATAR,
-								// justifyContent: "center",
-								// alignItems: "center",
-								// overflow: "hidden",
-							}}
-						>
-							<TouchableOpacity
-								style={{
-									position: "absolute",
-									bottom: 0,
-									right: 0,
-									alignItems: "center",
-									justifyContent: "center",
-									backgroundColor: "#000000aa",
-									padding: sizing(3),
-									borderRadius: sizing(10),
-								}}
-							>
-								<MaterialIcons
-									name="edit"
-									color={colors.backgroundPrimary}
-									size={sizing(4)}
-								/>
-							</TouchableOpacity>
-						</ImageBackground>
-					) : (
-						<View
-							style={{
-								backgroundColor: colors.Powder_Blue,
-								height: AVATAR,
-								width: AVATAR,
-								marginBottom: sizing(4),
-								borderRadius: AVATAR,
-								justifyContent: "center",
-								alignItems: "center",
-							}}
-						>
-							<Text
-								style={{
-									color: colors.backgroundSecondary,
-									fontSize: sizing(10),
-									fontWeight: "600",
-								}}
-							>
-								{`${user.first_name[0]}${user.last_name[0]}`}
-							</Text>
-						</View>
-					)}
-					<Text
+			<FlatList
+				contentContainerStyle={styles.container}
+				data={data}
+				keyExtractor={(item) => `${item.id}`}
+				ItemSeparatorComponent={() => (
+					<View
 						style={{
-							fontSize: sizing(6),
-							fontWeight: "500",
-							color: colors.textPrimary,
+							height: 1,
+							backgroundColor: "#d0d0d0",
 						}}
-					>
-						{`${user.first_name}, ${user.last_name}`}
-					</Text>
-					<Text
-						style={{
-							fontSize: sizing(3),
-							color: colors.textSecondary,
-							marginTop: sizing(2),
-						}}
-						numberOfLines={1}
-					>
-						{user.email}
-					</Text>
-				</View>
-				<FlatList
-					scrollEnabled={false}
-					contentContainerStyle={styles.container}
-					data={data}
-					keyExtractor={(item) => `${item.id}`}
-					ItemSeparatorComponent={() => (
-						<View
-							style={{
-								height: 1,
-								backgroundColor: "#d0d0d0",
-								marginVertical: sizing(3),
-								// marginHorizontal: sizing(2),
-							}}
-						/>
-					)}
-					renderItem={({ item }) => (
-						<SettingsItem
-							key={item.id}
-							title={item.title}
-							iconColor={item.iconColor}
-							iconName={item.iconName}
-							enter={item.enter}
-							provider={item.provider}
-						/>
-					)}
-				/>
-			</ScrollView>
+					/>
+				)}
+				renderItem={({ item }) => (
+					<SettingsItem key={item.id} {...item} />
+				)}
+			/>
 		</Screen>
 	);
 }
@@ -185,6 +127,7 @@ function SettingsScreen({ navigation }) {
 const styles = StyleSheet.create({
 	container: {
 		paddingHorizontal: sizing(6),
+		// backgroundColor: colors.backgroundPrimary,
 	},
 	drawerToggle: {
 		marginTop: sizing(5),
