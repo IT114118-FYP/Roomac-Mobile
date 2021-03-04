@@ -1,4 +1,3 @@
-import * as LocalAuthentication from "expo-local-authentication";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const TAG = "useBiometrics";

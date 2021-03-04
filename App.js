@@ -10,6 +10,7 @@ import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
+import { View } from "react-native";
 
 export default function App() {
 	const [user, setUser] = useState();

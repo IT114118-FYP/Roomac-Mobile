@@ -1,10 +1,19 @@
 import React from "react";
-import { View, StyleSheet, Text, Image, TouchableOpacity } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Text,
+	Image,
+	TouchableOpacity,
+	Dimensions,
+} from "react-native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import moment from "moment";
 
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
+
+const { height } = Dimensions.get("window");
 
 function ResourceItem({ item, onPress }) {
 	return (
@@ -69,7 +78,7 @@ const styles = StyleSheet.create({
 		padding: sizing(1.5),
 	},
 	image: {
-		height: 150,
+		height: height / 5,
 		borderRadius: sizing(4),
 		resizeMode: "cover",
 	},

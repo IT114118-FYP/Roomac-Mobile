@@ -16,19 +16,54 @@ import * as ImagePicker from "expo-image-picker";
 
 import useAuth from "../auth/useAuth";
 import Screen from "../components/Screen";
-import { sizing } from "../themes/presetStyles";
+import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
 import { axiosInstance } from "../api/config";
+import SettingsItem from "../components/SettingsItem";
 
 const { width } = Dimensions.get("screen");
 
 const AVATAR = width * 0.4;
+
+const ProfileItem = ({ title, value }) => {
+	return (
+		<View
+			style={[
+				presetStyles.row,
+				presetStyles.marginHorizontal,
+				{
+					marginTop: sizing(3),
+				},
+			]}
+		>
+			<Text
+				style={{
+					fontSize: sizing(4),
+					color: colors.textSecondary,
+					flex: 2,
+				}}
+			>
+				{title}
+			</Text>
+			<Text
+				style={{
+					flex: 3,
+					fontSize: sizing(4),
+					color: colors.textPrimary,
+				}}
+			>
+				{value}
+			</Text>
+		</View>
+	);
+};
 
 export default function ProfileSettingsScreen(props) {
 	const { user, fetchUser } = useAuth();
 
 	useEffect(() => {
 		getImagePermission();
+		console.log(user);
 	}, []);
 
 	const getImagePermission = async () => {
@@ -159,6 +194,18 @@ export default function ProfileSettingsScreen(props) {
 					>
 						{user.email}
 					</Text>
+				</View>
+				<View>
+					<ProfileItem
+						title="Name"
+						value={`${user.first_name}, ${user.last_name}`}
+					/>
+					<ProfileItem title="CNA" value={user.name} />
+					<ProfileItem title="Email" value={user.email} />
+					<ProfileItem
+						title="Programme"
+						value={`${user.program_id} (${user.branch_id})`}
+					/>
 				</View>
 			</ScrollView>
 		</Screen>
