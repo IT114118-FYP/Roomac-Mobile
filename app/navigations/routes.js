@@ -7,6 +7,7 @@ export default {
 		BOOKING_DETAILS: "BookingDetails",
 		SETTINGS: "Settings",
 		PROFILE_SETTINGS: "ProfileSettings",
+		TERMS_AND_CONDITION: "TermsAndCondition",
 	},
 	navigators: {
 		HOME: "Home",

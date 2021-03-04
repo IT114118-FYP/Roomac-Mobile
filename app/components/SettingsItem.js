@@ -16,15 +16,19 @@ export function ChevronRight() {
 
 function SettingsItem({
 	title,
+	titleStyle,
 	description,
+	descriptionStyle,
 	LeftComponent,
 	RightComponent,
 	onPress,
+	disabled = false,
 }) {
 	return (
 		<TouchableOpacity
 			style={[presetStyles.row, styles.container]}
 			onPress={onPress}
+			disabled={disabled}
 		>
 			{LeftComponent && (
 				<View style={styles.left}>
@@ -32,9 +36,16 @@ function SettingsItem({
 				</View>
 			)}
 			<View style={styles.textContainer}>
-				<Text style={styles.title}>{title}</Text>
+				<Text style={[styles.title, titleStyle]} adjustsFontSizeToFit>
+					{title}
+				</Text>
 				{description && (
-					<Text style={styles.description}>{description}</Text>
+					<Text
+						style={[styles.description, descriptionStyle]}
+						adjustsFontSizeToFit
+					>
+						{description}
+					</Text>
 				)}
 			</View>
 			{RightComponent && <RightComponent />}

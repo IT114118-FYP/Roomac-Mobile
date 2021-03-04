@@ -3,21 +3,17 @@ import {
 	View,
 	StyleSheet,
 	Text,
-	ScrollView,
 	TouchableOpacity,
-	RefreshControl,
 	FlatList,
 	Image,
-	VirtualizedList,
-	ImageBackground,
+	Switch,
+	Alert,
 } from "react-native";
-import moment from "moment";
-import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
-import * as Animatable from "react-native-animatable";
+import { Feather } from "@expo/vector-icons";
+import * as LocalAuthentication from "expo-local-authentication";
 
-import { axiosInstance } from "../api/config";
+import * as BioStorage from "../biometrics/storage";
 import Screen from "../components/Screen";
-import ViewBookingListItem from "../components/ViewBookingListItem";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
@@ -27,7 +23,45 @@ import SettingsItem, { ChevronRight } from "../components/SettingsItem";
 const AVATAR = 75;
 
 function SettingsScreen({ navigation }) {
-	const { user } = useAuth();
+	const { user, logOut } = useAuth();
+	const [isBioAvailable, setBioAvailable] = useState(false);
+	const [isBioEnabled, setBioEnabled] = useState(false);
+	const [isLoading, setLoading] = useState(false);
+
+	const handleBioToggle = async () => {
+		BioStorage.storeEnable(!isBioEnabled);
+		setBioEnabled((previousState) => !previousState);
+
+		const biometricsEnabled = await BioStorage.getEnable();
+		console.log(biometricsEnabled);
+	};
+
+	const getBioAvailability = async () => {
+		setLoading(true);
+		const biometricsEnabled = await BioStorage.getEnable();
+		setBioEnabled(biometricsEnabled);
+		LocalAuthentication.hasHardwareAsync()
+			.then((response) => {
+				setBioAvailable(response);
+			})
+			.catch((error) => {
+				console.log(error);
+				setBioAvailable(false);
+			})
+			.finally(() => setLoading(false));
+	};
+
+	// useEffect(() => {
+	//     if (isBioEnabled) {
+	//         BioStorage.storeEnable(true);
+	// 	} else {
+	// 		BioStorage.storeEnable(false);
+	// 	}
+	// }, [isBioEnabled]);
+
+	useEffect(() => {
+		getBioAvailability();
+	}, []);
 
 	const UserIcon = () => (
 		<View>
@@ -55,7 +89,7 @@ function SettingsScreen({ navigation }) {
 					<Text
 						style={{
 							color: colors.backgroundSecondary,
-							fontSize: sizing(10),
+							fontSize: sizing(6),
 							fontWeight: "600",
 						}}
 					>
@@ -63,6 +97,21 @@ function SettingsScreen({ navigation }) {
 					</Text>
 				</View>
 			)}
+		</View>
+	);
+
+	const LanguageChevron = () => (
+		<View style={presetStyles.row}>
+			<Text
+				style={{
+					color: colors.textSecondary,
+					fontSize: sizing(4),
+					marginRight: sizing(2),
+				}}
+			>
+				English
+			</Text>
+			<ChevronRight />
 		</View>
 	);
 
@@ -78,16 +127,39 @@ function SettingsScreen({ navigation }) {
 		{
 			id: 1,
 			title: "Change Language",
-			RightComponent: ChevronRight,
+			RightComponent: LanguageChevron,
 		},
 		{
 			id: 2,
 			title: "Terms & Condition",
 			RightComponent: ChevronRight,
+			onPress: () =>
+				navigation.navigate(routes.screens.TERMS_AND_CONDITION),
+		},
+		isBioAvailable && {
+			id: 3,
+			title: "Sign in with Touch ID / Face ID",
+			RightComponent: () => (
+				<Switch value={isBioEnabled} onValueChange={handleBioToggle} />
+			),
+			disabled: true,
 		},
 		{
-			id: 3,
+			id: 4,
 			title: "Log out",
+			titleStyle: {
+				color: "red",
+				fontWeight: "500",
+			},
+			onPress: () => {
+				Alert.alert("Log out", "Are you sure you want to log out?", [
+					{
+						text: "Cancel",
+						style: "cancel",
+					},
+					{ text: "Log out", onPress: () => logOut() },
+				]);
+			},
 		},
 	];
 
@@ -104,22 +176,24 @@ function SettingsScreen({ navigation }) {
 				/>
 			</TouchableOpacity>
 			<Text style={styles.title}>Settings</Text>
-			<FlatList
-				contentContainerStyle={styles.container}
-				data={data}
-				keyExtractor={(item) => `${item.id}`}
-				ItemSeparatorComponent={() => (
-					<View
-						style={{
-							height: 1,
-							backgroundColor: "#d0d0d0",
-						}}
-					/>
-				)}
-				renderItem={({ item }) => (
-					<SettingsItem key={item.id} {...item} />
-				)}
-			/>
+			{!isLoading && (
+				<FlatList
+					contentContainerStyle={styles.container}
+					data={data}
+					keyExtractor={(item) => `${item.id}`}
+					ItemSeparatorComponent={() => (
+						<View
+							style={{
+								height: 1,
+								backgroundColor: "#d0d0d0",
+							}}
+						/>
+					)}
+					renderItem={({ item }) => (
+						<SettingsItem key={item.id} {...item} />
+					)}
+				/>
+			)}
 		</Screen>
 	);
 }

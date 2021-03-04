@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { axiosInstance } from "../api/config";
 import AuthContext from "./context";
 import authStorage from "./storage";
+import * as BioStorage from "../biometrics/storage";
 
 export default function useAuth() {
 	const { user, setUser } = useContext(AuthContext);
@@ -13,6 +14,7 @@ export default function useAuth() {
 
 	const logOut = () => {
 		authStorage.removeToken();
+		BioStorage.storeEnable(false);
 		setUser(null);
 	};
 

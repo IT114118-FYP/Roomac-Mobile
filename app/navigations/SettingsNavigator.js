@@ -6,6 +6,7 @@ import CampusLocationsScreen from "../screens/CampusLocationsScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ProfileSettingsScreen from "../screens/ProfileSettingsScreen";
 import colors from "../themes/colors";
+import TOSscreen from "../screens/TOSscreen";
 
 const Stack = createStackNavigator();
 
@@ -22,6 +23,16 @@ export default function SettingsNavigator() {
 			<Stack.Screen
 				name={routes.screens.PROFILE_SETTINGS}
 				component={ProfileSettingsScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.textPrimary,
+				}}
+			/>
+			<Stack.Screen
+				name={routes.screens.TERMS_AND_CONDITION}
+				component={TOSscreen}
 				options={{
 					headerBackTitleVisible: false,
 					headerTitle: false,

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
+import * as LocalAuthentication from "expo-local-authentication";
 
+import * as BioStorage from "./app/biometrics/storage";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
 import authStorage from "./app/auth/storage";
@@ -13,12 +15,33 @@ export default function App() {
 	const [user, setUser] = useState();
 	const [isReady, setIsReady] = useState(false);
 
+	const appLoad = async () => {
+		await restoreToken();
+	};
+
 	const restoreToken = async () => {
 		const token = await authStorage.getToken();
 		if (token) {
-			fetchUser();
+			loadBiometrics();
 		} else {
 			setIsReady(true);
+		}
+	};
+
+	const loadBiometrics = async () => {
+		const biometricsEnabled = await BioStorage.getEnable();
+		if (biometricsEnabled) {
+			const result = await LocalAuthentication.authenticateAsync({
+				promptMessage:
+					"Verify your fingerprint to continue authentication.",
+			});
+			if (result.success) {
+				fetchUser();
+			} else {
+				alert("Authentication Failed");
+			}
+		} else {
+			fetchUser();
 		}
 	};
 
@@ -36,7 +59,7 @@ export default function App() {
 			});
 
 	useEffect(() => {
-		restoreToken();
+		appLoad();
 	}, []);
 
 	return (
