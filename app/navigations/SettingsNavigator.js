@@ -2,9 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import routes from "./routes";
-import CampusLocationsScreen from "../screens/CampusLocationsScreen";
 import SettingsScreen from "../screens/SettingsScreen";
-import ProfileSettingsScreen from "../screens/ProfileSettingsScreen";
 import colors from "../themes/colors";
 import TOSscreen from "../screens/TOSscreen";
 
@@ -18,16 +16,6 @@ export default function SettingsNavigator() {
 				component={SettingsScreen}
 				options={{
 					headerShown: false,
-				}}
-			/>
-			<Stack.Screen
-				name={routes.screens.PROFILE_SETTINGS}
-				component={ProfileSettingsScreen}
-				options={{
-					headerBackTitleVisible: false,
-					headerTitle: false,
-					headerTransparent: true,
-					headerTintColor: colors.textPrimary,
 				}}
 			/>
 			<Stack.Screen
