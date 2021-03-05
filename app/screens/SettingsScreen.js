@@ -259,7 +259,7 @@ function SettingsScreen({ navigation }) {
 				{!isLoading && (
 					<View style={styles.container}>
 						{data.map((item, index) => (
-							<View key={item.id}>
+							<View key={`${item.id}`}>
 								<SettingsItem {...item} />
 								{index < data.length - 1 && (
 									<View
