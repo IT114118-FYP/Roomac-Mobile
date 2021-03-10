@@ -30,6 +30,15 @@ function ResourceItem({ item, onPress }) {
 			/>
 			<View style={styles.infoContainer}>
 				<Text
+					style={{
+						color: colors.textSecondary,
+						fontSize: sizing(3),
+						fontWeight: "500",
+					}}
+				>
+					{item.branch.title_en}
+				</Text>
+				<Text
 					style={styles.title}
 				>{`${item.number} ${item.title_en}`}</Text>
 
@@ -43,7 +52,7 @@ function ResourceItem({ item, onPress }) {
 						style={styles.descriptionTitle}
 					>{`${item.min_user} - ${item.max_user}`}</Text>
 				</View>
-				<View style={[presetStyles.row, { marginTop: sizing(1) }]}>
+				{/* <View style={[presetStyles.row, { marginTop: sizing(1) }]}>
 					<MaterialIcons
 						name="location-on"
 						size={sizing(4)}
@@ -52,7 +61,7 @@ function ResourceItem({ item, onPress }) {
 					<Text style={styles.descriptionTitle}>
 						{item.branch.title_en}
 					</Text>
-				</View>
+				</View> */}
 				<View style={[presetStyles.row, { marginTop: sizing(1) }]}>
 					<MaterialCommunityIcons
 						name="clock"
@@ -89,7 +98,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: sizing(4),
 		fontWeight: "500",
-		marginBottom: sizing(1),
+		marginVertical: sizing(1),
 	},
 	descriptionTitle: {
 		color: colors.textSecondary,

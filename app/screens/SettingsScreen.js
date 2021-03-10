@@ -80,18 +80,40 @@ function SettingsScreen({ navigation }) {
 		console.log(result);
 
 		if (!result.cancelled) {
-			updateUser(result.uri);
+			updateImage(result);
 		}
 	};
 
-	const updateUser = (image_url) => {
+	const updateImage = (result) => {
+		/*
+		const data = new FormData();
+		data.append(`image`, {
+			name: "image/jpeg",
+			type: "image/jpeg", // <-
+			uri: result.uri,
+		});
+		*/
+
+		// ImagePicker saves the taken photo to disk and returns a local URI to it
+		let localUri = result.uri;
+		let filename = localUri.split("/").pop();
+
+		// Infer the type of the image
+		let match = /\.(\w+)$/.exec(filename);
+		let type = match ? `image/${match[1]}` : `image`;
+
+		// Upload the image using the fetch and FormData APIs
+		let formData = new FormData();
+		formData.append("image", { uri: localUri, name: filename, type: type });
+
 		axiosInstance
-			.put(`/api/users/${user.id}`, {
-				...user,
-				image_url,
+			.post(`/api/users/me/avatar`, formData, {
+				headers: {
+					"content-type": "multipart/form-data",
+				},
 			})
 			.then(() => fetchUser())
-			.catch((error) => console.log(error));
+			.catch((error) => console.log(error.response.data));
 	};
 
 	useEffect(() => {
@@ -144,7 +166,16 @@ function SettingsScreen({ navigation }) {
 					>
 						{`${user.first_name[0]}${user.last_name[0]}`}
 					</Text>
-					<EditButton />
+					<TouchableOpacity
+						onPress={pickImage}
+						style={styles.editImageIcon}
+					>
+						<MaterialIcons
+							name="edit"
+							color={colors.backgroundPrimary}
+							size={sizing(4.5)}
+						/>
+					</TouchableOpacity>
 				</View>
 			)}
 		</View>
@@ -167,9 +198,15 @@ function SettingsScreen({ navigation }) {
 
 	const data = [
 		{
-			id: 1,
+			id: 0,
 			title: "Change Language",
 			RightComponent: LanguageChevron,
+		},
+		{
+			id: 1,
+			title: "Change Password",
+			RightComponent: ChevronRight,
+			onPress: () => navigation.navigate(routes.screens.CHANGE_PASSWORD),
 		},
 		{
 			id: 2,

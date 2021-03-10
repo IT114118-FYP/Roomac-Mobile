@@ -20,6 +20,7 @@ export default function useAuth() {
 
 	const fetchUser = () =>
 		axiosInstance.get(`/api/users/me`).then(({ data }) => {
+			console.log(data);
 			setUser(data);
 		});
 
