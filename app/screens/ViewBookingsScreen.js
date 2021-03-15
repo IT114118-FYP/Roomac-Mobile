@@ -21,7 +21,7 @@ import routes from "../navigations/routes";
 
 const historyOptions = [7, 30, 90];
 
-const TimeSection = ({ data, title, children, navigation }) => (
+export const TimeSection = ({ data, title, children, navigation }) => (
 	<>
 		{data.length !== 0 && (
 			<Animatable.View animation="fadeInUp" style={styles.section}>

@@ -14,6 +14,7 @@ import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import moment from "moment";
 
+import { TimeSection } from "./ViewBookingsScreen";
 import { axiosInstance } from "../api/config";
 import CategoryItem from "../components/CategoryItem";
 import Screen from "../components/Screen";
@@ -22,12 +23,15 @@ import ViewBookingListItem from "../components/ViewBookingListItem";
 import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
+import { DrawerActions } from "@react-navigation/routers";
+import routes from "../navigations/routes";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(1);
-	const [activeBookings, setActiveBookings] = useState([]);
+	const [activeBooking, setActiveBooking] = useState(null);
+	const [upcoming, setUpcoming] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [resources, setResources] = useState([]);
 	const [isfilterOpen, setFilterOpen] = useState(false);
@@ -41,6 +45,12 @@ function MainScreen({ navigation }) {
 		fetchResources();
 	}, [selectedCategory]);
 
+	const fetchAll = () => {
+		fetchCategories();
+		fetchBookings();
+		fetchResources();
+	};
+
 	const fetchBookings = () => {
 		axiosInstance(
 			`/api/users/${user.id}/bookings?start=${moment().format(
@@ -48,7 +58,20 @@ function MainScreen({ navigation }) {
 			)}&end=${moment().format("YYYY-MM-DD")}`
 		).then(({ data }) => {
 			console.log(data);
-			setActiveBookings(data);
+
+			const current = moment();
+			var upcomingData = [];
+			data.forEach((booking) => {
+				if (moment().isBetween(booking.start_time, booking.end_time)) {
+					setActiveBooking(booking);
+				} else if (moment(booking.start_time).isAfter(current)) {
+					upcomingData.push(booking);
+				}
+			});
+			upcomingData.sort((a, b) =>
+				moment(a.start_time).isAfter(moment(b.start_time))
+			);
+			setUpcoming(upcomingData);
 		});
 	};
 
@@ -124,12 +147,119 @@ function MainScreen({ navigation }) {
 				refreshControl={
 					<RefreshControl
 						refreshing={isLoading}
-						onRefresh={fetchResources}
+						onRefresh={fetchAll}
 						title="pull to refresh"
 					/>
 				}
 			>
-				{activeBookings && <ViewBookingListItem />}
+				<View
+					style={[
+						presetStyles.marginHorizontal,
+						{
+							marginVertical: sizing(4),
+						},
+					]}
+				>
+					{activeBooking && (
+						<View
+							style={{
+								marginBottom: sizing(4),
+							}}
+						>
+							<Text
+								style={[
+									presetStyles.listHeader,
+									{
+										marginBottom: sizing(2),
+									},
+								]}
+							>
+								Now
+							</Text>
+
+							<Animatable.View animation="fadeInRight">
+								<ViewBookingListItem
+									active
+									// onCheckIn
+									date={moment(
+										activeBooking.start_time
+									).format("LL")}
+									period={`${moment(
+										activeBooking.start_time
+									).format("H:mm")} - ${moment(
+										activeBooking.end_time
+									).format("H:mm")}`}
+									location={
+										Boolean(activeBooking.resource.title_en)
+											? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
+											: activeBooking.resource.number
+									}
+									onPress={() => {
+										navigation.navigate(
+											routes.navigators.BOOKINGS,
+											{
+												screen:
+													routes.screens
+														.BOOKING_DETAILS,
+												params: {
+													item: activeBooking,
+												},
+											}
+										);
+									}}
+								/>
+							</Animatable.View>
+						</View>
+					)}
+					{upcoming.length !== 0 && (
+						<View>
+							<View style={presetStyles.row}>
+								<Text style={presetStyles.listHeader}>
+									Today
+								</Text>
+							</View>
+							{upcoming.map((item, index) => (
+								<Animatable.View
+									animation="fadeInRight"
+									delay={index * 100}
+									key={item.id}
+									style={{
+										marginTop: sizing(3),
+									}}
+								>
+									<ViewBookingListItem
+										date={moment(item.start_time).format(
+											"LL"
+										)}
+										period={`${moment(
+											item.start_time
+										).format("H:mm")} - ${moment(
+											item.end_time
+										).format("H:mm")}`}
+										location={
+											Boolean(item.resource.title_en)
+												? `${item.resource.number} • ${item.resource.title_en}`
+												: item.resource.number
+										}
+										onPress={() =>
+											navigation.navigate(
+												routes.navigators.BOOKINGS,
+												{
+													screen:
+														routes.screens
+															.BOOKING_DETAILS,
+													params: {
+														item,
+													},
+												}
+											)
+										}
+									/>
+								</Animatable.View>
+							))}
+						</View>
+					)}
+				</View>
 				{!isLoading && (
 					<View style={styles.categories}>
 						<Text

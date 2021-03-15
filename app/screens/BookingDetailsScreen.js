@@ -29,6 +29,7 @@ const { width, height } = Dimensions.get("screen");
 
 function BookingDetailsScreen({ route }) {
 	const { item } = route.params;
+	console.log(item);
 	const [tos, setTos] = useState();
 
 	const fetchTOS = () => {

@@ -93,9 +93,7 @@ function CreateBookingScreen({ route, navigation }) {
 				scrollToIndex(i + 1);
 				break;
 			case 3:
-				navigation.dispatch(
-					DrawerActions.jumpTo(routes.navigators.BOOKINGS)
-				);
+				navigation.navigate(routes.navigators.BOOKINGS);
 				break;
 			default:
 				scrollToIndex(i + 1);
