@@ -6,7 +6,7 @@ import colors from "../themes/colors";
 function LoginButton({ title, style }) {
 	const { handleSubmit } = useFormikContext();
 	return (
-		<TouchableOpacity style={styles.container} onPress={handleSubmit}>
+		<TouchableOpacity style={[styles.container]} onPress={handleSubmit}>
 			<Text style={styles.title}>{title}</Text>
 		</TouchableOpacity>
 	);

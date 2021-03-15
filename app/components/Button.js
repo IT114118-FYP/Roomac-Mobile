@@ -3,10 +3,17 @@ import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import colors from "../themes/colors";
 import { sizing } from "../themes/presetStyles";
 
-function Button({ title, onPress, style, titleStyle }) {
+function Button({ title, onPress, style, titleStyle, children, disabled }) {
 	return (
-		<TouchableOpacity style={[styles.container, style]} onPress={onPress}>
-			<Text style={[styles.title, titleStyle]}>{title}</Text>
+		<TouchableOpacity
+			style={[styles.container, style]}
+			onPress={onPress}
+			disabled={disabled}
+		>
+			{!children && (
+				<Text style={[styles.title, titleStyle]}>{title}</Text>
+			)}
+			{children}
 		</TouchableOpacity>
 	);
 }

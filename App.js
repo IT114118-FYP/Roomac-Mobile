@@ -12,6 +12,7 @@ import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
+import BookingsNavigator from "./app/navigations/BookingsNavigator";
 
 export default function App() {
 	const [user, setUser] = useState();

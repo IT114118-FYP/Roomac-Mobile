@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import routes from "./routes";
 import ViewBookingsScreen from "../screens/ViewBookingsScreen";
 import BookingDetailsScreen from "../screens/BookingDetailsScreen";
+import colors from "../themes/colors";
 
 const Stack = createStackNavigator();
 
@@ -21,7 +22,10 @@ export default function BookingsNavigator() {
 				name={routes.screens.BOOKING_DETAILS}
 				component={BookingDetailsScreen}
 				options={{
-					headerShown: false,
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.backgroundPrimary,
 				}}
 			/>
 		</Stack.Navigator>

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 

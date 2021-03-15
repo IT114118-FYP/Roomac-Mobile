@@ -12,11 +12,13 @@ import {
 } from "react-native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
+import moment from "moment";
 
 import { axiosInstance } from "../api/config";
 import CategoryItem from "../components/CategoryItem";
 import Screen from "../components/Screen";
 import ResourceItem from "../components/ResourceItem";
+import ViewBookingListItem from "../components/ViewBookingListItem";
 import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
@@ -25,17 +27,30 @@ function MainScreen({ navigation }) {
 	const { user } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(1);
+	const [activeBookings, setActiveBookings] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [resources, setResources] = useState([]);
 	const [isfilterOpen, setFilterOpen] = useState(false);
 
 	useEffect(() => {
 		fetchCategories();
+		fetchBookings();
 	}, []);
 
 	useEffect(() => {
 		fetchResources();
 	}, [selectedCategory]);
+
+	const fetchBookings = () => {
+		axiosInstance(
+			`/api/users/${user.id}/bookings?start=${moment().format(
+				"YYYY-MM-DD"
+			)}&end=${moment().format("YYYY-MM-DD")}`
+		).then(({ data }) => {
+			console.log(data);
+			setActiveBookings(data);
+		});
+	};
 
 	const fetchCategories = () => {
 		setLoading(true);
@@ -114,6 +129,7 @@ function MainScreen({ navigation }) {
 					/>
 				}
 			>
+				{activeBookings && <ViewBookingListItem />}
 				{!isLoading && (
 					<View style={styles.categories}>
 						<Text

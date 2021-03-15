@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
 	View,
 	StyleSheet,
@@ -8,9 +8,11 @@ import {
 	Platform,
 	TouchableWithoutFeedback,
 	Keyboard,
+	Modal,
 } from "react-native";
 import { Formik, useFormikContext } from "formik";
 import * as Yup from "yup";
+import LottieView from "lottie-react-native";
 
 import Screen from "../components/Screen";
 import Button from "../components/Button";
@@ -18,7 +20,6 @@ import colors from "../themes/colors";
 import { sizing } from "../themes/presetStyles";
 import { axiosInstance } from "../api/config";
 import useAuth from "../auth/useAuth";
-import { useState } from "react";
 import { Popup } from "popup-ui";
 
 const validationSchema = Yup.object().shape({
@@ -28,7 +29,8 @@ const validationSchema = Yup.object().shape({
 		.matches(
 			/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/,
 			"Must Contain 8 Characters, One Uppercase, One Lowercase and one Number"
-		),
+		)
+		.label("New Password"),
 	passwordConfirmation: Yup.string().oneOf(
 		[Yup.ref("password"), null],
 		"Passwords must match"
@@ -107,11 +109,12 @@ const SubmitButton = () => {
 };
 
 function ChangePasswordScreen(props) {
-	const { user } = useAuth();
+	const { user, logOut } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 
 	const handleSubmit = ({ old, password }) => {
 		setLoading(true);
+		Keyboard.dismiss();
 		axiosInstance
 			.post(`/api/users/me/password`, {
 				old_password: old,
@@ -122,12 +125,15 @@ function ChangePasswordScreen(props) {
 					type: "Success",
 					title: "Success",
 					// button: false,
-					buttonText: "Ok",
-					textBody: "Password changed",
-					callback: () => Popup.hide(),
+					textBody: "Password change, sign in now with new password",
+					buttonText: "Sign In",
+					callback: () => {
+						Popup.hide();
+						logOut();
+					},
 				});
 			})
-			.catch(
+			.catch(() =>
 				Popup.show({
 					type: "Danger",
 					title: "Failed",
@@ -142,41 +148,47 @@ function ChangePasswordScreen(props) {
 
 	return (
 		<Screen>
-			<Text style={styles.title}>Change Password</Text>
-			{/* <KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-				style={{
-					flex: 1,
-				}}
-			>
-				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-					<View
-						style={{
-							flex: 1,
+			{!isLoading && (
+				<>
+					<Text style={styles.title}>Change Password</Text>
+
+					<Formik
+						initialValues={{
+							old: "",
+							password: "",
+							passwordConfirmation: "",
 						}}
-					> */}
-			<Formik
-				initialValues={{
-					old: "",
-					password: "",
-					passwordConfirmation: "",
-				}}
-				onSubmit={handleSubmit}
-				validationSchema={validationSchema}
+						onSubmit={handleSubmit}
+						validationSchema={validationSchema}
+					>
+						<View style={styles.container}>
+							<PasswordField
+								title="Enter old password"
+								name="old"
+							/>
+							<PasswordField
+								title="Enter new password"
+								name="password"
+							/>
+							<PasswordField
+								title="Confirm new password"
+								name="passwordConfirmation"
+							/>
+							<SubmitButton />
+						</View>
+					</Formik>
+				</>
+			)}
+			<Modal
+				visible={isLoading}
+				animationType="fade"
+				style={styles.loadingAnimation}
 			>
-				<View style={styles.container}>
-					<PasswordField title="Enter old password" name="old" />
-					<PasswordField title="Enter new password" name="password" />
-					<PasswordField
-						title="Confirm new password"
-						name="passwordConfirmation"
-					/>
-					<SubmitButton />
-				</View>
-			</Formik>
-			{/* </View>
-				</TouchableWithoutFeedback>
-			</KeyboardAvoidingView> */}
+				<LottieView
+					source={require("../../assets/loading.json")}
+					autoPlay
+				/>
+			</Modal>
 		</Screen>
 	);
 }
