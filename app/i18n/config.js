@@ -1,8 +1,8 @@
 import i18n from "i18n-js";
-import en from "./locale/en";
+import * as languages from "./locale/index";
 
 const loadTranslations = () => {
-	i18n.translations = { en };
+	i18n.translations = languages;
 	i18n.fallbacks = true;
 	i18n.missingBehaviour = "guess";
 };
