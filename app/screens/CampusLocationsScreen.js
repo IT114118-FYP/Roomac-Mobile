@@ -11,9 +11,6 @@ import {
 	Dimensions,
 	Text,
 	TouchableOpacity,
-	SafeAreaView,
-	ScrollView,
-	FlatList,
 	Image,
 	Button,
 } from "react-native";
@@ -25,6 +22,7 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import { axiosInstance } from "../api/config";
 import BottomSheet from "@gorhom/bottom-sheet";
+import { Translations } from "../i18n";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -80,8 +78,13 @@ function CampusLocationsScreen({ navigation }) {
 									latitude: Number(branch.lat),
 									longitude: Number(branch.lng),
 								}}
-								title={branch.title_en}
-								// description={item.branch.title_en}
+								title={Translations.getTranslatedStringFromProvider(
+									{
+										en: branch.title_en,
+										hk: branch.title_hk,
+										cn: branch.title_cn,
+									}
+								)}
 							/>
 						))}
 					</MapView>
@@ -116,7 +119,13 @@ function CampusLocationsScreen({ navigation }) {
 										flex: 1,
 									}}
 								>
-									{branches[selected]?.title_en}
+									{Translations.getTranslatedStringFromProvider(
+										{
+											en: branches[selected]?.title_en,
+											hk: branches[selected]?.title_hk,
+											cn: branches[selected]?.title_cn,
+										}
+									)}
 								</Text>
 								<Button title="Go to website" />
 							</View>

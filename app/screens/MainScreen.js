@@ -14,7 +14,6 @@ import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import moment from "moment";
 
-import { TimeSection } from "./ViewBookingsScreen";
 import { axiosInstance } from "../api/config";
 import CategoryItem from "../components/CategoryItem";
 import Screen from "../components/Screen";
@@ -25,6 +24,7 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import { DrawerActions } from "@react-navigation/routers";
 import routes from "../navigations/routes";
+import { Translations } from "../i18n";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
@@ -126,7 +126,13 @@ function MainScreen({ navigation }) {
 						size={sizing(5.5)}
 					/>
 				</TouchableOpacity>
-				<Text style={styles.username}>Welcome, {user.first_name}</Text>
+				<Text style={styles.username}>
+					{Translations.getTranslatedString(
+						"welcome",
+						routes.screens.HOME,
+						user.first_name
+					)}
+				</Text>
 			</View>
 			<View style={[styles.searchBar, presetStyles.shadow]}>
 				<Feather
@@ -140,7 +146,10 @@ function MainScreen({ navigation }) {
 						color: colors.textSecondary,
 					}}
 				>
-					help me find a resource
+					{Translations.getTranslatedString(
+						"searchTitle",
+						routes.screens.HOME
+					)}
 				</Text>
 			</View>
 			<ScrollView
@@ -148,100 +157,59 @@ function MainScreen({ navigation }) {
 					<RefreshControl
 						refreshing={isLoading}
 						onRefresh={fetchAll}
-						title="pull to refresh"
+						title={Translations.getTranslatedString(
+							"pullToRefresh",
+							"common"
+						)}
 					/>
 				}
 			>
-				<View
-					style={[
-						presetStyles.marginHorizontal,
-						{
-							marginVertical: sizing(4),
-						},
-					]}
-				>
-					{activeBooking && (
-						<View
-							style={{
-								marginBottom: sizing(4),
-							}}
-						>
-							<Text
-								style={[
-									presetStyles.listHeader,
-									{
-										marginBottom: sizing(2),
-									},
-								]}
+				{(upcoming.length !== 0 || activeBooking) && (
+					<View
+						style={[
+							presetStyles.marginHorizontal,
+							{
+								marginVertical: sizing(4),
+							},
+						]}
+					>
+						{activeBooking && (
+							<View
+								style={{
+									marginBottom: sizing(4),
+								}}
 							>
-								Now
-							</Text>
-
-							<Animatable.View animation="fadeInRight">
-								<ViewBookingListItem
-									active
-									// onCheckIn
-									date={moment(
-										activeBooking.start_time
-									).format("LL")}
-									period={`${moment(
-										activeBooking.start_time
-									).format("H:mm")} - ${moment(
-										activeBooking.end_time
-									).format("H:mm")}`}
-									location={
-										Boolean(activeBooking.resource.title_en)
-											? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
-											: activeBooking.resource.number
-									}
-									onPress={() => {
-										navigation.navigate(
-											routes.navigators.BOOKINGS,
-											{
-												screen:
-													routes.screens
-														.BOOKING_DETAILS,
-												params: {
-													item: activeBooking,
-												},
-											}
-										);
-									}}
-								/>
-							</Animatable.View>
-						</View>
-					)}
-					{upcoming.length !== 0 && (
-						<View>
-							<View style={presetStyles.row}>
-								<Text style={presetStyles.listHeader}>
-									Today
-								</Text>
-							</View>
-							{upcoming.map((item, index) => (
-								<Animatable.View
-									animation="fadeInRight"
-									delay={index * 100}
-									key={item.id}
-									style={{
-										marginTop: sizing(3),
-									}}
+								<Text
+									style={[
+										presetStyles.listHeader,
+										{
+											marginBottom: sizing(2),
+										},
+									]}
 								>
+									Now
+								</Text>
+
+								<Animatable.View animation="fadeInRight">
 									<ViewBookingListItem
-										date={moment(item.start_time).format(
-											"LL"
-										)}
+										active
+										// onCheckIn
+										date={moment(
+											activeBooking.start_time
+										).format("LL")}
 										period={`${moment(
-											item.start_time
+											activeBooking.start_time
 										).format("H:mm")} - ${moment(
-											item.end_time
+											activeBooking.end_time
 										).format("H:mm")}`}
 										location={
-											Boolean(item.resource.title_en)
-												? `${item.resource.number} • ${item.resource.title_en}`
-												: item.resource.number
+											Boolean(
+												activeBooking.resource.title_en
+											)
+												? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
+												: activeBooking.resource.number
 										}
-										onPress={() =>
+										onPress={() => {
 											navigation.navigate(
 												routes.navigators.BOOKINGS,
 												{
@@ -249,17 +217,68 @@ function MainScreen({ navigation }) {
 														routes.screens
 															.BOOKING_DETAILS,
 													params: {
-														item,
+														item: activeBooking,
 													},
 												}
-											)
-										}
+											);
+										}}
 									/>
 								</Animatable.View>
-							))}
-						</View>
-					)}
-				</View>
+							</View>
+						)}
+						{upcoming.length !== 0 && (
+							<View>
+								<View style={presetStyles.row}>
+									<Text style={presetStyles.listHeader}>
+										{Translations.getTranslatedString(
+											"Today",
+											routes.screens.HOME
+										)}
+									</Text>
+								</View>
+								{upcoming.map((item, index) => (
+									<Animatable.View
+										animation="fadeInRight"
+										delay={index * 100}
+										key={item.id}
+										style={{
+											marginTop: sizing(3),
+										}}
+									>
+										<ViewBookingListItem
+											date={moment(
+												item.start_time
+											).format("LL")}
+											period={`${moment(
+												item.start_time
+											).format("H:mm")} - ${moment(
+												item.end_time
+											).format("H:mm")}`}
+											location={
+												Boolean(item.resource.title_en)
+													? `${item.resource.number} • ${item.resource.title_en}`
+													: item.resource.number
+											}
+											onPress={() =>
+												navigation.navigate(
+													routes.navigators.BOOKINGS,
+													{
+														screen:
+															routes.screens
+																.BOOKING_DETAILS,
+														params: {
+															item,
+														},
+													}
+												)
+											}
+										/>
+									</Animatable.View>
+								))}
+							</View>
+						)}
+					</View>
+				)}
 				{!isLoading && (
 					<View style={styles.categories}>
 						<Text
@@ -268,7 +287,10 @@ function MainScreen({ navigation }) {
 								presetStyles.listHeader,
 							]}
 						>
-							Categories
+							{Translations.getTranslatedString(
+								"categories",
+								routes.screens.HOME
+							)}
 						</Text>
 						<FlatList
 							contentContainerStyle={{
@@ -300,7 +322,13 @@ function MainScreen({ navigation }) {
 									<CategoryItem
 										displayCard={false}
 										imageUrl={item.image_url}
-										title={item.title_en}
+										title={Translations.getTranslatedStringFromProvider(
+											{
+												en: item.title_en,
+												hk: item.title_hk,
+												cn: item.title_cn,
+											}
+										)}
 										selected={
 											item.id === selectedCategory
 												? true
@@ -323,7 +351,11 @@ function MainScreen({ navigation }) {
 								presetStyles.listHeader,
 							]}
 						>
-							Resources ({resources.length})
+							{Translations.getTranslatedString(
+								"resources",
+								routes.screens.HOME,
+								resources.length
+							)}
 						</Text>
 						<TouchableOpacity onPress={() => setFilterOpen(true)}>
 							<MaterialCommunityIcons
@@ -355,7 +387,7 @@ function MainScreen({ navigation }) {
 									key={item.id}
 									onPress={() =>
 										navigation.navigate(
-											"DetailedResources",
+											routes.screens.DETAILED_RESOURCES,
 											{ item }
 										)
 									}

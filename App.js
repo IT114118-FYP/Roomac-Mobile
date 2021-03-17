@@ -5,6 +5,9 @@ import * as LocalAuthentication from "expo-local-authentication";
 import { Root as PopupRoot, Popup, Toast } from "popup-ui";
 import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
 
+import * as Localization from "expo-localization";
+import { LanguageConfig, Translations } from "./app/i18n/index";
+
 import * as BioStorage from "./app/biometrics/storage";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
@@ -12,7 +15,6 @@ import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
-import BookingsNavigator from "./app/navigations/BookingsNavigator";
 
 export default function App() {
 	const [user, setUser] = useState();
@@ -22,9 +24,12 @@ export default function App() {
 	if (netInfo.type !== "unknown" && netInfo.isInternetReachable === false) {
 		Popup.show({
 			type: "Warning",
-			title: "No Internet connection!",
+			title: Translations.getTranslatedString("noInternet", "App"),
 			button: false,
-			textBody: "Turn on Internet connection before using roomac.",
+			textBody: Translations.getTranslatedString(
+				"noInternetDescription",
+				"App"
+			),
 			callback: () => Popup.hide(),
 		});
 	}
@@ -42,12 +47,17 @@ export default function App() {
 		const biometricsEnabled = await BioStorage.getEnable();
 		if (biometricsEnabled) {
 			const result = await LocalAuthentication.authenticateAsync({
-				promptMessage: "Verify to continue authentication.",
+				promptMessage: Translations.getTranslatedString(
+					"biometrics",
+					"App"
+				),
 			});
 			if (result.success) {
 				fetchUser();
 			} else {
-				alert("Authentication Failed");
+				alert(
+					Translations.getTranslatedString("biometricsFailed", "App")
+				);
 			}
 		} else {
 			fetchUser();
@@ -66,15 +76,22 @@ export default function App() {
 				authStorage.removeToken();
 				Popup.show({
 					type: "Danger",
-					title: "Something went wrong!",
+					title: Translations.getTranslatedString("error", "App"),
 					button: false,
-					textBody: "Restart the App and try again",
-					buttonText: "Ok",
+					textBody: Translations.getTranslatedString(
+						"errorDescription",
+						"App"
+					),
+					buttonText: Translations.getTranslatedString(
+						"ok",
+						"common"
+					),
 					callback: () => Popup.hide(),
 				});
 			});
 
 	useEffect(() => {
+		LanguageConfig.setLanguage(Localization.locale);
 		restoreToken();
 	}, []);
 
@@ -96,7 +113,6 @@ export default function App() {
 					/>
 				)}
 			</AuthContext.Provider>
-			{/* <OfflineNotice /> */}
 		</PopupRoot>
 	);
 }

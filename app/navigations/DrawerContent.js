@@ -14,6 +14,7 @@ import routes from "./routes";
 import { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
+import { Translations } from "../i18n";
 
 function DrawerContent(props) {
 	const { user, logOut } = useAuth();
@@ -31,7 +32,6 @@ function DrawerContent(props) {
 					<Image
 						source={{ url: user.image_url }}
 						style={{
-							// backgroundColor: colors.Powder_Blue,
 							height: 135,
 							width: 135,
 							marginVertical: sizing(4),
@@ -70,7 +70,11 @@ function DrawerContent(props) {
 						color: colors.textPrimary,
 					}}
 				>
-					{`${user.first_name}, ${user.last_name}`}
+					{Translations.getTranslatedStringFromProvider({
+						en: `${user.first_name}, ${user.last_name}`,
+						hk: user.chinese_name,
+						cn: user.chinese_name,
+					})}
 				</Text>
 				<Text
 					style={{
@@ -100,7 +104,7 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label="Home"
+					label={Translations.getTranslatedString("home", "Drawer")}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.HOME);
 					}}
@@ -113,7 +117,10 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label="My Bookings"
+					label={Translations.getTranslatedString(
+						"bookings",
+						"Drawer"
+					)}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.BOOKINGS);
 					}}
@@ -126,7 +133,10 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label="Campuses"
+					label={Translations.getTranslatedString(
+						"campuses",
+						"Drawer"
+					)}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.CAMPUS);
 					}}
@@ -139,7 +149,10 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label="Settings"
+					label={Translations.getTranslatedString(
+						"settings",
+						"Drawer"
+					)}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.SETTINGS);
 					}}
@@ -171,17 +184,32 @@ function DrawerContent(props) {
 						size={size}
 					/>
 				)}
-				label="Logout"
+				label={Translations.getTranslatedString("logout", "common")}
 				onPress={() => {
 					Alert.alert(
-						"Log out",
-						"Are you sure you want to log out?",
+						Translations.getTranslatedString(
+							"logout",
+							routes.screens.SETTINGS
+						),
+						Translations.getTranslatedString(
+							"logoutConfirm",
+							routes.screens.SETTINGS
+						),
 						[
 							{
-								text: "Cancel",
+								text: Translations.getTranslatedString(
+									"cancel",
+									routes.screens.SETTINGS
+								),
 								style: "cancel",
 							},
-							{ text: "Log out", onPress: () => logOut() },
+							{
+								text: Translations.getTranslatedString(
+									"logout",
+									routes.screens.SETTINGS
+								),
+								onPress: () => logOut(),
+							},
 						]
 					);
 				}}

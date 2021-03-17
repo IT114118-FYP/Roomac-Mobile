@@ -4,11 +4,18 @@ import moment from "moment";
 
 import TimeslotListItem from "../../components/TimeslotListItem";
 import presetStyles, { sizing } from "../../themes/presetStyles";
+import { Translations } from "../../i18n";
+import routes from "../../navigations/routes";
 
 function ConfirmBooking({ timeslot, resource, date }) {
 	return (
 		<View style={styles.container}>
-			<Text>Please check and confirm the following booking</Text>
+			<Text>
+				{Translations.getTranslatedString(
+					"confirm_description",
+					routes.screens.CREATE_BOOKING
+				)}
+			</Text>
 			<Text
 				style={[
 					presetStyles.listHeader,
@@ -18,15 +25,27 @@ function ConfirmBooking({ timeslot, resource, date }) {
 				]}
 			>
 				{moment(date, "YYYY-MM-DD").calendar({
-					sameDay: "[Today] - D/M",
-					nextDay: "[Tomorrow] - D/M",
+					sameDay: Translations.getTranslatedString(
+						"timeslot_sameDay",
+						"common"
+					),
+					nextDay: Translations.getTranslatedString(
+						"timeslot_nextDay",
+						"common"
+					),
 					nextWeek: "D/M",
 					sameElse: "D/M",
 				})}
 			</Text>
 			<TimeslotListItem
 				timeslot={timeslot}
-				location={`${resource.number} • ${resource.branch.title_en}`}
+				location={`${
+					resource.number
+				} • ${Translations.getTranslatedStringFromProvider({
+					en: resource.branch.title_en,
+					hk: resource.branch.title_hk,
+					cn: resource.branch.title_cn,
+				})}`}
 			/>
 		</View>
 	);

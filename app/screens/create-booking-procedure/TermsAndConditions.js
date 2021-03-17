@@ -1,6 +1,7 @@
 import React from "react";
 import { View, StyleSheet, Text, ScrollView } from "react-native";
 import Markdown from "react-native-markdown-display";
+import { Translations } from "../../i18n";
 
 import presetStyles, { sizing } from "../../themes/presetStyles";
 
@@ -19,7 +20,11 @@ function TermsAndConditions({ tos }) {
 					},
 				}}
 			>
-				{tos.tos_en}
+				{Translations.getTranslatedStringFromProvider({
+					en: tos.tos_en,
+					hk: tos.tos_hk,
+					cn: tos.tos_cn,
+				})}
 			</Markdown>
 		</ScrollView>
 	);

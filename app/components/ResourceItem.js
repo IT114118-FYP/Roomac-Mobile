@@ -12,6 +12,7 @@ import moment from "moment";
 
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
+import { Translations } from "../i18n";
 
 const { height } = Dimensions.get("window");
 
@@ -36,11 +37,19 @@ function ResourceItem({ item, onPress }) {
 						fontWeight: "500",
 					}}
 				>
-					{item.branch.title_en}
+					{Translations.getTranslatedStringFromProvider({
+						en: item.branch.title_en,
+						hk: item.branch.title_hk,
+						cn: item.branch.title_cn,
+					})}
 				</Text>
-				<Text
-					style={styles.title}
-				>{`${item.number} ${item.title_en}`}</Text>
+				<Text style={styles.title}>{`${
+					item.number
+				} ${Translations.getTranslatedStringFromProvider({
+					en: item.title_en,
+					hk: item.title_hk,
+					cn: item.title_cn,
+				})}`}</Text>
 
 				<View style={presetStyles.row}>
 					<MaterialCommunityIcons
@@ -52,16 +61,6 @@ function ResourceItem({ item, onPress }) {
 						style={styles.descriptionTitle}
 					>{`${item.min_user} - ${item.max_user}`}</Text>
 				</View>
-				{/* <View style={[presetStyles.row, { marginTop: sizing(1) }]}>
-					<MaterialIcons
-						name="location-on"
-						size={sizing(4)}
-						color={colors.textSecondary}
-					/>
-					<Text style={styles.descriptionTitle}>
-						{item.branch.title_en}
-					</Text>
-				</View> */}
 				<View style={[presetStyles.row, { marginTop: sizing(1) }]}>
 					<MaterialCommunityIcons
 						name="clock"

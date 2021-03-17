@@ -24,12 +24,13 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Markdown from "react-native-markdown-display";
 import Button from "../components/Button";
+import { Translations } from "../i18n";
+import routes from "../navigations/routes";
 
 const { width, height } = Dimensions.get("screen");
 
 function BookingDetailsScreen({ route }) {
 	const { item } = route.params;
-	console.log(item);
 	const [tos, setTos] = useState();
 
 	const fetchTOS = () => {
@@ -42,10 +43,6 @@ function BookingDetailsScreen({ route }) {
 	};
 
 	useEffect(() => {
-		console.log(moment().toString());
-		console.log(moment(item.start_time).toString());
-		const subtarctedTime = moment(item.start_time).subtract(15, "minutes");
-		console.log(moment().isBetween(subtarctedTime, moment()));
 		fetchTOS();
 	}, []);
 
@@ -57,7 +54,11 @@ function BookingDetailsScreen({ route }) {
 				style={styles.image}
 			/>
 			<Text style={[presetStyles.marginHorizontal, styles.date]}>
-				{moment(item.start_time).format("LL")}
+				{Translations.getTranslatedStringFromProvider({
+					en: moment(item.start_time).format("LL"),
+					hk: moment(item.start_time).format("l"),
+					cn: moment(item.start_time).format("l"),
+				})}
 			</Text>
 			<Text
 				adjustsFontSizeToFit
@@ -110,14 +111,22 @@ function BookingDetailsScreen({ route }) {
 						moment(item.start_time).subtract(15, "minutes"),
 						moment(item.end_time)
 					) ? (
-						<Button title="Check In" style={{ flex: 1 }} />
+						<Button
+							title={Translations.getTranslatedString(
+								"checkIn",
+								routes.screens.BOOKING_DETAILS
+							)}
+							style={{ flex: 1 }}
+						/>
 					) : (
 						<Button
-							title={`Check in available after ${moment(
-								item.start_time
-							)
-								.subtract(15, "minutes")
-								.format("H:mm")}`}
+							title={Translations.getTranslatedString(
+								"checkInAvailable",
+								routes.screens.BOOKING_DETAILS,
+								moment(item.start_time)
+									.subtract(15, "minutes")
+									.format("H:mm")
+							)}
 							style={{
 								flex: 1,
 								backgroundColor: colors.textSecondary,
@@ -144,7 +153,10 @@ function BookingDetailsScreen({ route }) {
 							},
 						]}
 					>
-						Terms and Conditions
+						{Translations.getTranslatedString(
+							"tos",
+							routes.screens.BOOKING_DETAILS
+						)}
 					</Text>
 					<Markdown
 						style={{
@@ -159,7 +171,11 @@ function BookingDetailsScreen({ route }) {
 							},
 						}}
 					>
-						{tos.tos_en}
+						{Translations.getTranslatedStringFromProvider({
+							en: tos.tos_en,
+							hk: tos.tos_hk,
+							cn: tos.tos_cn,
+						})}
 					</Markdown>
 				</View>
 			)}

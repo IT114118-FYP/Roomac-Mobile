@@ -4,8 +4,6 @@ import {
 	StyleSheet,
 	Text,
 	TouchableOpacity,
-	FlatList,
-	Image,
 	Switch,
 	Alert,
 	ScrollView,
@@ -27,6 +25,7 @@ import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
 import SettingsItem, { ChevronRight } from "../components/SettingsItem";
 import { axiosInstance } from "../api/config";
+import { Translations } from "../i18n";
 
 const AVATAR = 90;
 
@@ -201,45 +200,69 @@ function SettingsScreen({ navigation }) {
 	const data = [
 		{
 			id: 0,
-			title: "Change Language",
+			title: Translations.getTranslatedString(
+				"language",
+				routes.screens.SETTINGS
+			),
 			RightComponent: LanguageChevron,
 		},
 		{
 			id: 1,
-			title: "Change Password",
+			title: Translations.getTranslatedString(
+				"password",
+				routes.screens.SETTINGS
+			),
 			RightComponent: ChevronRight,
 			onPress: () => navigation.navigate(routes.screens.CHANGE_PASSWORD),
 		},
-		{
-			id: 2,
-			title: "Terms & Condition",
-			RightComponent: ChevronRight,
-			onPress: () =>
-				navigation.navigate(routes.screens.TERMS_AND_CONDITION),
-		},
 		isBioAvailable && {
-			id: 3,
-			title: "Sign in with Touch ID / Face ID",
+			id: 2,
+			title: Translations.getTranslatedString(
+				"bio",
+				routes.screens.SETTINGS
+			),
 			RightComponent: () => (
 				<Switch value={isBioEnabled} onValueChange={handleBioToggle} />
 			),
 			disabled: true,
 		},
 		{
-			id: 4,
-			title: "Log out",
+			id: 3,
+			title: Translations.getTranslatedString(
+				"logout",
+				routes.screens.SETTINGS
+			),
 			titleStyle: {
 				color: "red",
 				fontWeight: "500",
 			},
 			onPress: () => {
-				Alert.alert("Log out", "Are you sure you want to log out?", [
-					{
-						text: "Cancel",
-						style: "cancel",
-					},
-					{ text: "Log out", onPress: () => logOut() },
-				]);
+				Alert.alert(
+					Translations.getTranslatedString(
+						"logout",
+						routes.screens.SETTINGS
+					),
+					Translations.getTranslatedString(
+						"logoutConfirm",
+						routes.screens.SETTINGS
+					),
+					[
+						{
+							text: Translations.getTranslatedString(
+								"cancel",
+								routes.screens.SETTINGS
+							),
+							style: "cancel",
+						},
+						{
+							text: Translations.getTranslatedString(
+								"logout",
+								routes.screens.SETTINGS
+							),
+							onPress: () => logOut(),
+						},
+					]
+				);
 			},
 		},
 	];
@@ -257,14 +280,23 @@ function SettingsScreen({ navigation }) {
 				/>
 			</TouchableOpacity>
 			<ScrollView>
-				<Text style={styles.title}>Settings</Text>
+				<Text style={styles.title}>
+					{Translations.getTranslatedString(
+						"settings",
+						routes.screens.SETTINGS
+					)}
+				</Text>
 				<View style={styles.profileContainer}>
 					<View style={[presetStyles.row]}>
 						<UserIcon />
 						<View style={styles.detailsContainer}>
-							<Text
-								style={styles.username}
-							>{`${user.first_name}, ${user.last_name}`}</Text>
+							<Text style={styles.username}>
+								{Translations.getTranslatedStringFromProvider({
+									en: `${user.first_name}, ${user.last_name}`,
+									hk: user.chinese_name,
+									cn: user.chinese_name,
+								})}
+							</Text>
 							<Text style={styles.CNA}>{user.name}</Text>
 						</View>
 					</View>

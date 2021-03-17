@@ -19,13 +19,19 @@ import Screen from "../components/Screen";
 import Textfield from "../components/Textfield";
 import colors from "../themes/colors";
 import auth from "../api/auth";
-import ClassroomSvg from "../../assets/classroom";
 import useAuth from "../auth/useAuth";
 import { sizing } from "../themes/presetStyles";
+import { Translations } from "../i18n";
 
 const validationSchema = Yup.object().shape({
-	email: Yup.string().required().min(4).label("Email"),
-	password: Yup.string().required().min(4).label("Password"),
+	email: Yup.string()
+		.required()
+		.min(4)
+		.label(Translations.getTranslatedString("email", "Login")),
+	password: Yup.string()
+		.required()
+		.min(4)
+		.label(Translations.getTranslatedString("password", "Login")),
 });
 
 function LoginScreen(props) {
@@ -51,8 +57,12 @@ function LoginScreen(props) {
 		<Screen style={styles.container}>
 			<View style={styles.form}>
 				<View style={styles.titleView}>
-					<Text style={styles.welcomeText}>Welcome to</Text>
-					<Text style={styles.title}>Roomac</Text>
+					<Text style={styles.welcomeText}>
+						{Translations.getTranslatedString("welcomeTo", "Login")}
+					</Text>
+					<Text style={styles.title}>
+						{Translations.getTranslatedString("roomac", "common")}
+					</Text>
 				</View>
 				<KeyboardAvoidingView
 					behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -78,23 +88,40 @@ function LoginScreen(props) {
 												color: "red",
 											}}
 										>
-											Email/CNA or password is incorrect.
+											{Translations.getTranslatedString(
+												"failedDescription",
+												"Login"
+											)}
 										</Text>
 									)}
 									<Textfield
 										name="email"
-										title="Email"
+										title={Translations.getTranslatedString(
+											"email",
+											"Login"
+										)}
 										placeholder="example@email.com"
 									/>
 									<Textfield
 										name="password"
 										textContentType="password"
 										secureTextEntry
-										title="Password"
-										placeholder="Password"
+										title={Translations.getTranslatedString(
+											"password",
+											"Login"
+										)}
+										placeholder={Translations.getTranslatedString(
+											"password",
+											"Login"
+										)}
 										style={styles.password}
 									/>
-									<LoginButton title="Sign In" />
+									<LoginButton
+										title={Translations.getTranslatedString(
+											"signIn",
+											"common"
+										)}
+									/>
 								</View>
 							</Formik>
 							<TouchableOpacity
@@ -108,7 +135,10 @@ function LoginScreen(props) {
 										fontSize: sizing(3),
 									}}
 								>
-									Forgot your password?
+									{Translations.getTranslatedString(
+										"forgot",
+										"Login"
+									)}
 								</Text>
 							</TouchableOpacity>
 						</View>

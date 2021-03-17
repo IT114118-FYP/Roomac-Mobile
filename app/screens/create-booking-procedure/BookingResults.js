@@ -2,8 +2,11 @@ import React from "react";
 import { View, StyleSheet, Text, Dimensions } from "react-native";
 import LottieView from "lottie-react-native";
 import * as Animable from "react-native-animatable";
+
 import colors from "../../themes/colors";
 import { sizing } from "../../themes/presetStyles";
+import { Translations } from "../../i18n";
+import routes from "../../navigations/routes";
 const { width } = Dimensions.get("window");
 
 function BookingResults({ isLoading, bookingRef }) {
@@ -24,7 +27,10 @@ function BookingResults({ isLoading, bookingRef }) {
 						loop={false}
 					/>
 					<Animable.Text animation="wobble" style={styles.failed}>
-						Failed...
+						{Translations.getTranslatedString(
+							"results_failed",
+							routes.screens.CREATE_BOOKING
+						)}
 					</Animable.Text>
 				</>
 			) : (
@@ -36,10 +42,17 @@ function BookingResults({ isLoading, bookingRef }) {
 						loop={false}
 					/>
 					<Animable.Text animation="swing" style={styles.success}>
-						Successful!
+						{Translations.getTranslatedString(
+							"results_successful",
+							routes.screens.CREATE_BOOKING
+						)}
 					</Animable.Text>
 					<Animable.Text animation="fadeIn" style={styles.ref}>
-						Booking Referrence: {bookingRef}
+						{Translations.getTranslatedString(
+							"results_bookingRef",
+							routes.screens.CREATE_BOOKING,
+							bookingRef
+						)}
 					</Animable.Text>
 				</>
 			)}

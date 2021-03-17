@@ -23,34 +23,55 @@ import {
 	BookingResults,
 } from "./create-booking-procedure";
 import routes from "../navigations/routes";
-import { DrawerActions } from "@react-navigation/native";
+import { Translations } from "../i18n/index";
 
 const { width } = Dimensions.get("window");
 
 const procedure = [
 	{
 		step: 1,
-		title: "Select Time",
+		title: Translations.getTranslatedString(
+			"selectTime",
+			routes.screens.CREATE_BOOKING
+		),
 		component: SelectTime,
-		preceedButtonText: "Next",
+		preceedButtonText: Translations.getTranslatedString(
+			"next",
+			routes.screens.CREATE_BOOKING
+		),
 	},
 	{
 		step: 2,
-		title: "Terms & Conditions",
+		title: Translations.getTranslatedString(
+			"tos",
+			routes.screens.CREATE_BOOKING
+		),
 		component: TermsAndConditions,
-		preceedButtonText: "Accept",
+		preceedButtonText: Translations.getTranslatedString(
+			"accept",
+			routes.screens.CREATE_BOOKING
+		),
 	},
 	{
 		step: 3,
-		title: "Confirm Booking",
+		title: Translations.getTranslatedString(
+			"confirmBooking",
+			routes.screens.CREATE_BOOKING
+		),
 		component: ConfirmBooking,
-		preceedButtonText: "Submit",
+		preceedButtonText: Translations.getTranslatedString(
+			"submit",
+			routes.screens.CREATE_BOOKING
+		),
 	},
 	{
 		step: 4,
-		title: "Booking Results",
+		title: "",
 		component: BookingResults,
-		preceedButtonText: "View in My Bookings",
+		preceedButtonText: Translations.getTranslatedString(
+			"viewBookings",
+			routes.screens.CREATE_BOOKING
+		),
 	},
 ];
 
@@ -110,11 +131,10 @@ function CreateBookingScreen({ route, navigation }) {
 				end: timeslot.end,
 			})
 			.then(({ data }) => {
-				console.log("good ", data);
 				setBookingRef(data);
 			})
 			.catch((error) => {
-				console.log("bad ", error);
+				console.log(error);
 			})
 			.finally(() => {
 				setLoading(false);
@@ -135,9 +155,15 @@ function CreateBookingScreen({ route, navigation }) {
 						</Text>
 						<Text style={styles.next}>
 							{listIndex === 2
-								? "Last step, almost finish!"
+								? Translations.getTranslatedString(
+										"lastStep",
+										routes.screens.CREATE_BOOKING
+								  )
 								: listIndex < procedure.length - 1
-								? `Next: ${procedure[listIndex + 1].title}`
+								? `${Translations.getTranslatedString(
+										"next",
+										routes.screens.CREATE_BOOKING
+								  )}: ${procedure[listIndex + 1].title}`
 								: ""}
 						</Text>
 					</Animated.View>

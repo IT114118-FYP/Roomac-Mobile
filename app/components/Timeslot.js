@@ -12,6 +12,7 @@ import moment from "moment";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import routes from "../navigations/routes";
+import { Translations } from "../i18n";
 
 const { width } = Dimensions.get("window");
 
@@ -22,8 +23,14 @@ function Timeslot({ data, onPress }) {
 		<View style={styles.wrapper}>
 			<Text style={styles.date}>
 				{moment(data.date, "YYYY-MM-DD").calendar({
-					sameDay: "[Today]",
-					nextDay: "[Tomorrow]",
+					sameDay: Translations.getTranslatedString(
+						"timeslot_sameDay",
+						"common"
+					),
+					nextDay: Translations.getTranslatedString(
+						"timeslot_nextDay",
+						"common"
+					),
 					nextWeek: "D/M",
 					sameElse: "D/M",
 				})}

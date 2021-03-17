@@ -21,19 +21,40 @@ import { sizing } from "../themes/presetStyles";
 import { axiosInstance } from "../api/config";
 import useAuth from "../auth/useAuth";
 import { Popup } from "popup-ui";
+import { Translations } from "../i18n";
+import routes from "../navigations/routes";
 
 const validationSchema = Yup.object().shape({
-	old: Yup.string().required().min(4).label("Old Password"),
+	old: Yup.string()
+		.required()
+		.min(4)
+		.label(
+			Translations.getTranslatedString(
+				"old",
+				routes.screens.CHANGE_PASSWORD
+			)
+		),
 	password: Yup.string()
 		.required()
 		.matches(
 			/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/,
-			"Must Contain 8 Characters, One Uppercase, One Lowercase and one Number"
+			Translations.getTranslatedString(
+				"passwordRequirement",
+				routes.screens.CHANGE_PASSWORD
+			)
 		)
-		.label("New Password"),
+		.label(
+			Translations.getTranslatedString(
+				"new",
+				routes.screens.CHANGE_PASSWORD
+			)
+		),
 	passwordConfirmation: Yup.string().oneOf(
 		[Yup.ref("password"), null],
-		"Passwords must match"
+		Translations.getTranslatedString(
+			"passwordMatch",
+			routes.screens.CHANGE_PASSWORD
+		)
 	),
 });
 
@@ -105,11 +126,19 @@ const PasswordField = ({
 
 const SubmitButton = () => {
 	const { handleSubmit } = useFormikContext();
-	return <Button title="Submit New Password" onPress={handleSubmit} />;
+	return (
+		<Button
+			title={Translations.getTranslatedString(
+				"submit",
+				routes.screens.CHANGE_PASSWORD
+			)}
+			onPress={handleSubmit}
+		/>
+	);
 };
 
 function ChangePasswordScreen(props) {
-	const { user, logOut } = useAuth();
+	const { logOut } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 
 	const handleSubmit = ({ old, password }) => {
@@ -120,13 +149,21 @@ function ChangePasswordScreen(props) {
 				old_password: old,
 				new_password: password,
 			})
-			.then(({ data }) => {
+			.then(() => {
 				Popup.show({
 					type: "Success",
-					title: "Success",
-					// button: false,
-					textBody: "Password change, sign in now with new password",
-					buttonText: "Sign In",
+					title: Translations.getTranslatedString(
+						"success",
+						"common"
+					),
+					textBody: Translations.getTranslatedString(
+						"changeSuccessText",
+						routes.screens.CHANGE_PASSWORD
+					),
+					buttonText: Translations.getTranslatedString(
+						"signIn",
+						"common"
+					),
 					callback: () => {
 						Popup.hide();
 						logOut();
@@ -136,10 +173,16 @@ function ChangePasswordScreen(props) {
 			.catch(() =>
 				Popup.show({
 					type: "Danger",
-					title: "Failed",
-					buttonText: "Ok",
+					title: Translations.getTranslatedString("failed", "common"),
+					buttonText: Translations.getTranslatedString(
+						"ok",
+						"common"
+					),
 					// button: false,
-					textBody: "Make sure the old password is correct.",
+					textBody: Translations.getTranslatedString(
+						"changeFailedText",
+						routes.screens.CHANGE_PASSWORD
+					),
 					callback: () => Popup.hide(),
 				})
 			)
@@ -150,8 +193,12 @@ function ChangePasswordScreen(props) {
 		<Screen>
 			{!isLoading && (
 				<>
-					<Text style={styles.title}>Change Password</Text>
-
+					<Text style={styles.title}>
+						{Translations.getTranslatedString(
+							"title",
+							routes.screens.CHANGE_PASSWORD
+						)}
+					</Text>
 					<Formik
 						initialValues={{
 							old: "",
@@ -163,15 +210,24 @@ function ChangePasswordScreen(props) {
 					>
 						<View style={styles.container}>
 							<PasswordField
-								title="Enter old password"
+								title={Translations.getTranslatedString(
+									"enterOld",
+									routes.screens.CHANGE_PASSWORD
+								)}
 								name="old"
 							/>
 							<PasswordField
-								title="Enter new password"
+								title={Translations.getTranslatedString(
+									"enterNew",
+									routes.screens.CHANGE_PASSWORD
+								)}
 								name="password"
 							/>
 							<PasswordField
-								title="Confirm new password"
+								title={Translations.getTranslatedString(
+									"confirmNew",
+									routes.screens.CHANGE_PASSWORD
+								)}
 								name="passwordConfirmation"
 							/>
 							<SubmitButton />

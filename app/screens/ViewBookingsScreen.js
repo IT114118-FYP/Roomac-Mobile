@@ -18,6 +18,7 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
+import { Translations } from "../i18n/index";
 
 const historyOptions = [7, 30, 90];
 
@@ -128,7 +129,12 @@ function ViewBookingsScreen({ navigation }) {
 					size={sizing(5.5)}
 				/>
 			</TouchableOpacity>
-			<Text style={styles.title}>My Bookings</Text>
+			<Text style={styles.title}>
+				{Translations.getTranslatedString(
+					"myBookings",
+					routes.screens.VIEW_BOOKINGS
+				)}
+			</Text>
 			<ScrollView
 				style={styles.container}
 				refreshControl={
@@ -146,10 +152,14 @@ function ViewBookingsScreen({ navigation }) {
 								animation="fadeInUp"
 								style={styles.section}
 							>
-								<Text style={styles.header}>Active</Text>
+								<Text style={styles.header}>
+									{Translations.getTranslatedString(
+										"active",
+										routes.screens.VIEW_BOOKINGS
+									)}
+								</Text>
 								<Animatable.View
 									animation="fadeInUp"
-									// delay={100}
 									style={styles.bookingListItem}
 								>
 									<ViewBookingListItem
@@ -184,12 +194,18 @@ function ViewBookingsScreen({ navigation }) {
 						)}
 						<TimeSection
 							data={upcoming}
-							title="Upcoming"
+							title={Translations.getTranslatedString(
+								"upcoming",
+								routes.screens.VIEW_BOOKINGS
+							)}
 							navigation={navigation}
 						/>
 						<TimeSection
 							data={history}
-							title="History"
+							title={Translations.getTranslatedString(
+								"history",
+								routes.screens.VIEW_BOOKINGS
+							)}
 							navigation={navigation}
 						>
 							<TouchableOpacity
@@ -215,8 +231,11 @@ function ViewBookingsScreen({ navigation }) {
 										fontSize: sizing(3.5),
 									}}
 								>
-									Past {historyOptions[historyOptionsIndex]}{" "}
-									days
+									{Translations.getTranslatedString(
+										"pastDays",
+										routes.screens.VIEW_BOOKINGS,
+										historyOptions[historyOptionsIndex]
+									)}
 								</Text>
 							</TouchableOpacity>
 						</TimeSection>
