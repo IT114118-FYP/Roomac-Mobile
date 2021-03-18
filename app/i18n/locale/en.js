@@ -12,7 +12,7 @@ export default {
 		logout: "Log out",
 		ok: "Ok",
 	},
-	app: {
+	App: {
 		noInternet: "No Internet connection!",
 		noInternetDescription:
 			"Turn on Internet connection before using roomac.",
@@ -24,7 +24,7 @@ export default {
 	Login: {
 		email: "Email / CNA",
 		password: "Password",
-		welcomeTo: "welcomeTo",
+		welcomeTo: "Welcome To",
 		failedDescription: "Email/CNA or password is incorrect.",
 		forgot: "Forgot your password?",
 	},
@@ -102,5 +102,10 @@ export default {
 		enterNew: "Enter new password",
 		confirmNew: "Confirm new password",
 		submit: "Submit New Password",
+	},
+	//TODO add hk and cn
+	[routes.screens.CHANGE_LANGUAGE]: {
+		title: "Languages",
+		default: " | default",
 	},
 };

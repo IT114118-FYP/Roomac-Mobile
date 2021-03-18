@@ -205,6 +205,7 @@ function SettingsScreen({ navigation }) {
 				routes.screens.SETTINGS
 			),
 			RightComponent: LanguageChevron,
+			onPress: () => navigation.navigate(routes.screens.CHANGE_LANGUAGE),
 		},
 		{
 			id: 1,

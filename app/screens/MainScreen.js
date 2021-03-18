@@ -57,8 +57,6 @@ function MainScreen({ navigation }) {
 				"YYYY-MM-DD"
 			)}&end=${moment().format("YYYY-MM-DD")}`
 		).then(({ data }) => {
-			console.log(data);
-
 			const current = moment();
 			var upcomingData = [];
 			data.forEach((booking) => {

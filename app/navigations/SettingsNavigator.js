@@ -5,6 +5,7 @@ import routes from "./routes";
 import SettingsScreen from "../screens/SettingsScreen";
 import colors from "../themes/colors";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen";
+import ChangeLanguageScreen from "../screens/ChangeLanguageScreen";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,16 @@ export default function SettingsNavigator() {
 			<Stack.Screen
 				name={routes.screens.CHANGE_PASSWORD}
 				component={ChangePasswordScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.textPrimary,
+				}}
+			/>
+			<Stack.Screen
+				name={routes.screens.CHANGE_LANGUAGE}
+				component={ChangeLanguageScreen}
 				options={{
 					headerBackTitleVisible: false,
 					headerTitle: false,

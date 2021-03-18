@@ -8,6 +8,7 @@ export default {
 		SETTINGS: "Settings",
 		TERMS_AND_CONDITION: "TermsAndCondition",
 		CHANGE_PASSWORD: "ChangePassword",
+		CHANGE_LANGUAGE: "ChangeLanguage",
 	},
 	navigators: {
 		HOME: "Home",
