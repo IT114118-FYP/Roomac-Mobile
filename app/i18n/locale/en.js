@@ -107,5 +107,6 @@ export default {
 	[routes.screens.CHANGE_LANGUAGE]: {
 		title: "Languages",
 		default: " | default",
+		reset: "Reset Language",
 	},
 };

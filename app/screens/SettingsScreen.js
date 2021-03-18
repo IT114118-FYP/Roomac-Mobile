@@ -25,7 +25,7 @@ import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
 import SettingsItem, { ChevronRight } from "../components/SettingsItem";
 import { axiosInstance } from "../api/config";
-import { Translations } from "../i18n";
+import { Translations, useTranslation } from "../i18n";
 
 const AVATAR = 90;
 
@@ -182,20 +182,24 @@ function SettingsScreen({ navigation }) {
 		</View>
 	);
 
-	const LanguageChevron = () => (
-		<View style={presetStyles.row}>
-			<Text
-				style={{
-					color: colors.textSecondary,
-					fontSize: sizing(4),
-					marginRight: sizing(2),
-				}}
-			>
-				English
-			</Text>
-			<ChevronRight />
-		</View>
-	);
+	const LanguageChevron = () => {
+		const { language } = useTranslation();
+
+		return (
+			<View style={presetStyles.row}>
+				<Text
+					style={{
+						color: colors.textSecondary,
+						fontSize: sizing(4),
+						marginRight: sizing(2),
+					}}
+				>
+					{language.label}
+				</Text>
+				<ChevronRight />
+			</View>
+		);
+	};
 
 	const data = [
 		{

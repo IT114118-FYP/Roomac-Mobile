@@ -24,10 +24,14 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import { DrawerActions } from "@react-navigation/routers";
 import routes from "../navigations/routes";
-import { Translations } from "../i18n";
+import { useTranslation } from "../i18n";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
+	const {
+		getTranslatedString,
+		getTranslatedStringFromProvider,
+	} = useTranslation();
 	const [isLoading, setLoading] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(1);
 	const [activeBooking, setActiveBooking] = useState(null);
@@ -125,7 +129,7 @@ function MainScreen({ navigation }) {
 					/>
 				</TouchableOpacity>
 				<Text style={styles.username}>
-					{Translations.getTranslatedString(
+					{getTranslatedString(
 						"welcome",
 						routes.screens.HOME,
 						user.first_name
@@ -144,10 +148,7 @@ function MainScreen({ navigation }) {
 						color: colors.textSecondary,
 					}}
 				>
-					{Translations.getTranslatedString(
-						"searchTitle",
-						routes.screens.HOME
-					)}
+					{getTranslatedString("searchTitle", routes.screens.HOME)}
 				</Text>
 			</View>
 			<ScrollView
@@ -155,10 +156,7 @@ function MainScreen({ navigation }) {
 					<RefreshControl
 						refreshing={isLoading}
 						onRefresh={fetchAll}
-						title={Translations.getTranslatedString(
-							"pullToRefresh",
-							"common"
-						)}
+						title={getTranslatedString("pullToRefresh", "common")}
 					/>
 				}
 			>
@@ -228,7 +226,7 @@ function MainScreen({ navigation }) {
 							<View>
 								<View style={presetStyles.row}>
 									<Text style={presetStyles.listHeader}>
-										{Translations.getTranslatedString(
+										{getTranslatedString(
 											"Today",
 											routes.screens.HOME
 										)}
@@ -285,7 +283,7 @@ function MainScreen({ navigation }) {
 								presetStyles.listHeader,
 							]}
 						>
-							{Translations.getTranslatedString(
+							{getTranslatedString(
 								"categories",
 								routes.screens.HOME
 							)}
@@ -320,13 +318,11 @@ function MainScreen({ navigation }) {
 									<CategoryItem
 										displayCard={false}
 										imageUrl={item.image_url}
-										title={Translations.getTranslatedStringFromProvider(
-											{
-												en: item.title_en,
-												hk: item.title_hk,
-												cn: item.title_cn,
-											}
-										)}
+										title={getTranslatedStringFromProvider({
+											en: item.title_en,
+											hk: item.title_hk,
+											cn: item.title_cn,
+										})}
 										selected={
 											item.id === selectedCategory
 												? true
@@ -349,7 +345,7 @@ function MainScreen({ navigation }) {
 								presetStyles.listHeader,
 							]}
 						>
-							{Translations.getTranslatedString(
+							{getTranslatedString(
 								"resources",
 								routes.screens.HOME,
 								resources.length

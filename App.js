@@ -6,7 +6,11 @@ import { Root as PopupRoot, Popup, Toast } from "popup-ui";
 import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
 
 import * as Localization from "expo-localization";
-import { LanguageConfig, Translations } from "./app/i18n/index";
+import {
+	LanguageConfig,
+	Translations,
+	TranslationsContext,
+} from "./app/i18n/index";
 
 import * as BioStorage from "./app/biometrics/storage";
 import LoginScreen from "./app/screens/LoginScreen";
@@ -15,9 +19,16 @@ import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
+import I18n from "i18n-js";
 
 export default function App() {
 	const [user, setUser] = useState();
+	const [language, setLanguage] = useState(
+		LanguageConfig.LanguageOptions.find(
+			(lang) =>
+				lang.key === LanguageConfig.getModifiedKey(Localization.locale)
+		)
+	);
 	const [isReady, setIsReady] = useState(false);
 	const netInfo = useNetInfo();
 
@@ -91,28 +102,30 @@ export default function App() {
 			});
 
 	useEffect(() => {
-		LanguageConfig.setLanguage(Localization.locale);
+		LanguageConfig.setLanguage(language);
 		restoreToken();
 	}, []);
 
 	return (
-		<PopupRoot>
-			<AuthContext.Provider value={{ user, setUser }}>
-				{isReady ? (
-					<NavigationContainer theme={navigationTheme}>
-						{user ? <AppDrawer /> : <LoginScreen />}
-					</NavigationContainer>
-				) : (
-					<LottieView
-						source={require("./assets/roomac-animation.json")}
-						style={{
-							flex: 1,
-						}}
-						autoPlay
-						loop
-					/>
-				)}
-			</AuthContext.Provider>
-		</PopupRoot>
+		<TranslationsContext.Provider value={{ language, setLanguage }}>
+			<PopupRoot>
+				<AuthContext.Provider value={{ user, setUser }}>
+					{isReady ? (
+						<NavigationContainer theme={navigationTheme}>
+							{user ? <AppDrawer /> : <LoginScreen />}
+						</NavigationContainer>
+					) : (
+						<LottieView
+							source={require("./assets/roomac-animation.json")}
+							style={{
+								flex: 1,
+							}}
+							autoPlay
+							loop
+						/>
+					)}
+				</AuthContext.Provider>
+			</PopupRoot>
+		</TranslationsContext.Provider>
 	);
 }

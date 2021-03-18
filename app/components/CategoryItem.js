@@ -8,8 +8,6 @@ import {
 } from "react-native";
 import colors from "../themes/colors";
 
-const { height } = Dimensions.get("window");
-
 function CategoryItem({
 	imageUrl,
 	title,

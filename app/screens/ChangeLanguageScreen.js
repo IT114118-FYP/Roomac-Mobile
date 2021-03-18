@@ -11,7 +11,12 @@ import * as Localization from "expo-localization";
 import Screen from "../components/Screen";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
-import { LanguageConfig, Translations } from "../i18n";
+import {
+	LanguageConfig,
+	Translations,
+	TranslationsStorage,
+	useTranslation,
+} from "../i18n";
 import routes from "../navigations/routes";
 
 const LanguageItem = ({ item, selected, onPress }) => (
@@ -60,10 +65,11 @@ const LanguageItem = ({ item, selected, onPress }) => (
 );
 
 function ChangeLanguageScreen(props) {
-	const [selected, setSelected] = useState(LanguageConfig.getLanguage());
+	const { language, changeLanguage } = useTranslation();
+	const [selected, setSelected] = useState(language);
 
 	useEffect(() => {
-		LanguageConfig.storeLanguagePreference(selected);
+		changeLanguage(selected);
 	}, [selected]);
 
 	return (
@@ -99,7 +105,10 @@ function ChangeLanguageScreen(props) {
 								fontWeight: "300",
 							}}
 						>
-							Reset Language
+							{Translations.getTranslatedString(
+								"reset",
+								routes.screens.CHANGE_LANGUAGE
+							)}
 						</Text>
 					</TouchableOpacity>
 				</View>

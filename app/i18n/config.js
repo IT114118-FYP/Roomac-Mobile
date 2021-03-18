@@ -1,8 +1,6 @@
 import i18n from "i18n-js";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import TranslationsStorage from "./storage";
 import * as languages from "./locale/index";
-
-const TAG = "languageOptions";
 
 const LanguageOptions = [
 	{
@@ -18,29 +16,9 @@ const LanguageOptions = [
 	{
 		id: 3,
 		key: "cn",
-		label: "簡體中文",
+		label: "簡体中文",
 	},
 ];
-
-const storeLanguagePreference = async (languageOptions) => {
-	try {
-		console.log("====================================");
-		console.log(languageOptions);
-		console.log("====================================");
-		await AsyncStorage.setItem(TAG, JSON.stringify(languageOptions));
-	} catch (error) {
-		console.log(error);
-	}
-};
-
-const getLanguagePreference = async () => {
-	try {
-		const preference = await AsyncStorage.getItem(TAG);
-		return preference != null ? JSON.parse(preference) : null;
-	} catch (error) {
-		console.log(error);
-	}
-};
 
 const loadTranslations = () => {
 	i18n.translations = languages;
@@ -49,8 +27,11 @@ const loadTranslations = () => {
 };
 
 const setLanguage = async (lang) => {
+	console.log("====================================");
+	console.log(lang);
+	console.log("====================================");
 	loadTranslations();
-	const preference = await getLanguagePreference();
+	const preference = await TranslationsStorage.getLanguagePreference();
 	console.log(preference);
 	if (preference != null) {
 		i18n.locale = preference.key;
@@ -77,6 +58,5 @@ export default {
 	setLanguage,
 	getLanguage,
 	getModifiedKey,
-	storeLanguagePreference,
 	LanguageOptions,
 };
