@@ -4,9 +4,6 @@ import {
 	StyleSheet,
 	Text,
 	TextInput,
-	KeyboardAvoidingView,
-	Platform,
-	TouchableWithoutFeedback,
 	Keyboard,
 	Modal,
 } from "react-native";
@@ -21,42 +18,8 @@ import { sizing } from "../themes/presetStyles";
 import { axiosInstance } from "../api/config";
 import useAuth from "../auth/useAuth";
 import { Popup } from "popup-ui";
-import { Translations } from "../i18n";
 import routes from "../navigations/routes";
-
-const validationSchema = Yup.object().shape({
-	old: Yup.string()
-		.required()
-		.min(4)
-		.label(
-			Translations.getTranslatedString(
-				"old",
-				routes.screens.CHANGE_PASSWORD
-			)
-		),
-	password: Yup.string()
-		.required()
-		.matches(
-			/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/,
-			Translations.getTranslatedString(
-				"passwordRequirement",
-				routes.screens.CHANGE_PASSWORD
-			)
-		)
-		.label(
-			Translations.getTranslatedString(
-				"new",
-				routes.screens.CHANGE_PASSWORD
-			)
-		),
-	passwordConfirmation: Yup.string().oneOf(
-		[Yup.ref("password"), null],
-		Translations.getTranslatedString(
-			"passwordMatch",
-			routes.screens.CHANGE_PASSWORD
-		)
-	),
-});
+import { useTranslation } from "react-i18next";
 
 const PasswordField = ({
 	name,
@@ -126,20 +89,32 @@ const PasswordField = ({
 
 const SubmitButton = () => {
 	const { handleSubmit } = useFormikContext();
-	return (
-		<Button
-			title={Translations.getTranslatedString(
-				"submit",
-				routes.screens.CHANGE_PASSWORD
-			)}
-			onPress={handleSubmit}
-		/>
-	);
+	const { t } = useTranslation([routes.screens.CHANGE_PASSWORD]);
+	return <Button title={t("submit")} onPress={handleSubmit} />;
 };
 
 function ChangePasswordScreen(props) {
 	const { logOut } = useAuth();
+	const { t, i18n } = useTranslation([
+		routes.screens.CHANGE_PASSWORD,
+		"common",
+	]);
 	const [isLoading, setLoading] = useState(false);
+
+	const validationSchema = Yup.object().shape({
+		old: Yup.string().required().min(4).label(t("old")),
+		password: Yup.string()
+			.required()
+			.matches(
+				/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{8,}$/,
+				t("passwordRequirement")
+			)
+			.label(t("new")),
+		passwordConfirmation: Yup.string().oneOf(
+			[Yup.ref("password"), null],
+			t("passwordMatch")
+		),
+	});
 
 	const handleSubmit = ({ old, password }) => {
 		setLoading(true);
@@ -152,18 +127,9 @@ function ChangePasswordScreen(props) {
 			.then(() => {
 				Popup.show({
 					type: "Success",
-					title: Translations.getTranslatedString(
-						"success",
-						"common"
-					),
-					textBody: Translations.getTranslatedString(
-						"changeSuccessText",
-						routes.screens.CHANGE_PASSWORD
-					),
-					buttonText: Translations.getTranslatedString(
-						"signIn",
-						"common"
-					),
+					title: t("common:success"),
+					textBody: t("changeSuccessText"),
+					buttonText: t("common:signIn"),
 					callback: () => {
 						Popup.hide();
 						logOut();
@@ -173,16 +139,10 @@ function ChangePasswordScreen(props) {
 			.catch(() =>
 				Popup.show({
 					type: "Danger",
-					title: Translations.getTranslatedString("failed", "common"),
-					buttonText: Translations.getTranslatedString(
-						"ok",
-						"common"
-					),
+					title: t("common:failed"),
+					buttonText: t("common:ok"),
 					// button: false,
-					textBody: Translations.getTranslatedString(
-						"changeFailedText",
-						routes.screens.CHANGE_PASSWORD
-					),
+					textBody: t("changeFailedText"),
 					callback: () => Popup.hide(),
 				})
 			)
@@ -193,12 +153,7 @@ function ChangePasswordScreen(props) {
 		<Screen>
 			{!isLoading && (
 				<>
-					<Text style={styles.title}>
-						{Translations.getTranslatedString(
-							"title",
-							routes.screens.CHANGE_PASSWORD
-						)}
-					</Text>
+					<Text style={styles.title}>{t("title")}</Text>
 					<Formik
 						initialValues={{
 							old: "",
@@ -209,25 +164,13 @@ function ChangePasswordScreen(props) {
 						validationSchema={validationSchema}
 					>
 						<View style={styles.container}>
+							<PasswordField title={t("enterOld")} name="old" />
 							<PasswordField
-								title={Translations.getTranslatedString(
-									"enterOld",
-									routes.screens.CHANGE_PASSWORD
-								)}
-								name="old"
-							/>
-							<PasswordField
-								title={Translations.getTranslatedString(
-									"enterNew",
-									routes.screens.CHANGE_PASSWORD
-								)}
+								title={t("enterNew")}
 								name="password"
 							/>
 							<PasswordField
-								title={Translations.getTranslatedString(
-									"confirmNew",
-									routes.screens.CHANGE_PASSWORD
-								)}
+								title={t("confirmNew")}
 								name="passwordConfirmation"
 							/>
 							<SubmitButton />

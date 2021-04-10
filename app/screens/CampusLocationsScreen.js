@@ -22,11 +22,13 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import { axiosInstance } from "../api/config";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { Translations } from "../i18n";
+import { useTranslation } from "react-i18next";
+import routes from "../navigations/routes";
 
 const { width, height } = Dimensions.get("screen");
 
 function CampusLocationsScreen({ navigation }) {
+	const { t, i18n } = useTranslation([routes.CampusLocationsScreen]);
 	const [isLoading, setLoading] = useState();
 	const [branches, setBranches] = useState([]);
 	const [selected, setSelected] = useState(1);
@@ -78,13 +80,13 @@ function CampusLocationsScreen({ navigation }) {
 									latitude: Number(branch.lat),
 									longitude: Number(branch.lng),
 								}}
-								title={Translations.getTranslatedStringFromProvider(
+								title={
 									{
 										en: branch.title_en,
 										hk: branch.title_hk,
 										cn: branch.title_cn,
-									}
-								)}
+									}[i18n.language]
+								}
 							/>
 						))}
 					</MapView>
@@ -119,13 +121,13 @@ function CampusLocationsScreen({ navigation }) {
 										flex: 1,
 									}}
 								>
-									{Translations.getTranslatedStringFromProvider(
+									{
 										{
 											en: branches[selected]?.title_en,
 											hk: branches[selected]?.title_hk,
 											cn: branches[selected]?.title_cn,
-										}
-									)}
+										}[i18n.language]
+									}
 								</Text>
 								<Button title="Go to website" />
 							</View>

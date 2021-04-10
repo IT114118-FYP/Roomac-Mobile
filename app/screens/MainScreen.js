@@ -14,6 +14,7 @@ import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 import moment from "moment";
 
+import { useTranslation } from "react-i18next";
 import { axiosInstance } from "../api/config";
 import CategoryItem from "../components/CategoryItem";
 import Screen from "../components/Screen";
@@ -22,16 +23,12 @@ import ViewBookingListItem from "../components/ViewBookingListItem";
 import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
-import { DrawerActions } from "@react-navigation/routers";
 import routes from "../navigations/routes";
-import { useTranslation } from "../i18n";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
-	const {
-		getTranslatedString,
-		getTranslatedStringFromProvider,
-	} = useTranslation();
+	const { t, i18n } = useTranslation([routes.screens.HOME, "common"]);
+
 	const [isLoading, setLoading] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(1);
 	const [activeBooking, setActiveBooking] = useState(null);
@@ -129,11 +126,13 @@ function MainScreen({ navigation }) {
 					/>
 				</TouchableOpacity>
 				<Text style={styles.username}>
-					{getTranslatedString(
-						"welcome",
-						routes.screens.HOME,
-						user.first_name
-					)}
+					{t("welcome", {
+						value: {
+							en: user.first_name,
+							hk: user.chinese_name,
+							cn: user.chinese_name,
+						}[i18n.language],
+					})}
 				</Text>
 			</View>
 			<View style={[styles.searchBar, presetStyles.shadow]}>
@@ -148,7 +147,7 @@ function MainScreen({ navigation }) {
 						color: colors.textSecondary,
 					}}
 				>
-					{getTranslatedString("searchTitle", routes.screens.HOME)}
+					{t("searchTitle")}
 				</Text>
 			</View>
 			<ScrollView
@@ -156,7 +155,7 @@ function MainScreen({ navigation }) {
 					<RefreshControl
 						refreshing={isLoading}
 						onRefresh={fetchAll}
-						title={getTranslatedString("pullToRefresh", "common")}
+						title={t("common:pullToRefresh")}
 					/>
 				}
 			>
@@ -226,10 +225,7 @@ function MainScreen({ navigation }) {
 							<View>
 								<View style={presetStyles.row}>
 									<Text style={presetStyles.listHeader}>
-										{getTranslatedString(
-											"Today",
-											routes.screens.HOME
-										)}
+										{t("Today")}
 									</Text>
 								</View>
 								{upcoming.map((item, index) => (
@@ -283,10 +279,7 @@ function MainScreen({ navigation }) {
 								presetStyles.listHeader,
 							]}
 						>
-							{getTranslatedString(
-								"categories",
-								routes.screens.HOME
-							)}
+							{t("categories")}
 						</Text>
 						<FlatList
 							contentContainerStyle={{
@@ -318,11 +311,13 @@ function MainScreen({ navigation }) {
 									<CategoryItem
 										displayCard={false}
 										imageUrl={item.image_url}
-										title={getTranslatedStringFromProvider({
-											en: item.title_en,
-											hk: item.title_hk,
-											cn: item.title_cn,
-										})}
+										title={
+											{
+												en: item.title_en,
+												hk: item.title_hk,
+												cn: item.title_cn,
+											}[i18n.language]
+										}
 										selected={
 											item.id === selectedCategory
 												? true
@@ -345,11 +340,7 @@ function MainScreen({ navigation }) {
 								presetStyles.listHeader,
 							]}
 						>
-							{getTranslatedString(
-								"resources",
-								routes.screens.HOME,
-								resources.length
-							)}
+							{t("resources", { value: resources.length })}
 						</Text>
 						<TouchableOpacity onPress={() => setFilterOpen(true)}>
 							<MaterialCommunityIcons

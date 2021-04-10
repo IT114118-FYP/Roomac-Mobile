@@ -24,13 +24,14 @@ import { useState } from "react";
 import { useEffect } from "react";
 import Markdown from "react-native-markdown-display";
 import Button from "../components/Button";
-import { Translations } from "../i18n";
 import routes from "../navigations/routes";
+import { useTranslation } from "react-i18next";
 
 const { width, height } = Dimensions.get("screen");
 
 function BookingDetailsScreen({ route }) {
 	const { item } = route.params;
+	const { t, i18n } = useTranslation([routes.screens.BOOKING_DETAILS]);
 	const [tos, setTos] = useState();
 
 	const fetchTOS = () => {
@@ -54,11 +55,13 @@ function BookingDetailsScreen({ route }) {
 				style={styles.image}
 			/>
 			<Text style={[presetStyles.marginHorizontal, styles.date]}>
-				{Translations.getTranslatedStringFromProvider({
-					en: moment(item.start_time).format("LL"),
-					hk: moment(item.start_time).format("l"),
-					cn: moment(item.start_time).format("l"),
-				})}
+				{moment(item.start_time).format(
+					{
+						en: "LL",
+						hk: "YYYY年MM月DD日",
+						cn: "YYYY年MM月DD日",
+					}[i18n.language]
+				)}
 			</Text>
 			<Text
 				adjustsFontSizeToFit
@@ -67,7 +70,13 @@ function BookingDetailsScreen({ route }) {
 			>
 				{`${moment(item.start_time).format("H:mm")} - ${moment(
 					item.end_time
-				).format("H:mm")} • ${item.resource.number}`}
+				).format("H:mm")} • ${
+					{
+						en: item.resource.title_en,
+						hk: item.resource.title_hk,
+						cn: item.resource.title_cn,
+					}[i18n.language]
+				}`}
 			</Text>
 			<View style={presetStyles.marginHorizontal}>
 				<View style={[presetStyles.row, { marginTop: sizing(2) }]}>
@@ -111,22 +120,14 @@ function BookingDetailsScreen({ route }) {
 						moment(item.start_time).subtract(15, "minutes"),
 						moment(item.end_time)
 					) ? (
-						<Button
-							title={Translations.getTranslatedString(
-								"checkIn",
-								routes.screens.BOOKING_DETAILS
-							)}
-							style={{ flex: 1 }}
-						/>
+						<Button title={t("checkIn")} style={{ flex: 1 }} />
 					) : (
 						<Button
-							title={Translations.getTranslatedString(
-								"checkInAvailable",
-								routes.screens.BOOKING_DETAILS,
-								moment(item.start_time)
+							title={t("checkInAvailable", {
+								value: moment(item.start_time)
 									.subtract(15, "minutes")
-									.format("H:mm")
-							)}
+									.format("H:mm"),
+							})}
 							style={{
 								flex: 1,
 								backgroundColor: colors.textSecondary,
@@ -153,10 +154,7 @@ function BookingDetailsScreen({ route }) {
 							},
 						]}
 					>
-						{Translations.getTranslatedString(
-							"tos",
-							routes.screens.BOOKING_DETAILS
-						)}
+						{t("tos")}
 					</Text>
 					<Markdown
 						style={{
@@ -171,11 +169,13 @@ function BookingDetailsScreen({ route }) {
 							},
 						}}
 					>
-						{Translations.getTranslatedStringFromProvider({
-							en: tos.tos_en,
-							hk: tos.tos_hk,
-							cn: tos.tos_cn,
-						})}
+						{
+							{
+								en: tos.tos_en,
+								hk: tos.tos_hk,
+								cn: tos.tos_cn,
+							}[i18n.language]
+						}
 					</Markdown>
 				</View>
 			)}

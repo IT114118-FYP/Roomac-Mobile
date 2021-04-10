@@ -5,11 +5,12 @@ import * as Animable from "react-native-animatable";
 
 import colors from "../../themes/colors";
 import { sizing } from "../../themes/presetStyles";
-import { Translations } from "../../i18n";
 import routes from "../../navigations/routes";
+import { useTranslation } from "react-i18next";
 const { width } = Dimensions.get("window");
 
 function BookingResults({ isLoading, bookingRef }) {
+	const { t } = useTranslation([routes.screens.CREATE_BOOKING]);
 	return (
 		<View style={styles.container}>
 			{isLoading ? (
@@ -27,10 +28,7 @@ function BookingResults({ isLoading, bookingRef }) {
 						loop={false}
 					/>
 					<Animable.Text animation="wobble" style={styles.failed}>
-						{Translations.getTranslatedString(
-							"results_failed",
-							routes.screens.CREATE_BOOKING
-						)}
+						{t("results_failed")}
 					</Animable.Text>
 				</>
 			) : (
@@ -42,17 +40,10 @@ function BookingResults({ isLoading, bookingRef }) {
 						loop={false}
 					/>
 					<Animable.Text animation="swing" style={styles.success}>
-						{Translations.getTranslatedString(
-							"results_successful",
-							routes.screens.CREATE_BOOKING
-						)}
+						{t("results_successful")}
 					</Animable.Text>
 					<Animable.Text animation="fadeIn" style={styles.ref}>
-						{Translations.getTranslatedString(
-							"results_bookingRef",
-							routes.screens.CREATE_BOOKING,
-							bookingRef
-						)}
+						{t("results_bookingRef", { value: bookingRef })}
 					</Animable.Text>
 				</>
 			)}

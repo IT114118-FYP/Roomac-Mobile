@@ -12,11 +12,13 @@ import moment from "moment";
 
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
-import { Translations } from "../i18n";
+
+import { useTranslation } from "react-i18next";
 
 const { height } = Dimensions.get("window");
 
 function ResourceItem({ item, onPress }) {
+	const { i18n } = useTranslation();
 	return (
 		<TouchableOpacity
 			style={[styles.container, presetStyles.shadow]}
@@ -37,19 +39,21 @@ function ResourceItem({ item, onPress }) {
 						fontWeight: "500",
 					}}
 				>
-					{Translations.getTranslatedStringFromProvider({
-						en: item.branch.title_en,
-						hk: item.branch.title_hk,
-						cn: item.branch.title_cn,
-					})}
+					{
+						{
+							en: item.branch.title_en,
+							hk: item.branch.title_hk,
+							cn: item.branch.title_cn,
+						}[i18n.language]
+					}
 				</Text>
-				<Text style={styles.title}>{`${
-					item.number
-				} ${Translations.getTranslatedStringFromProvider({
-					en: item.title_en,
-					hk: item.title_hk,
-					cn: item.title_cn,
-				})}`}</Text>
+				<Text style={styles.title}>{`${item.number} ${
+					{
+						en: item.title_en,
+						hk: item.title_hk,
+						cn: item.title_cn,
+					}[i18n.language]
+				}`}</Text>
 
 				<View style={presetStyles.row}>
 					<MaterialCommunityIcons

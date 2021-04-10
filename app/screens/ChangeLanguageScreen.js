@@ -11,78 +11,97 @@ import * as Localization from "expo-localization";
 import Screen from "../components/Screen";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
-import {
-	LanguageConfig,
-	Translations,
-	TranslationsStorage,
-	useTranslation,
-} from "../i18n";
 import routes from "../navigations/routes";
+import { useTranslation } from "react-i18next";
+import { storeLanguagePreference } from "../i18n/func";
 
-const LanguageItem = ({ item, selected, onPress }) => (
-	<TouchableOpacity
-		onPress={onPress}
-		style={[
-			presetStyles.shadow,
-			presetStyles.row,
-			{
-				paddingVertical: sizing(3),
-				paddingHorizontal: sizing(4),
-				marginTop: sizing(4),
-				borderRadius: sizing(2),
-				backgroundColor: selected
-					? colors.Cyber_Grape
-					: colors.backgroundPrimary,
-			},
-		]}
-	>
-		<Text
-			style={{
-				fontSize: sizing(4),
-				color: selected ? colors.backgroundPrimary : colors.textPrimary,
-				fontWeight: selected ? "600" : "400",
-			}}
+const LanguageOptions = [
+	{
+		id: 1,
+		key: "en",
+		label: "English",
+	},
+	{
+		id: 2,
+		key: "hk",
+		label: "繁體中文",
+	},
+	{
+		id: 3,
+		key: "cn",
+		label: "簡体中文",
+	},
+];
+
+const LanguageItem = ({ item, selected, onPress }) => {
+	const { t, i18n } = useTranslation([routes.screens.CHANGE_LANGUAGE]);
+	return (
+		<TouchableOpacity
+			onPress={onPress}
+			style={[
+				presetStyles.shadow,
+				presetStyles.row,
+				{
+					paddingVertical: sizing(3),
+					paddingHorizontal: sizing(4),
+					marginTop: sizing(4),
+					borderRadius: sizing(2),
+					backgroundColor: selected
+						? colors.Cyber_Grape
+						: colors.backgroundPrimary,
+				},
+			]}
 		>
-			{item.label}
-		</Text>
-		{LanguageConfig.getModifiedKey(Localization.locale) === item.key && (
 			<Text
 				style={{
 					fontSize: sizing(4),
 					color: selected
 						? colors.backgroundPrimary
-						: colors.textSecondary,
-					fontWeight: "300",
+						: colors.textPrimary,
+					fontWeight: selected ? "600" : "400",
 				}}
 			>
-				{Translations.getTranslatedString(
-					"default",
-					routes.screens.CHANGE_LANGUAGE
-				)}
+				{item.label}
 			</Text>
-		)}
-	</TouchableOpacity>
-);
+
+			{Localization.locale.substring(0, 2) === "zh"
+				? Localization.locale.includes("Hant")
+					? "hk"
+					: "cn"
+				: "en" === item.key && (
+						<Text
+							style={{
+								fontSize: sizing(4),
+								color: selected
+									? colors.backgroundPrimary
+									: colors.textSecondary,
+								fontWeight: "300",
+							}}
+						>
+							{t("default")}
+						</Text>
+				  )}
+		</TouchableOpacity>
+	);
+};
 
 function ChangeLanguageScreen(props) {
-	const { language, changeLanguage } = useTranslation();
-	const [selected, setSelected] = useState(language);
+	const { t, i18n } = useTranslation([routes.screens.CHANGE_LANGUAGE]);
+	const [selected, setSelected] = useState(
+		LanguageOptions.find((lang) => lang.key === i18n.language)
+	);
 
 	useEffect(() => {
-		changeLanguage(selected);
+		i18n.changeLanguage(selected.key);
+		storeLanguagePreference(selected);
 	}, [selected]);
 
 	return (
 		<Screen>
 			<ScrollView>
-				<Text style={styles.title}>
-					{Translations.getTranslatedString(
-						"title",
-						routes.screens.CHANGE_LANGUAGE
-					)}
-				</Text>
+				<Text style={styles.title}>{t("title")}</Text>
 				<View style={presetStyles.marginHorizontal}>
-					{LanguageConfig.LanguageOptions.map((item) => (
+					{LanguageOptions.map((item) => (
 						<LanguageItem
 							item={item}
 							key={item.key}
@@ -101,14 +120,11 @@ function ChangeLanguageScreen(props) {
 						<Text
 							style={{
 								color: colors.textSecondary,
-								fontSize: sizing(3.5),
+								fontSize: sizing(4),
 								fontWeight: "300",
 							}}
 						>
-							{Translations.getTranslatedString(
-								"reset",
-								routes.screens.CHANGE_LANGUAGE
-							)}
+							{t("reset")}
 						</Text>
 					</TouchableOpacity>
 				</View>

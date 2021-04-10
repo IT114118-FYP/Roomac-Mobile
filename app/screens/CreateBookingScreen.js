@@ -23,60 +23,13 @@ import {
 	BookingResults,
 } from "./create-booking-procedure";
 import routes from "../navigations/routes";
-import { Translations } from "../i18n/index";
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 
-const procedure = [
-	{
-		step: 1,
-		title: Translations.getTranslatedString(
-			"selectTime",
-			routes.screens.CREATE_BOOKING
-		),
-		component: SelectTime,
-		preceedButtonText: Translations.getTranslatedString(
-			"next",
-			routes.screens.CREATE_BOOKING
-		),
-	},
-	{
-		step: 2,
-		title: Translations.getTranslatedString(
-			"tos",
-			routes.screens.CREATE_BOOKING
-		),
-		component: TermsAndConditions,
-		preceedButtonText: Translations.getTranslatedString(
-			"accept",
-			routes.screens.CREATE_BOOKING
-		),
-	},
-	{
-		step: 3,
-		title: Translations.getTranslatedString(
-			"confirmBooking",
-			routes.screens.CREATE_BOOKING
-		),
-		component: ConfirmBooking,
-		preceedButtonText: Translations.getTranslatedString(
-			"submit",
-			routes.screens.CREATE_BOOKING
-		),
-	},
-	{
-		step: 4,
-		title: "",
-		component: BookingResults,
-		preceedButtonText: Translations.getTranslatedString(
-			"viewBookings",
-			routes.screens.CREATE_BOOKING
-		),
-	},
-];
-
 function CreateBookingScreen({ route, navigation }) {
 	const { timeslot, item: resource, date } = route.params;
+	const { t, i18n } = useTranslation([routes.screens.CREATE_BOOKING]);
 	const scrollX = React.useRef(new Animated.Value(0)).current;
 	const flatListRef = useRef(null);
 	const [listIndex, setListIndex] = useState(0);
@@ -122,6 +75,33 @@ function CreateBookingScreen({ route, navigation }) {
 		}
 	};
 
+	const procedure = [
+		{
+			step: 1,
+			title: t("selectTime"),
+			component: SelectTime,
+			preceedButtonText: t("next"),
+		},
+		{
+			step: 2,
+			title: t("tos"),
+			component: TermsAndConditions,
+			preceedButtonText: t("accept"),
+		},
+		{
+			step: 3,
+			title: t("confirmBooking"),
+			component: ConfirmBooking,
+			preceedButtonText: t("submit"),
+		},
+		{
+			step: 4,
+			title: "",
+			component: BookingResults,
+			preceedButtonText: t("viewBookings"),
+		},
+	];
+
 	const addBooking = () => {
 		setLoading(true);
 		axiosInstance
@@ -155,15 +135,11 @@ function CreateBookingScreen({ route, navigation }) {
 						</Text>
 						<Text style={styles.next}>
 							{listIndex === 2
-								? Translations.getTranslatedString(
-										"lastStep",
-										routes.screens.CREATE_BOOKING
-								  )
+								? t("lastStep")
 								: listIndex < procedure.length - 1
-								? `${Translations.getTranslatedString(
-										"next",
-										routes.screens.CREATE_BOOKING
-								  )}: ${procedure[listIndex + 1].title}`
+								? `${t("next")}: ${
+										procedure[listIndex + 1].title
+								  }`
 								: ""}
 						</Text>
 					</Animated.View>

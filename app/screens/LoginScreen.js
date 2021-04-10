@@ -13,6 +13,7 @@ import {
 import { Formik } from "formik";
 import * as Yup from "yup";
 import LottieView from "lottie-react-native";
+import { useTranslation } from "react-i18next";
 
 import LoginButton from "../components/LoginButton";
 import Screen from "../components/Screen";
@@ -21,23 +22,17 @@ import colors from "../themes/colors";
 import auth from "../api/auth";
 import useAuth from "../auth/useAuth";
 import { sizing } from "../themes/presetStyles";
-import { Translations } from "../i18n";
-
-const validationSchema = Yup.object().shape({
-	email: Yup.string()
-		.required()
-		.min(4)
-		.label(Translations.getTranslatedString("email", "Login")),
-	password: Yup.string()
-		.required()
-		.min(4)
-		.label(Translations.getTranslatedString("password", "Login")),
-});
 
 function LoginScreen(props) {
+	const { t, i18n } = useTranslation(["Login"]);
 	const { logIn } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [loginFailed, setLoginFailed] = useState(false);
+
+	const validationSchema = Yup.object().shape({
+		email: Yup.string().required().min(4).label(t("email")),
+		password: Yup.string().required().min(4).label(t("password")),
+	});
 
 	const handleSubmit = async ({ email, password }) => {
 		setLoading(true);
@@ -57,12 +52,8 @@ function LoginScreen(props) {
 		<Screen style={styles.container}>
 			<View style={styles.form}>
 				<View style={styles.titleView}>
-					<Text style={styles.welcomeText}>
-						{Translations.getTranslatedString("welcomeTo", "Login")}
-					</Text>
-					<Text style={styles.title}>
-						{Translations.getTranslatedString("roomac", "common")}
-					</Text>
+					<Text style={styles.welcomeText}>{t("welcomeTo")}</Text>
+					<Text style={styles.title}>{t("roomac")}</Text>
 				</View>
 				<KeyboardAvoidingView
 					behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -88,40 +79,23 @@ function LoginScreen(props) {
 												color: "red",
 											}}
 										>
-											{Translations.getTranslatedString(
-												"failedDescription",
-												"Login"
-											)}
+											{t("failedDescription")}
 										</Text>
 									)}
 									<Textfield
 										name="email"
-										title={Translations.getTranslatedString(
-											"email",
-											"Login"
-										)}
+										title={t("email")}
 										placeholder="example@email.com"
 									/>
 									<Textfield
 										name="password"
 										textContentType="password"
 										secureTextEntry
-										title={Translations.getTranslatedString(
-											"password",
-											"Login"
-										)}
-										placeholder={Translations.getTranslatedString(
-											"password",
-											"Login"
-										)}
+										title={t("password")}
+										placeholder={t("password")}
 										style={styles.password}
 									/>
-									<LoginButton
-										title={Translations.getTranslatedString(
-											"signIn",
-											"common"
-										)}
-									/>
+									<LoginButton title={t("signIn")} />
 								</View>
 							</Formik>
 							<TouchableOpacity
@@ -135,10 +109,7 @@ function LoginScreen(props) {
 										fontSize: sizing(3),
 									}}
 								>
-									{Translations.getTranslatedString(
-										"forgot",
-										"Login"
-									)}
+									{t("forgot")}
 								</Text>
 							</TouchableOpacity>
 						</View>

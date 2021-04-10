@@ -18,7 +18,7 @@ import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
-import { Translations } from "../i18n/index";
+import { useTranslation } from "react-i18next";
 
 const historyOptions = [7, 30, 90];
 
@@ -65,6 +65,7 @@ export const TimeSection = ({ data, title, children, navigation }) => (
 );
 
 function ViewBookingsScreen({ navigation }) {
+	const { t, i18n } = useTranslation([routes.screens.VIEW_BOOKINGS]);
 	const { user } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [historyOptionsIndex, setHistoryOptionsIndex] = useState(0);
@@ -129,12 +130,7 @@ function ViewBookingsScreen({ navigation }) {
 					size={sizing(5.5)}
 				/>
 			</TouchableOpacity>
-			<Text style={styles.title}>
-				{Translations.getTranslatedString(
-					"myBookings",
-					routes.screens.VIEW_BOOKINGS
-				)}
-			</Text>
+			<Text style={styles.title}>{t("myBookings")}</Text>
 			<ScrollView
 				style={styles.container}
 				refreshControl={
@@ -152,12 +148,7 @@ function ViewBookingsScreen({ navigation }) {
 								animation="fadeInUp"
 								style={styles.section}
 							>
-								<Text style={styles.header}>
-									{Translations.getTranslatedString(
-										"active",
-										routes.screens.VIEW_BOOKINGS
-									)}
-								</Text>
+								<Text style={styles.header}>{t("active")}</Text>
 								<Animatable.View
 									animation="fadeInUp"
 									style={styles.bookingListItem}
@@ -167,7 +158,13 @@ function ViewBookingsScreen({ navigation }) {
 										bookingData={activeBooking}
 										date={moment(
 											activeBooking.start_time
-										).format("LL")}
+										).format(
+											{
+												en: "LL",
+												hk: "YYYY年MM月DD日",
+												cn: "YYYY年MM月DD日",
+											}[i18n.language]
+										)}
 										period={`${moment(
 											activeBooking.start_time
 										).format("H:mm")} - ${moment(
@@ -177,7 +174,25 @@ function ViewBookingsScreen({ navigation }) {
 											Boolean(
 												activeBooking.resource.title_en
 											)
-												? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
+												? `${
+														activeBooking.resource
+															.number
+												  } • ${
+														{
+															en:
+																activeBooking
+																	.resource
+																	.title_en,
+															hk:
+																activeBooking
+																	.resource
+																	.title_hk,
+															cn:
+																activeBooking
+																	.resource
+																	.title_cn,
+														}[i18n.language]
+												  }`
 												: activeBooking.resource.number
 										}
 										onPress={() =>
@@ -194,18 +209,12 @@ function ViewBookingsScreen({ navigation }) {
 						)}
 						<TimeSection
 							data={upcoming}
-							title={Translations.getTranslatedString(
-								"upcoming",
-								routes.screens.VIEW_BOOKINGS
-							)}
+							title={t("upcoming")}
 							navigation={navigation}
 						/>
 						<TimeSection
 							data={history}
-							title={Translations.getTranslatedString(
-								"history",
-								routes.screens.VIEW_BOOKINGS
-							)}
+							title={t("history")}
 							navigation={navigation}
 						>
 							<TouchableOpacity
@@ -231,11 +240,10 @@ function ViewBookingsScreen({ navigation }) {
 										fontSize: sizing(3.5),
 									}}
 								>
-									{Translations.getTranslatedString(
-										"pastDays",
-										routes.screens.VIEW_BOOKINGS,
-										historyOptions[historyOptionsIndex]
-									)}
+									{t("pastDays", {
+										value:
+											historyOptions[historyOptionsIndex],
+									})}
 								</Text>
 							</TouchableOpacity>
 						</TimeSection>

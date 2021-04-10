@@ -25,14 +25,16 @@ import Timeslot from "../components/Timeslot";
 import { axiosInstance } from "../api/config";
 import { getDistance } from "geolib";
 import routes from "../navigations/routes";
-import { Translations } from "../i18n";
+import { useTranslation } from "react-i18next";
 const MAX_HEIGHT = 200;
 
 const { width } = Dimensions.get("window");
+//TODO
 
 const TIMESLOT_WIDTH = width * sizing(0.2);
 
 function DetailedResourcesScreen({ route, navigation }) {
+	const { t, i18n } = useTranslation([routes.screens.DETAILED_RESOURCES]);
 	const { item } = route.params;
 	const [isLoading, setLoading] = useState(true);
 	const [timeslot, setTimeslot] = useState({});
@@ -116,13 +118,13 @@ function DetailedResourcesScreen({ route, navigation }) {
 			/>
 			<StatusBar barStyle="light-content" animated={true} />
 			<View style={styles.detailContainer}>
-				<Text style={styles.title}>{`${
-					item.number
-				} ${Translations.getTranslatedStringFromProvider({
-					en: item.title_en,
-					hk: item.title_hk,
-					cn: item.title_cn,
-				})}`}</Text>
+				<Text style={styles.title}>{`${item.number} ${
+					{
+						en: item.title_en,
+						hk: item.title_hk,
+						cn: item.title_cn,
+					}[i18n.language]
+				}`}</Text>
 			</View>
 			<View style={presetStyles.marginHorizontal}>
 				<View style={[presetStyles.row, { marginTop: sizing(1.5) }]}>
@@ -137,17 +139,15 @@ function DetailedResourcesScreen({ route, navigation }) {
 							marginLeft: sizing(2),
 						}}
 					>
-						{Translations.getTranslatedStringFromProvider({
-							en: item.branch.title_en,
-							hk: item.branch.title_hk,
-							cn: item.branch.title_cn,
-						})}
+						{
+							{
+								en: item.branch.title_en,
+								hk: item.branch.title_hk,
+								cn: item.branch.title_cn,
+							}[i18n.language]
+						}
 						{distance !== null &&
-							Translations.getTranslatedString(
-								"distance",
-								routes.screens.DETAILED_RESOURCES,
-								distance
-							)}
+							t("distance", { value: distance })}
 					</Text>
 				</View>
 				<View style={[presetStyles.row, { marginTop: sizing(1.5) }]}>
@@ -168,14 +168,8 @@ function DetailedResourcesScreen({ route, navigation }) {
 							moment(item.opening_time, "HH:mm:ss"),
 							moment(item.closing_time, "HH:mm:ss")
 						)
-							? Translations.getTranslatedString(
-									"opened",
-									routes.screens.DETAILED_RESOURCES
-							  )
-							: Translations.getTranslatedString(
-									"closed",
-									routes.screens.DETAILED_RESOURCES
-							  )}
+							? t("opened")
+							: t("closed")}
 					</Text>
 				</View>
 				<View style={[presetStyles.row, { marginTop: sizing(2) }]}>
@@ -205,10 +199,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 							},
 						]}
 					>
-						{Translations.getTranslatedString(
-							"availability",
-							routes.screens.DETAILED_RESOURCES
-						)}
+						{t("availability")}
 					</Animatable.Text>
 					<Animatable.Text
 						animation="fadeIn"
@@ -220,10 +211,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 							},
 						]}
 					>
-						{Translations.getTranslatedString(
-							"availabilityDescriptoin",
-							routes.screens.DETAILED_RESOURCES
-						)}
+						{t("availabilityDescriptoin")}
 					</Animatable.Text>
 					<FlatList
 						horizontal
@@ -275,15 +263,13 @@ function DetailedResourcesScreen({ route, navigation }) {
 					},
 				]}
 			>
-				{Translations.getTranslatedString(
-					"campusLocation",
-					routes.screens.DETAILED_RESOURCES,
-					Translations.getTranslatedStringFromProvider({
+				{t("campusLocation", {
+					value: {
 						en: item.branch.title_en,
 						hk: item.branch.title_hk,
 						cn: item.branch.title_cn,
-					})
-				)}
+					}[i18n.language],
+				})}
 			</Text>
 			<View style={styles.mapContainer}>
 				<MapView
@@ -305,11 +291,13 @@ function DetailedResourcesScreen({ route, navigation }) {
 							latitude: Number(item.branch.lat),
 							longitude: Number(item.branch.lng),
 						}}
-						title={Translations.getTranslatedStringFromProvider({
-							en: item.branch.title_en,
-							hk: item.branch.title_hk,
-							cn: item.branch.title_cn,
-						})}
+						title={
+							{
+								en: item.branch.title_en,
+								hk: item.branch.title_hk,
+								cn: item.branch.title_cn,
+							}[i18n.language]
+						}
 					/>
 				</MapView>
 			</View>
@@ -347,20 +335,14 @@ function DetailedResourcesScreen({ route, navigation }) {
 							},
 						]}
 					>
-						{Translations.getTranslatedString(
-							"contactAdmin",
-							routes.screens.DETAILED_RESOURCES
-						)}
+						{t("contactAdmin")}
 					</Text>
 					<Text
 						style={{
 							color: colors.textSecondary,
 						}}
 					>
-						{Translations.getTranslatedString(
-							"contactAdminDescription",
-							routes.screens.DETAILED_RESOURCES
-						)}
+						{t("contactAdminDescription")}
 					</Text>
 				</View>
 				<MaterialCommunityIcons

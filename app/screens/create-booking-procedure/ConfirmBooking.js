@@ -4,18 +4,18 @@ import moment from "moment";
 
 import TimeslotListItem from "../../components/TimeslotListItem";
 import presetStyles, { sizing } from "../../themes/presetStyles";
-import { Translations } from "../../i18n";
 import routes from "../../navigations/routes";
+import { useTranslation } from "react-i18next";
 
 function ConfirmBooking({ timeslot, resource, date }) {
+	const { t, i18n } = useTranslation([
+		routes.screens.CREATE_BOOKING,
+		"common",
+	]);
+
 	return (
 		<View style={styles.container}>
-			<Text>
-				{Translations.getTranslatedString(
-					"confirm_description",
-					routes.screens.CREATE_BOOKING
-				)}
-			</Text>
+			<Text>{t("confirm_description")}</Text>
 			<Text
 				style={[
 					presetStyles.listHeader,
@@ -25,26 +25,20 @@ function ConfirmBooking({ timeslot, resource, date }) {
 				]}
 			>
 				{moment(date, "YYYY-MM-DD").calendar({
-					sameDay: Translations.getTranslatedString(
-						"timeslot_sameDay",
-						"common"
-					),
-					nextDay: Translations.getTranslatedString(
-						"timeslot_nextDay",
-						"common"
-					),
+					sameDay: t("common:timeslot_sameDay"),
+					nextDay: t("common:timeslot_nextDay"),
 					nextWeek: "D/M",
 					sameElse: "D/M",
 				})}
 			</Text>
 			<TimeslotListItem
 				timeslot={timeslot}
-				location={`${
-					resource.number
-				} • ${Translations.getTranslatedStringFromProvider({
-					en: resource.branch.title_en,
-					hk: resource.branch.title_hk,
-					cn: resource.branch.title_cn,
+				location={`${resource.number} • ${
+					i18n.language === "en"
+						? resource.branch.title_en
+						: i18n.language === "hk"
+						? resource.branch.title_hk
+						: resource.branch.title_cn
 				})}`}
 			/>
 		</View>

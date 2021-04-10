@@ -25,11 +25,12 @@ import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
 import SettingsItem, { ChevronRight } from "../components/SettingsItem";
 import { axiosInstance } from "../api/config";
-import { Translations, useTranslation } from "../i18n";
+import { useTranslation } from "react-i18next";
 
 const AVATAR = 90;
 
 function SettingsScreen({ navigation }) {
+	const { t, i18n } = useTranslation([routes.screens.SETTINGS]);
 	const { user, logOut, fetchUser } = useAuth();
 	const [isBioAvailable, setBioAvailable] = useState(false);
 	const [isBioEnabled, setBioEnabled] = useState(false);
@@ -183,7 +184,7 @@ function SettingsScreen({ navigation }) {
 	);
 
 	const LanguageChevron = () => {
-		const { language } = useTranslation();
+		const { t, i18n } = useTranslation();
 
 		return (
 			<View style={presetStyles.row}>
@@ -194,7 +195,13 @@ function SettingsScreen({ navigation }) {
 						marginRight: sizing(2),
 					}}
 				>
-					{language.label}
+					{
+						{
+							en: "English",
+							cn: "简体中文",
+							hk: "繁體中文",
+						}[i18n.language]
+					}
 				</Text>
 				<ChevronRight />
 			</View>
@@ -204,28 +211,19 @@ function SettingsScreen({ navigation }) {
 	const data = [
 		{
 			id: 0,
-			title: Translations.getTranslatedString(
-				"language",
-				routes.screens.SETTINGS
-			),
+			title: t("language"),
 			RightComponent: LanguageChevron,
 			onPress: () => navigation.navigate(routes.screens.CHANGE_LANGUAGE),
 		},
 		{
 			id: 1,
-			title: Translations.getTranslatedString(
-				"password",
-				routes.screens.SETTINGS
-			),
+			title: t("password"),
 			RightComponent: ChevronRight,
 			onPress: () => navigation.navigate(routes.screens.CHANGE_PASSWORD),
 		},
 		isBioAvailable && {
 			id: 2,
-			title: Translations.getTranslatedString(
-				"bio",
-				routes.screens.SETTINGS
-			),
+			title: t("bio"),
 			RightComponent: () => (
 				<Switch value={isBioEnabled} onValueChange={handleBioToggle} />
 			),
@@ -233,41 +231,22 @@ function SettingsScreen({ navigation }) {
 		},
 		{
 			id: 3,
-			title: Translations.getTranslatedString(
-				"logout",
-				routes.screens.SETTINGS
-			),
+			title: t("logout"),
 			titleStyle: {
 				color: "red",
 				fontWeight: "500",
 			},
 			onPress: () => {
-				Alert.alert(
-					Translations.getTranslatedString(
-						"logout",
-						routes.screens.SETTINGS
-					),
-					Translations.getTranslatedString(
-						"logoutConfirm",
-						routes.screens.SETTINGS
-					),
-					[
-						{
-							text: Translations.getTranslatedString(
-								"cancel",
-								routes.screens.SETTINGS
-							),
-							style: "cancel",
-						},
-						{
-							text: Translations.getTranslatedString(
-								"logout",
-								routes.screens.SETTINGS
-							),
-							onPress: () => logOut(),
-						},
-					]
-				);
+				Alert.alert(t("logout"), t("logoutConfirm"), [
+					{
+						text: t("cancel"),
+						style: "cancel",
+					},
+					{
+						text: t("logout"),
+						onPress: () => logOut(),
+					},
+				]);
 			},
 		},
 	];
@@ -285,22 +264,19 @@ function SettingsScreen({ navigation }) {
 				/>
 			</TouchableOpacity>
 			<ScrollView>
-				<Text style={styles.title}>
-					{Translations.getTranslatedString(
-						"settings",
-						routes.screens.SETTINGS
-					)}
-				</Text>
+				<Text style={styles.title}>{t("settings")}</Text>
 				<View style={styles.profileContainer}>
 					<View style={[presetStyles.row]}>
 						<UserIcon />
 						<View style={styles.detailsContainer}>
 							<Text style={styles.username}>
-								{Translations.getTranslatedStringFromProvider({
-									en: `${user.first_name}, ${user.last_name}`,
-									hk: user.chinese_name,
-									cn: user.chinese_name,
-								})}
+								{
+									{
+										en: `${user.first_name}, ${user.last_name}`,
+										hk: user.chinese_name,
+										cn: user.chinese_name,
+									}[i18n.language]
+								}
 							</Text>
 							<Text style={styles.CNA}>{user.name}</Text>
 						</View>

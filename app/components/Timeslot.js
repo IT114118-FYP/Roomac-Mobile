@@ -11,26 +11,20 @@ import moment from "moment";
 
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
-import routes from "../navigations/routes";
-import { Translations } from "../i18n";
+import { useTranslation } from "react-i18next";
 
 const { width } = Dimensions.get("window");
 
 const WIDTH = width * sizing(0.2);
 
 function Timeslot({ data, onPress }) {
+	const { t, i18n } = useTranslation(["common"]);
 	return (
 		<View style={styles.wrapper}>
 			<Text style={styles.date}>
 				{moment(data.date, "YYYY-MM-DD").calendar({
-					sameDay: Translations.getTranslatedString(
-						"timeslot_sameDay",
-						"common"
-					),
-					nextDay: Translations.getTranslatedString(
-						"timeslot_nextDay",
-						"common"
-					),
+					sameDay: t("timeslot_sameDay"),
+					nextDay: t("timeslot_nextDay"),
 					nextWeek: "D/M",
 					sameElse: "D/M",
 				})}

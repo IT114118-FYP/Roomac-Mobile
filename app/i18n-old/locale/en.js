@@ -12,7 +12,7 @@ export default {
 		logout: "Log out",
 		ok: "Ok",
 	},
-	app: {
+	App: {
 		noInternet: "No Internet connection!",
 		noInternetDescription:
 			"Turn on Internet connection before using roomac.",
@@ -24,7 +24,7 @@ export default {
 	Login: {
 		email: "Email / CNA",
 		password: "Password",
-		welcomeTo: "welcomeTo",
+		welcomeTo: "Welcome To",
 		failedDescription: "Email/CNA or password is incorrect.",
 		forgot: "Forgot your password?",
 	},
@@ -47,7 +47,7 @@ export default {
 		closed: "closed",
 		availability: "Availability",
 		availabilityDescriptoin:
-			"Press on the preferred timeslot to create your booking.",
+			"Press on the prefered timeslot to create your booking.",
 		campusLocation: "Campus Location ({{value}})",
 		contactAdmin: "Contact Admin",
 		contactAdminDescription: "Feel free to contact admin if help is needed",
@@ -63,7 +63,7 @@ export default {
 		viewBookings: "View in My Bookings",
 		results_failed: "Failed...",
 		results_successful: "Successful!",
-		results_bookingRef: "Booking Reference: {{value}}",
+		results_bookingRef: "Booking Referrence: {{value}}",
 		confirm_description: "Please check and confirm the following booking.",
 		lastStep: "Last step, almost finish!",
 	},
@@ -73,7 +73,6 @@ export default {
 		upcoming: "Upcoming",
 		history: "History",
 		pastDays: "Past {{value}} days",
-		checkIn: "Check In",
 	},
 	[routes.screens.BOOKING_DETAILS]: {
 		checkIn: "Check In",
@@ -97,16 +96,17 @@ export default {
 			"Must Contain 8 Characters, One Uppercase, One Lowercase and one Number",
 		passwordMatch: "Password must match",
 		changeSuccessText: "Password changed, sign in now with new password",
-		changeFailedText: "Password change failed, please try again",
+		changeFailedText: "Password changed, sign in now with new password",
 		title: "Change Password",
 		enterOld: "Enter old password",
 		enterNew: "Enter new password",
 		confirmNew: "Confirm new password",
 		submit: "Submit New Password",
 	},
+	//TODO add hk and cn
 	[routes.screens.CHANGE_LANGUAGE]: {
-		title: "Change Language",
-		reset: "Reset Language",
+		title: "Languages",
 		default: " | default",
+		reset: "Reset Language",
 	},
 };

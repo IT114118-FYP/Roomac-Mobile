@@ -14,11 +14,16 @@ import routes from "./routes";
 import { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
-import { Translations } from "../i18n";
+
+import { useTranslation } from "react-i18next";
 
 function DrawerContent(props) {
 	const { user, logOut } = useAuth();
-
+	const { t, i18n } = useTranslation([
+		"Drawer",
+		"common",
+		routes.screens.SETTINGS,
+	]);
 	return (
 		<SafeAreaView style={{ flex: 1 }}>
 			<View
@@ -70,11 +75,13 @@ function DrawerContent(props) {
 						color: colors.textPrimary,
 					}}
 				>
-					{Translations.getTranslatedStringFromProvider({
-						en: `${user.first_name}, ${user.last_name}`,
-						hk: user.chinese_name,
-						cn: user.chinese_name,
-					})}
+					{
+						{
+							en: `${user.first_name}, ${user.last_name}`,
+							hk: user.chinese_name,
+							cn: user.chinese_name,
+						}[i18n.language]
+					}
 				</Text>
 				<Text
 					style={{
@@ -104,7 +111,7 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label={Translations.getTranslatedString("home", "Drawer")}
+					label={t("home")}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.HOME);
 					}}
@@ -117,10 +124,7 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label={Translations.getTranslatedString(
-						"bookings",
-						"Drawer"
-					)}
+					label={t("bookings")}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.BOOKINGS);
 					}}
@@ -133,10 +137,7 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label={Translations.getTranslatedString(
-						"campuses",
-						"Drawer"
-					)}
+					label={t("campuses")}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.CAMPUS);
 					}}
@@ -149,10 +150,7 @@ function DrawerContent(props) {
 							size={size}
 						/>
 					)}
-					label={Translations.getTranslatedString(
-						"settings",
-						"Drawer"
-					)}
+					label={t("settings")}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.SETTINGS);
 					}}
@@ -184,30 +182,18 @@ function DrawerContent(props) {
 						size={size}
 					/>
 				)}
-				label={Translations.getTranslatedString("logout", "common")}
+				label={t("common:logout")}
 				onPress={() => {
 					Alert.alert(
-						Translations.getTranslatedString(
-							"logout",
-							routes.screens.SETTINGS
-						),
-						Translations.getTranslatedString(
-							"logoutConfirm",
-							routes.screens.SETTINGS
-						),
+						t("common:logout"),
+						t(routes.screens.SETTINGS + ":logoutConfirm"),
 						[
 							{
-								text: Translations.getTranslatedString(
-									"cancel",
-									routes.screens.SETTINGS
-								),
+								text: t(routes.screens.SETTINGS + ":cancel"),
 								style: "cancel",
 							},
 							{
-								text: Translations.getTranslatedString(
-									"logout",
-									routes.screens.SETTINGS
-								),
+								text: t("common:logout"),
 								onPress: () => logOut(),
 							},
 						]

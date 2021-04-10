@@ -5,13 +5,6 @@ import * as LocalAuthentication from "expo-local-authentication";
 import { Root as PopupRoot, Popup, Toast } from "popup-ui";
 import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
 
-import * as Localization from "expo-localization";
-import {
-	LanguageConfig,
-	Translations,
-	TranslationsContext,
-} from "./app/i18n/index";
-
 import * as BioStorage from "./app/biometrics/storage";
 import LoginScreen from "./app/screens/LoginScreen";
 import AuthContext from "./app/auth/context";
@@ -19,28 +12,23 @@ import authStorage from "./app/auth/storage";
 import { axiosInstance } from "./app/api/config";
 import navigationTheme from "./app/themes/navigationTheme";
 import AppDrawer from "./app/navigations/AppDrawer";
-import I18n from "i18n-js";
+
+import i18n from "./app/i18n/config";
+import { I18nextProvider, useTranslation } from "react-i18next";
+import { getLanguagePreference } from "./app/i18n/func";
 
 export default function App() {
 	const [user, setUser] = useState();
-	const [language, setLanguage] = useState(
-		LanguageConfig.LanguageOptions.find(
-			(lang) =>
-				lang.key === LanguageConfig.getModifiedKey(Localization.locale)
-		)
-	);
 	const [isReady, setIsReady] = useState(false);
 	const netInfo = useNetInfo();
+	const { t } = useTranslation(["app", "common"]);
 
 	if (netInfo.type !== "unknown" && netInfo.isInternetReachable === false) {
 		Popup.show({
 			type: "Warning",
-			title: Translations.getTranslatedString("noInternet", "App"),
+			title: t("app:noInternet"),
 			button: false,
-			textBody: Translations.getTranslatedString(
-				"noInternetDescription",
-				"App"
-			),
+			textBody: t("app:noInternetDescription"),
 			callback: () => Popup.hide(),
 		});
 	}
@@ -58,17 +46,12 @@ export default function App() {
 		const biometricsEnabled = await BioStorage.getEnable();
 		if (biometricsEnabled) {
 			const result = await LocalAuthentication.authenticateAsync({
-				promptMessage: Translations.getTranslatedString(
-					"biometrics",
-					"App"
-				),
+				promptMessage: t("app:biometrics"),
 			});
 			if (result.success) {
 				fetchUser();
 			} else {
-				alert(
-					Translations.getTranslatedString("biometricsFailed", "App")
-				);
+				alert(t("app:biometricsFailed"));
 			}
 		} else {
 			fetchUser();
@@ -87,27 +70,20 @@ export default function App() {
 				authStorage.removeToken();
 				Popup.show({
 					type: "Danger",
-					title: Translations.getTranslatedString("error", "App"),
+					title: t("error"),
 					button: false,
-					textBody: Translations.getTranslatedString(
-						"errorDescription",
-						"App"
-					),
-					buttonText: Translations.getTranslatedString(
-						"ok",
-						"common"
-					),
+					textBody: t("errorDescription"),
+					buttonText: t("common:ok"),
 					callback: () => Popup.hide(),
 				});
 			});
 
 	useEffect(() => {
-		LanguageConfig.setLanguage(language);
 		restoreToken();
 	}, []);
 
 	return (
-		<TranslationsContext.Provider value={{ language, setLanguage }}>
+		<I18nextProvider i18n={i18n}>
 			<PopupRoot>
 				<AuthContext.Provider value={{ user, setUser }}>
 					{isReady ? (
@@ -126,6 +102,6 @@ export default function App() {
 					)}
 				</AuthContext.Provider>
 			</PopupRoot>
-		</TranslationsContext.Provider>
+		</I18nextProvider>
 	);
 }

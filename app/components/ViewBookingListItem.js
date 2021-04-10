@@ -1,5 +1,7 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
+import routes from "../navigations/routes";
 
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
@@ -12,6 +14,7 @@ function ViewBookingListItem({
 	onPress,
 	onCheckIn,
 }) {
+	const { t, i18n } = useTranslation([routes.screens.VIEW_BOOKINGS]);
 	return (
 		<TouchableOpacity
 			onPress={onPress}
@@ -71,12 +74,11 @@ function ViewBookingListItem({
 						marginTop: sizing(2),
 					}}
 				>
-					{/* <View style={{ flex: 1 }} /> */}
 					<TouchableOpacity
 						style={styles.checkinButton}
 						onPress={onCheckIn}
 					>
-						<Text style={styles.checkinText}>Check In</Text>
+						<Text style={styles.checkinText}>{t("checkIn")}</Text>
 					</TouchableOpacity>
 				</View>
 			)}
@@ -91,6 +93,7 @@ const styles = StyleSheet.create({
 	},
 	date: {
 		fontSize: sizing(3),
+		marginBottom: sizing(1),
 		color: colors.textSecondary,
 	},
 	location: {
