@@ -9,6 +9,7 @@ export default {
 		TERMS_AND_CONDITION: "TermsAndCondition",
 		CHANGE_PASSWORD: "ChangePassword",
 		CHANGE_LANGUAGE: "ChangeLanguage",
+		CHECKIN: "CheckIn",
 	},
 	navigators: {
 		HOME: "Home",

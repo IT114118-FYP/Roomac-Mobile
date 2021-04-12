@@ -113,4 +113,7 @@ export default {
 		reset: "Reset Language",
 		default: " | default",
 	},
+	[routes.screens.CHECKIN]: {
+		description: "Display the QR code to the scanner to check in.",
+	},
 };

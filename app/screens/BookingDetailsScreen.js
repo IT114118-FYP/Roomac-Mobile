@@ -193,18 +193,36 @@ function BookingDetailsScreen({ route }) {
 				</View>
 			)}
 
-			<Modal
-				visible={isCheckInClicked}
-				animationType="slide"
-				presentationStyle="pageSheet"
-			>
-				<SafeAreaView>
-					<CheckInScreen
-						onClose={() => setCheckInClicked(false)}
-						bookingId={item.id}
-					/>
-				</SafeAreaView>
-			</Modal>
+			{isCheckInClicked && (
+				<Modal
+					visible={isCheckInClicked}
+					animationType="slide"
+					presentationStyle="pageSheet"
+				>
+					<SafeAreaView>
+						<CheckInScreen
+							onClose={() => setCheckInClicked(false)}
+							bookingId={item.id}
+							date={`${moment(item.start_time).format(
+								{
+									en: "LL",
+									hk: "YYYY年MM月DD日",
+									cn: "YYYY年MM月DD日",
+								}[i18n.language]
+							)}`}
+							time={`${moment(item.start_time).format(
+								"H:mm"
+							)} - ${moment(item.end_time).format("H:mm")} • ${
+								{
+									en: item.resource.title_en,
+									hk: item.resource.title_hk,
+									cn: item.resource.title_cn,
+								}[i18n.language]
+							}`}
+						/>
+					</SafeAreaView>
+				</Modal>
+			)}
 		</ScrollView>
 	);
 }

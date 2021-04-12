@@ -111,4 +111,7 @@ export default {
 		reset: "重設語言",
 		default: " | 預設",
 	},
+	[routes.screens.CHECKIN]: {
+		description: "請將QR碼顯示在掃描儀上以進行登記。",
+	},
 };
