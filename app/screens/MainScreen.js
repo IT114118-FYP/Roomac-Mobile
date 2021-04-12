@@ -182,7 +182,7 @@ function MainScreen({ navigation }) {
 										},
 									]}
 								>
-									Now
+									{t("common:now")}
 								</Text>
 
 								<Animatable.View animation="fadeInRight">
@@ -191,7 +191,13 @@ function MainScreen({ navigation }) {
 										// onCheckIn
 										date={moment(
 											activeBooking.start_time
-										).format("LL")}
+										).format(
+											{
+												en: "LL",
+												hk: "YYYY年MM月DD日",
+												cn: "YYYY年MM月DD日",
+											}[i18n.language]
+										)}
 										period={`${moment(
 											activeBooking.start_time
 										).format("H:mm")} - ${moment(
@@ -201,7 +207,25 @@ function MainScreen({ navigation }) {
 											Boolean(
 												activeBooking.resource.title_en
 											)
-												? `${activeBooking.resource.number} • ${activeBooking.resource.title_en}`
+												? `${
+														activeBooking.resource
+															.number
+												  } • ${
+														{
+															en:
+																activeBooking
+																	.resource
+																	.title_en,
+															hk:
+																activeBooking
+																	.resource
+																	.title_hk,
+															cn:
+																activeBooking
+																	.resource
+																	.title_cn,
+														}[i18n.language]
+												  }`
 												: activeBooking.resource.number
 										}
 										onPress={() => {
@@ -217,6 +241,20 @@ function MainScreen({ navigation }) {
 												}
 											);
 										}}
+										onCheckIn={() =>
+											navigation.navigate(
+												routes.navigators.BOOKINGS,
+												{
+													screen:
+														routes.screens
+															.BOOKING_DETAILS,
+													params: {
+														item: activeBooking,
+														checkInClicked: true,
+													},
+												}
+											)
+										}
 									/>
 								</Animatable.View>
 							</View>
@@ -225,7 +263,7 @@ function MainScreen({ navigation }) {
 							<View>
 								<View style={presetStyles.row}>
 									<Text style={presetStyles.listHeader}>
-										{t("Today")}
+										{t("common:today")}
 									</Text>
 								</View>
 								{upcoming.map((item, index) => (
@@ -240,7 +278,13 @@ function MainScreen({ navigation }) {
 										<ViewBookingListItem
 											date={moment(
 												item.start_time
-											).format("LL")}
+											).format(
+												{
+													en: "LL",
+													hk: "YYYY年MM月DD日",
+													cn: "YYYY年MM月DD日",
+												}[i18n.language]
+											)}
 											period={`${moment(
 												item.start_time
 											).format("H:mm")} - ${moment(
@@ -286,6 +330,7 @@ function MainScreen({ navigation }) {
 								paddingLeft: sizing(6),
 							}}
 							horizontal
+							// alwaysBounceHorizontal={false}
 							showsHorizontalScrollIndicator={false}
 							data={categories}
 							keyExtractor={(item) => `${item.id}`}

@@ -11,6 +11,8 @@ export default {
 		signIn: "Sign In",
 		logout: "Log out",
 		ok: "Ok",
+		today: "Today",
+		now: "Now",
 	},
 	app: {
 		noInternet: "No Internet connection!",
@@ -74,6 +76,8 @@ export default {
 		history: "History",
 		pastDays: "Past {{value}} days",
 		checkIn: "Check In",
+		noBookings: "You do not have any bookings for now.",
+		browse: "Browse Resources",
 	},
 	[routes.screens.BOOKING_DETAILS]: {
 		checkIn: "Check In",

@@ -18,28 +18,10 @@ import { Popup, Toast } from "popup-ui";
 const Drawer = createDrawerNavigator();
 
 function AppDrawer(props) {
-	const [bookings, setBookings] = useState([]);
-	const { user } = useAuth();
-	// const { fetchBookings } = useBookings();
-
-	// const fetchBookings = () => {
-	// 	axiosInstance(
-	// 		`/api/users/${user.id}/bookings?start=${moment().format(
-	// 			"YYYY-MM-DD"
-	// 		)}&end=${moment().add(10, "days").format("YYYY-MM-DD")}`
-	// 	).then(({ data }) => {
-	// 		console.log(data);
-	// 		setBookings(data);
-	// 	});
-	// };
-
-	// useEffect(() => {
-	// 	fetchBookings();
-	// }, []);
-
 	return (
 		<Drawer.Navigator
 			drawerContent={(props) => <DrawerContent {...props} />}
+			lazy={false}
 		>
 			<Drawer.Screen
 				name={routes.navigators.HOME}

@@ -19,6 +19,7 @@ import presetStyles, { sizing } from "../themes/presetStyles";
 import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
+import Button from "../components/Button";
 
 const historyOptions = [7, 30, 90];
 
@@ -143,7 +144,7 @@ function ViewBookingsScreen({ navigation }) {
 			>
 				{!isLoading && (
 					<>
-						{Boolean(activeBooking) && (
+						{Boolean(activeBooking) ? (
 							<Animatable.View
 								animation="fadeInUp"
 								style={styles.section}
@@ -200,12 +201,50 @@ function ViewBookingsScreen({ navigation }) {
 												routes.screens.BOOKING_DETAILS,
 												{
 													item: activeBooking,
+													checkInClicked: false,
+												}
+											)
+										}
+										onCheckIn={() =>
+											navigation.navigate(
+												routes.screens.BOOKING_DETAILS,
+												{
+													item: activeBooking,
+													checkInClicked: true,
 												}
 											)
 										}
 									/>
 								</Animatable.View>
 							</Animatable.View>
+						) : (
+							<View
+								style={{
+									alignItems: "center",
+									paddingVertical: sizing(4),
+								}}
+							>
+								<Text
+									style={{
+										color: colors.textSecondary,
+									}}
+								>
+									{t("noBookings")}
+								</Text>
+								<Button
+									title={t("browse")}
+									style={{
+										backgroundColor: colors.Cyber_Grape,
+										paddingVertical: sizing(2),
+										marginVertical: sizing(4),
+									}}
+									onPress={() => {
+										navigation.navigate(
+											routes.screens.HOME
+										);
+									}}
+								/>
+							</View>
 						)}
 						<TimeSection
 							data={upcoming}

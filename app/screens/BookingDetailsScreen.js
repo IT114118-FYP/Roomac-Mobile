@@ -8,6 +8,8 @@ import {
 	Dimensions,
 	ScrollView,
 	StatusBar,
+	Modal,
+	TouchableOpacity,
 } from "react-native";
 
 import {
@@ -26,13 +28,20 @@ import Markdown from "react-native-markdown-display";
 import Button from "../components/Button";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
+import { SafeAreaView } from "react-native-safe-area-context";
+import CheckInScreen from "./CheckInScreen";
 
 const { width, height } = Dimensions.get("screen");
 
 function BookingDetailsScreen({ route }) {
-	const { item } = route.params;
+	const { item, checkInClicked } = route.params;
 	const { t, i18n } = useTranslation([routes.screens.BOOKING_DETAILS]);
 	const [tos, setTos] = useState();
+	const [isCheckInClicked, setCheckInClicked] = useState(
+		Boolean(checkInClicked)
+	);
+
+	console.log(item);
 
 	const fetchTOS = () => {
 		axiosInstance
@@ -120,7 +129,11 @@ function BookingDetailsScreen({ route }) {
 						moment(item.start_time).subtract(15, "minutes"),
 						moment(item.end_time)
 					) ? (
-						<Button title={t("checkIn")} style={{ flex: 1 }} />
+						<Button
+							title={t("checkIn")}
+							style={{ flex: 1 }}
+							onPress={() => setCheckInClicked(true)}
+						/>
 					) : (
 						<Button
 							title={t("checkInAvailable", {
@@ -179,6 +192,19 @@ function BookingDetailsScreen({ route }) {
 					</Markdown>
 				</View>
 			)}
+
+			<Modal
+				visible={isCheckInClicked}
+				animationType="slide"
+				presentationStyle="pageSheet"
+			>
+				<SafeAreaView>
+					<CheckInScreen
+						onClose={() => setCheckInClicked(false)}
+						bookingId={item.id}
+					/>
+				</SafeAreaView>
+			</Modal>
 		</ScrollView>
 	);
 }

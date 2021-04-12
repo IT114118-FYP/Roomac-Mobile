@@ -11,6 +11,8 @@ export default {
 		signIn: "登入",
 		logout: "登出",
 		ok: "确认",
+		today: "今天",
+		now: "现在",
 	},
 	app: {
 		noInternet: "没有网络连接！",
@@ -72,6 +74,8 @@ export default {
 		history: "预约记录",
 		pastDays: "过去 {{value}} 日",
 		checkIn: "登记",
+		noBookings: "您暂时没有预约",
+		browse: "浏览资源",
 	},
 	[routes.screens.BOOKING_DETAILS]: {
 		checkIn: "登记",

@@ -11,7 +11,7 @@ const languageDetector = {
 	type: "languageDetector",
 	async: true, // async detection
 	detect: (callback) => {
-		console.log("error");
+		console.log("asidnpasdnasdasdiasd");
 		AsyncStorage.getItem("languageOptions").then((lng) => {
 			console.log("===asdas=================================");
 			console.log(lng);
