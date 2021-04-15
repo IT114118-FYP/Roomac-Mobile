@@ -10,6 +10,7 @@ export default {
 		CHANGE_PASSWORD: "ChangePassword",
 		CHANGE_LANGUAGE: "ChangeLanguage",
 		CHECKIN: "CheckIn",
+		SEARCH: "Search",
 	},
 	navigators: {
 		HOME: "Home",

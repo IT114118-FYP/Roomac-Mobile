@@ -114,4 +114,9 @@ export default {
 	[routes.screens.CHECKIN]: {
 		description: "请将QR码显示在扫描仪上以进行登记。",
 	},
+	[routes.screens.SEARCH]: {
+		title: "搜索资源",
+		searchPlaceholder: "搜索资源",
+		noResults: "没有结果",
+	},
 };

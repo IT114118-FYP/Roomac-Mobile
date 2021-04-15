@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 		color: colors.Oxford_Blue,
 		marginTop: sizing(14),
-		marginBottom: sizing(4),
+		marginBottom: sizing(2),
 		paddingHorizontal: sizing(6),
 	},
 });

@@ -5,33 +5,6 @@ import * as Localization from "expo-localization";
 
 import * as resources from "./locale/index";
 import routes from "../navigations/routes";
-import { getLanguagePreference } from "./func";
-
-// const languageDetector = {
-// 	type: "languageDetector",
-// 	async: true, // async detection
-// 	detect: (callback) => {
-// 		console.log("asidnpasdnasdasdiasd");
-// 		AsyncStorage.getItem("languageOptions").then((lng) => {
-// 			console.log("===asdas=================================");
-// 			console.log(lng);
-// 			console.log("====asdasd================================");
-// 			if (lng === null) {
-// 				callback(
-// 					Localization.locale.substring(0, 2) === "zh"
-// 						? lang.includes("Hant")
-// 							? "hk"
-// 							: "cn"
-// 						: "en"
-// 				);
-// 			} else {
-// 				callback(lng.key);
-// 			}
-// 		});
-// 	},
-// 	init: () => {},
-// 	cacheUserLanguage: () => {},
-// };
 
 i18n.use(initReactI18next).init({
 	lng:
@@ -54,6 +27,7 @@ i18n.use(initReactI18next).init({
 		routes.screens.CHANGE_PASSWORD,
 		routes.screens.CHANGE_LANGUAGE,
 		routes.screens.CHECKIN,
+		routes.screens.SEARCH,
 	],
 	resources,
 });

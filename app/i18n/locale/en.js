@@ -13,6 +13,7 @@ export default {
 		ok: "Ok",
 		today: "Today",
 		now: "Now",
+		back: "Back",
 	},
 	app: {
 		noInternet: "No Internet connection!",
@@ -26,7 +27,7 @@ export default {
 	Login: {
 		email: "Email / CNA",
 		password: "Password",
-		welcomeTo: "welcomeTo",
+		welcomeTo: "Welcome To",
 		failedDescription: "Email/CNA or password is incorrect.",
 		forgot: "Forgot your password?",
 	},
@@ -115,5 +116,10 @@ export default {
 	},
 	[routes.screens.CHECKIN]: {
 		description: "Display the QR code to the scanner to check in.",
+	},
+	[routes.screens.SEARCH]: {
+		title: "Search Resources",
+		searchPlaceholder: "Help me find a resource",
+		noResults: "No Results",
 	},
 };

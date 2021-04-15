@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
+import * as Animatable from "react-native-animatable";
 
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
@@ -82,11 +83,13 @@ function CheckInScreen({ onClose, bookingId, date, time }) {
 						<ActivityIndicator size="large" />
 					</View>
 				) : (
-					<QRCode
-						value={refNumber}
-						size={QRCodeSize}
-						backgroundColor={"rgba(255, 255, 255, 0)"}
-					/>
+					<Animatable.View animation="fadeIn">
+						<QRCode
+							value={refNumber}
+							size={QRCodeSize}
+							backgroundColor={"rgba(255, 255, 255, 0)"}
+						/>
+					</Animatable.View>
 				)}
 			</View>
 			<Text style={[presetStyles.marginHorizontal, styles.description]}>

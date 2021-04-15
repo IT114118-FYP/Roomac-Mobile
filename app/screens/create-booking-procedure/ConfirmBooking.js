@@ -34,12 +34,12 @@ function ConfirmBooking({ timeslot, resource, date }) {
 			<TimeslotListItem
 				timeslot={timeslot}
 				location={`${resource.number} • ${
-					i18n.language === "en"
-						? resource.branch.title_en
-						: i18n.language === "hk"
-						? resource.branch.title_hk
-						: resource.branch.title_cn
-				})}`}
+					{
+						en: resource.branch.title_en,
+						hk: resource.branch.title_hk,
+						cn: resource.branch.title_cn,
+					}[i18n.language]
+				}`}
 			/>
 		</View>
 	);

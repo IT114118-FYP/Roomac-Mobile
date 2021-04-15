@@ -36,6 +36,8 @@ function CreateBookingScreen({ route, navigation }) {
 	const [isLoading, setLoading] = useState(false);
 	const [bookingRef, setBookingRef] = useState("");
 
+	console.log(dateTimeslots);
+
 	const inputRange = [
 		(listIndex - 1) * width,
 		listIndex * width,
@@ -255,6 +257,7 @@ const styles = StyleSheet.create({
 		fontSize: sizing(8),
 		fontWeight: "600",
 		color: colors.Oxford_Blue,
+		marginBottom: sizing(2),
 	},
 	next: {
 		color: colors.textSecondary,

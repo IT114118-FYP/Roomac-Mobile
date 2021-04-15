@@ -7,6 +7,7 @@ import DetailedResourcesScreen from "../screens/DetailedResourcesScreen";
 import CreateBookingScreen from "../screens/CreateBookingScreen";
 import ViewBookingsScreen from "../screens/ViewBookingsScreen";
 import routes from "./routes";
+import SearchScreen from "../screens/SearchScreen";
 
 const Stack = createStackNavigator();
 
@@ -33,6 +34,16 @@ export default function HomeNavigator() {
 			<Stack.Screen
 				name={routes.screens.CREATE_BOOKING}
 				component={CreateBookingScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.textPrimary,
+				}}
+			/>
+			<Stack.Screen
+				name={routes.screens.SEARCH}
+				component={SearchScreen}
 				options={{
 					headerBackTitleVisible: false,
 					headerTitle: false,

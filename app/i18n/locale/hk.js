@@ -114,4 +114,9 @@ export default {
 	[routes.screens.CHECKIN]: {
 		description: "請將QR碼顯示在掃描儀上以進行登記。",
 	},
+	[routes.screens.SEARCH]: {
+		title: "搜索資源",
+		searchPlaceholder: "搜索資源",
+		noResults: "沒有結果",
+	},
 };

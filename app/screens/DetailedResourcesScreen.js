@@ -29,13 +29,13 @@ import { useTranslation } from "react-i18next";
 const MAX_HEIGHT = 200;
 
 const { width } = Dimensions.get("window");
-//TODO
 
 const TIMESLOT_WIDTH = width * sizing(0.2);
 
 function DetailedResourcesScreen({ route, navigation }) {
 	const { t, i18n } = useTranslation([routes.screens.DETAILED_RESOURCES]);
 	const { item } = route.params;
+	console.log(item);
 	const [isLoading, setLoading] = useState(true);
 	const [timeslot, setTimeslot] = useState({});
 	const [distance, setDistance] = useState(null);
@@ -101,6 +101,9 @@ function DetailedResourcesScreen({ route, navigation }) {
 	};
 
 	return (
+		// <View>
+		// 	<Text>HI</Text>
+		// </View>
 		<ScrollView
 			refreshControl={
 				<RefreshControl

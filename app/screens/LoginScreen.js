@@ -24,7 +24,7 @@ import useAuth from "../auth/useAuth";
 import { sizing } from "../themes/presetStyles";
 
 function LoginScreen(props) {
-	const { t, i18n } = useTranslation(["Login"]);
+	const { t, i18n } = useTranslation(["Login", "common"]);
 	const { logIn } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [loginFailed, setLoginFailed] = useState(false);
@@ -95,7 +95,7 @@ function LoginScreen(props) {
 										placeholder={t("password")}
 										style={styles.password}
 									/>
-									<LoginButton title={t("signIn")} />
+									<LoginButton title={t("common:signIn")} />
 								</View>
 							</Formik>
 							<TouchableOpacity
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 		color: colors.Oxford_Blue,
 	},
 	title: {
-		fontSize: sizing(12),
+		fontSize: sizing(14),
 		fontWeight: "600",
 		color: colors.Oxford_Blue,
 	},

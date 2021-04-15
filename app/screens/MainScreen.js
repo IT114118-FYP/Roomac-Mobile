@@ -135,7 +135,10 @@ function MainScreen({ navigation }) {
 					})}
 				</Text>
 			</View>
-			<View style={[styles.searchBar, presetStyles.shadow]}>
+			<TouchableOpacity
+				style={[styles.searchBar, presetStyles.shadow]}
+				onPress={() => navigation.navigate(routes.screens.SEARCH)}
+			>
 				<Feather
 					name="search"
 					size={16}
@@ -149,7 +152,7 @@ function MainScreen({ navigation }) {
 				>
 					{t("searchTitle")}
 				</Text>
-			</View>
+			</TouchableOpacity>
 			<ScrollView
 				refreshControl={
 					<RefreshControl
