@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, StyleSheet, Text, TextInput } from "react-native";
 import { useTranslation } from "react-i18next";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 import { InstantSearch, connectSearchBox } from "react-instantsearch-native";
 
 import Screen from "../components/Screen";
@@ -14,10 +14,7 @@ import InfiniteHits from "../InstantSearch/InfiniteHits";
 const SearchBox = connectSearchBox(({ currentRefinement, refine }) => {
 	const { t } = useTranslation([routes.screens.SEARCH]);
 	return (
-		<View
-			style={[styles.searchBar, presetStyles.shadow]}
-			// onPress={() => navigation.navigate(routes.screens.SEARCH)}
-		>
+		<View style={[styles.searchBar, presetStyles.shadow]}>
 			<Feather
 				name="search"
 				size={16}

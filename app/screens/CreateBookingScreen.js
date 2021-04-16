@@ -36,8 +36,6 @@ function CreateBookingScreen({ route, navigation }) {
 	const [isLoading, setLoading] = useState(false);
 	const [bookingRef, setBookingRef] = useState("");
 
-	console.log(dateTimeslots);
-
 	const inputRange = [
 		(listIndex - 1) * width,
 		listIndex * width,

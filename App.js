@@ -4,6 +4,8 @@ import LottieView from "lottie-react-native";
 import * as LocalAuthentication from "expo-local-authentication";
 import { Root as PopupRoot, Popup, Toast } from "popup-ui";
 import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["ReactNative.NativeModules.LottieAnimationView"]);
 
 import * as BioStorage from "./app/biometrics/storage";
 import LoginScreen from "./app/screens/LoginScreen";
@@ -15,7 +17,6 @@ import AppDrawer from "./app/navigations/AppDrawer";
 
 import i18n from "./app/i18n/config";
 import { I18nextProvider, useTranslation } from "react-i18next";
-import { getLanguagePreference } from "./app/i18n/func";
 
 export default function App() {
 	const [user, setUser] = useState();

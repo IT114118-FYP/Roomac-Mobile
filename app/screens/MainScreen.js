@@ -24,6 +24,7 @@ import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import routes from "../navigations/routes";
+import CheckBox from "react-native-check-box";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
@@ -35,6 +36,7 @@ function MainScreen({ navigation }) {
 	const [upcoming, setUpcoming] = useState([]);
 	const [categories, setCategories] = useState([]);
 	const [resources, setResources] = useState([]);
+	const [branches, setBranches] = useState([]);
 	const [isfilterOpen, setFilterOpen] = useState(false);
 
 	useEffect(() => {
@@ -50,6 +52,7 @@ function MainScreen({ navigation }) {
 		fetchCategories();
 		fetchBookings();
 		fetchResources();
+		fetchBranches();
 	};
 
 	const fetchBookings = () => {
@@ -101,6 +104,18 @@ function MainScreen({ navigation }) {
 				console.log(error);
 				setLoading(false);
 			});
+	};
+
+	const fetchBranches = () => {
+		setLoading(true);
+		axiosInstance
+			.get("/api/branches")
+			.then(({ data }) => {
+				console.log(data);
+				setBranches(data);
+			})
+			.catch((error) => console.log(error))
+			.finally(() => setLoading(false));
 	};
 
 	return (
@@ -430,31 +445,65 @@ function MainScreen({ navigation }) {
 					})}
 				</View>
 			</ScrollView>
-			<Modal
-				visible={isfilterOpen}
-				animationType="slide"
-				presentationStyle="pageSheet"
-			>
-				<SafeAreaView>
-					<TouchableOpacity onPress={() => setFilterOpen(false)}>
-						<MaterialCommunityIcons
-							name="close"
-							size={24}
-							color={colors.textSecondary}
-						/>
-					</TouchableOpacity>
-				</SafeAreaView>
-			</Modal>
-			{/* <Modal
-				visible={isLoading}
-				animationType="fade"
-				style={styles.loadingAnimation}
-			>
-				<LottieView
-					source={require("../../assets/preloader.json")}
-					autoPlay
-				/>
-			</Modal> */}
+			{!isLoading && (
+				<Modal
+					visible={isfilterOpen}
+					animationType="slide"
+					presentationStyle="pageSheet"
+				>
+					<SafeAreaView>
+						<ScrollView
+							style={{
+								padding: sizing(4),
+							}}
+						>
+							<TouchableOpacity
+								onPress={() => setFilterOpen(false)}
+							>
+								<MaterialCommunityIcons
+									name="close"
+									size={24}
+									color={colors.textSecondary}
+								/>
+							</TouchableOpacity>
+							<View style={presetStyles.marginHorizontal}>
+								<Text style={styles.branchTitle}>
+									{t("campuses")}
+								</Text>
+								{branches.map((branch) => (
+									<Text>
+										{
+											{
+												en: branch.title_en,
+												hk: branch.title_hk,
+												cn: branch.title_cn,
+											}[i18n.language]
+										}
+									</Text>
+									// <CheckBox
+									// 	key={branch.id}
+									// 	style={{
+									// 		paddingVertical: sizing(0.5),
+									// 		marginVertical: sizing(0.5),
+									// 	}}
+									// 	checkedCheckBoxColor={
+									// 		colors.Powder_Blue
+									// 	}
+									// 	isChecked={true}
+									// 	onClick={() => console.log("sdad")}
+									// 	rightText={
+
+									// 	}
+									// 	rightTextStyle={{
+									// 		fontSize: sizing(4),
+									// 	}}
+									// />
+								))}
+							</View>
+						</ScrollView>
+					</SafeAreaView>
+				</Modal>
+			)}
 		</Screen>
 	);
 }
@@ -529,6 +578,11 @@ const styles = StyleSheet.create({
 	capacity: {
 		flexDirection: "row",
 		alignItems: "center",
+	},
+	branchTitle: {
+		fontSize: sizing(8),
+		fontWeight: "600",
+		marginVertical: sizing(4),
 	},
 });
 

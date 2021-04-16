@@ -41,6 +41,7 @@ export default {
 		today: "今天",
 		categories: "類別",
 		resources: "資源 ({{value}})",
+		campuses: "學院",
 	},
 	[routes.screens.DETAILED_RESOURCES]: {
 		distance: " • {{value}} 公里遠",

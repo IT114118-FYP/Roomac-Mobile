@@ -43,6 +43,7 @@ export default {
 		today: "Today",
 		categories: "Categories",
 		resources: "Resources ({{value}})",
+		campuses: "Campuses",
 	},
 	[routes.screens.DETAILED_RESOURCES]: {
 		distance: " • {{value}} km away",
