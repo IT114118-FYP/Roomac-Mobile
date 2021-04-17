@@ -8,6 +8,7 @@ import CreateBookingScreen from "../screens/CreateBookingScreen";
 import ViewBookingsScreen from "../screens/ViewBookingsScreen";
 import routes from "./routes";
 import SearchScreen from "../screens/SearchScreen";
+import CampusResourcesScreen from "../screens/CampusResourcesScreen";
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,16 @@ export default function HomeNavigator() {
 					headerTitle: false,
 					headerTransparent: true,
 					headerTintColor: colors.textPrimary,
+				}}
+			/>
+			<Stack.Screen
+				name={routes.screens.CAMPUS_RESOURCES}
+				component={CampusResourcesScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.backgroundPrimary,
 				}}
 			/>
 		</Stack.Navigator>

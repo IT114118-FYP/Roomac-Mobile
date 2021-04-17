@@ -123,4 +123,8 @@ export default {
 		searchPlaceholder: "Help me find a resource",
 		noResults: "No Results",
 	},
+	[routes.screens.CAMPUS_RESOURCES]: {
+		campusTitle: "{{value}} Campus",
+		searchPlaceholder: "Search Resources on {{value}} campus",
+	},
 };

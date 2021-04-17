@@ -11,6 +11,7 @@ export default {
 		CHANGE_LANGUAGE: "ChangeLanguage",
 		CHECKIN: "CheckIn",
 		SEARCH: "Search",
+		CAMPUS_RESOURCES: "CampusResources",
 	},
 	navigators: {
 		HOME: "Home",

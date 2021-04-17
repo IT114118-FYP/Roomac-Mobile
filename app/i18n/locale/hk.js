@@ -32,7 +32,7 @@ export default {
 	Drawer: {
 		home: "首頁",
 		bookings: "我的預約",
-		campuses: "學院",
+		campuses: "院校",
 		settings: "設定",
 	},
 	[routes.screens.HOME]: {
@@ -41,7 +41,7 @@ export default {
 		today: "今天",
 		categories: "類別",
 		resources: "資源 ({{value}})",
-		campuses: "學院",
+		campuses: "院校",
 	},
 	[routes.screens.DETAILED_RESOURCES]: {
 		distance: " • {{value}} 公里遠",
@@ -49,7 +49,7 @@ export default {
 		closed: "不開放",
 		availability: "空置",
 		availabilityDescriptoin: "請按下您想選取的時段已創建您的預約。",
-		campusLocation: "學院位置 ({{value}})",
+		campusLocation: "院校位置 ({{value}})",
 		contactAdmin: "聯絡管理員",
 		contactAdminDescription: "如果需要幫助，請隨時與管理員聯繫",
 	},
@@ -119,5 +119,9 @@ export default {
 		title: "搜索資源",
 		searchPlaceholder: "搜索資源",
 		noResults: "沒有結果",
+	},
+	[routes.screens.CAMPUS_RESOURCES]: {
+		campusTitle: "{{value}} 院校",
+		searchPlaceholder: "在{{value}}學院上搜索資源",
 	},
 };

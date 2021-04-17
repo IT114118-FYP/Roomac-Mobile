@@ -28,6 +28,7 @@ i18n.use(initReactI18next).init({
 		routes.screens.CHANGE_LANGUAGE,
 		routes.screens.CHECKIN,
 		routes.screens.SEARCH,
+		routes.screens.CAMPUS_RESOURCES,
 	],
 	resources,
 });

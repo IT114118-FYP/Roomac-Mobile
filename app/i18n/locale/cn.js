@@ -32,7 +32,7 @@ export default {
 	Drawer: {
 		home: "首页",
 		bookings: "我的预约",
-		campuses: "学院",
+		campuses: "院校",
 		settings: "设定",
 	},
 	[routes.screens.HOME]: {
@@ -41,7 +41,7 @@ export default {
 		today: "今天",
 		categories: "类别",
 		resources: "资源 ({{value}})",
-		campuses: "学院",
+		campuses: "院校",
 	},
 	[routes.screens.DETAILED_RESOURCES]: {
 		distance: " • {{value}} 公里远",
@@ -49,7 +49,7 @@ export default {
 		closed: "关闭",
 		availability: "空置",
 		availabilityDescriptoin: "请按下您想选取的时段已创建您的预约。",
-		campusLocation: "学院位置 ({{value}})",
+		campusLocation: "院校位置 ({{value}})",
 		contactAdmin: "联络管理员",
 		contactAdminDescription: "如果需要帮助，请随时与管理员联系",
 	},
@@ -119,5 +119,9 @@ export default {
 		title: "搜索资源",
 		searchPlaceholder: "搜索资源",
 		noResults: "没有结果",
+	},
+	[routes.screens.CAMPUS_RESOURCES]: {
+		campusTitle: "{{value}} 院校",
+		searchPlaceholder: "在{{value}}学院上搜索资源",
 	},
 };

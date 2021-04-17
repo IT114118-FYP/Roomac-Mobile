@@ -24,7 +24,8 @@ import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import routes from "../navigations/routes";
-import CheckBox from "react-native-check-box";
+import axios from "axios";
+import CampusItem from "../components/CampusItem";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
@@ -37,33 +38,42 @@ function MainScreen({ navigation }) {
 	const [categories, setCategories] = useState([]);
 	const [resources, setResources] = useState([]);
 	const [branches, setBranches] = useState([]);
-	const [isfilterOpen, setFilterOpen] = useState(false);
+	const [isCampusOpen, setCampusOpen] = useState(false);
 
-	useEffect(() => {
-		fetchCategories();
-		fetchBookings();
-	}, []);
-
-	useEffect(() => {
-		fetchResources();
-	}, [selectedCategory]);
-
-	const fetchAll = () => {
-		fetchCategories();
-		fetchBookings();
-		fetchResources();
-		fetchBranches();
-	};
-
-	const fetchBookings = () => {
-		axiosInstance(
+	const getCategories = () => axiosInstance.get("/api/categories");
+	const getResources = (id) => axiosInstance.get(`/api/categories/${id}`);
+	const getBranches = () => axiosInstance.get("/api/branches");
+	const getBookings = () =>
+		axiosInstance.get(
 			`/api/users/${user.id}/bookings?start=${moment().format(
 				"YYYY-MM-DD"
 			)}&end=${moment().format("YYYY-MM-DD")}`
-		).then(({ data }) => {
+		);
+
+	const fetchAllData = async () => {
+		setLoading(true);
+		try {
+			const [
+				categoriesData,
+				branchesData,
+				bookingsData,
+			] = await axios.all([
+				getCategories(),
+				getBranches(),
+				getBookings(),
+			]);
+			//resources
+			const resourcesData = await getResources(categoriesData.data[0].id);
+			setResources(resourcesData.data);
+			//categories
+			setCategories(categoriesData.data);
+			setSelectedCategory(categoriesData.data[0].id);
+			//branches
+			setBranches(branchesData.data);
+			//bookings
 			const current = moment();
 			var upcomingData = [];
-			data.forEach((booking) => {
+			bookingsData.data.forEach((booking) => {
 				if (moment().isBetween(booking.start_time, booking.end_time)) {
 					setActiveBooking(booking);
 				} else if (moment(booking.start_time).isAfter(current)) {
@@ -74,49 +84,16 @@ function MainScreen({ navigation }) {
 				moment(a.start_time).isAfter(moment(b.start_time))
 			);
 			setUpcoming(upcomingData);
-		});
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
 	};
 
-	const fetchCategories = () => {
-		setLoading(true);
-		axiosInstance
-			.get("/api/categories")
-			.then(({ data }) => {
-				setCategories(data);
-				setSelectedCategory(data[0].id);
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.log(error);
-				setLoading(false);
-			});
-	};
-
-	const fetchResources = () => {
-		// setLoading(true);
-		axiosInstance
-			.get(`/api/categories/${selectedCategory}`)
-			.then(({ data }) => {
-				setResources(data);
-				setLoading(false);
-			})
-			.catch((error) => {
-				console.log(error);
-				setLoading(false);
-			});
-	};
-
-	const fetchBranches = () => {
-		setLoading(true);
-		axiosInstance
-			.get("/api/branches")
-			.then(({ data }) => {
-				console.log(data);
-				setBranches(data);
-			})
-			.catch((error) => console.log(error))
-			.finally(() => setLoading(false));
-	};
+	useEffect(() => {
+		fetchAllData();
+	}, []);
 
 	return (
 		<Screen style={styles.container}>
@@ -172,7 +149,7 @@ function MainScreen({ navigation }) {
 				refreshControl={
 					<RefreshControl
 						refreshing={isLoading}
-						onRefresh={fetchAll}
+						onRefresh={fetchAllData}
 						title={t("common:pullToRefresh")}
 					/>
 				}
@@ -405,12 +382,24 @@ function MainScreen({ navigation }) {
 						>
 							{t("resources", { value: resources.length })}
 						</Text>
-						<TouchableOpacity onPress={() => setFilterOpen(true)}>
+						<TouchableOpacity
+							onPress={() => setCampusOpen(true)}
+							style={[presetStyles.row, styles.campusButton]}
+						>
 							<MaterialCommunityIcons
-								name="filter-variant"
+								name="office-building"
 								size={24}
 								color={colors.textSecondary}
 							/>
+							<Text
+								style={{
+									fontSize: sizing(3),
+									color: colors.textSecondary,
+									fontWeight: "500",
+								}}
+							>
+								{t("campuses")}
+							</Text>
 						</TouchableOpacity>
 					</View>
 					{resources.map((item, index) => {
@@ -447,18 +436,20 @@ function MainScreen({ navigation }) {
 			</ScrollView>
 			{!isLoading && (
 				<Modal
-					visible={isfilterOpen}
+					visible={isCampusOpen}
 					animationType="slide"
 					presentationStyle="pageSheet"
 				>
 					<SafeAreaView>
 						<ScrollView
+							showsVerticalScrollIndicator={false}
 							style={{
-								padding: sizing(4),
+								margin: sizing(4),
+								marginBottom: 0,
 							}}
 						>
 							<TouchableOpacity
-								onPress={() => setFilterOpen(false)}
+								onPress={() => setCampusOpen(false)}
 							>
 								<MaterialCommunityIcons
 									name="close"
@@ -470,34 +461,32 @@ function MainScreen({ navigation }) {
 								<Text style={styles.branchTitle}>
 									{t("campuses")}
 								</Text>
-								{branches.map((branch) => (
-									<Text>
-										{
-											{
-												en: branch.title_en,
-												hk: branch.title_hk,
-												cn: branch.title_cn,
-											}[i18n.language]
-										}
-									</Text>
-									// <CheckBox
-									// 	key={branch.id}
-									// 	style={{
-									// 		paddingVertical: sizing(0.5),
-									// 		marginVertical: sizing(0.5),
-									// 	}}
-									// 	checkedCheckBoxColor={
-									// 		colors.Powder_Blue
-									// 	}
-									// 	isChecked={true}
-									// 	onClick={() => console.log("sdad")}
-									// 	rightText={
-
-									// 	}
-									// 	rightTextStyle={{
-									// 		fontSize: sizing(4),
-									// 	}}
-									// />
+								{branches.map((branch, index) => (
+									<Animatable.View
+										key={branch.id}
+										delay={index * 250}
+										animation="fadeInUp"
+									>
+										<CampusItem
+											item={branch}
+											title={
+												{
+													en: branch.title_en,
+													hk: branch.title_hk,
+													cn: branch.title_cn,
+												}[i18n.language]
+											}
+											imageUrl={branch.image_url}
+											onPress={() => {
+												setCampusOpen(false);
+												navigation.navigate(
+													routes.screens
+														.CAMPUS_RESOURCES,
+													{ branch }
+												);
+											}}
+										/>
+									</Animatable.View>
 								))}
 							</View>
 						</ScrollView>
@@ -582,7 +571,8 @@ const styles = StyleSheet.create({
 	branchTitle: {
 		fontSize: sizing(8),
 		fontWeight: "600",
-		marginVertical: sizing(4),
+		marginTop: sizing(4),
+		marginBottom: sizing(8),
 	},
 });
 

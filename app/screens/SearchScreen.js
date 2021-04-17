@@ -10,27 +10,19 @@ import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
 import { searchClient } from "../InstantSearch/config";
 import InfiniteHits from "../InstantSearch/InfiniteHits";
+import SearchBox from "../components/SearchBox";
 
-const SearchBox = connectSearchBox(({ currentRefinement, refine }) => {
+const RefineSearchBox = connectSearchBox(({ currentRefinement, refine }) => {
 	const { t } = useTranslation([routes.screens.SEARCH]);
 	return (
-		<View style={[styles.searchBar, presetStyles.shadow]}>
-			<Feather
-				name="search"
-				size={16}
-				color={colors.textSecondary}
-				style={styles.searchIcon}
-			/>
-			<TextInput
-				autoFocus
-				style={styles.searchInput}
-				placeholder={t("searchPlaceholder")}
-				value={currentRefinement}
-				onChangeText={(text) => {
-					refine(text);
-				}}
-			/>
-		</View>
+		<SearchBox
+			autoFocus
+			placeholder={t("searchPlaceholder")}
+			value={currentRefinement}
+			onChange={(text) => {
+				refine(text);
+			}}
+		/>
 	);
 });
 
@@ -41,7 +33,7 @@ function SearchScreen({ navigation }) {
 		<Screen style={styles.container}>
 			<InstantSearch indexName="resources" searchClient={searchClient}>
 				<Text style={styles.title}>{t("title")}</Text>
-				<SearchBox />
+				<RefineSearchBox />
 				<InfiniteHits navigation={navigation} />
 			</InstantSearch>
 		</Screen>
