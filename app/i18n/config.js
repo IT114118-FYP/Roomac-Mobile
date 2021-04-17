@@ -8,7 +8,7 @@ import routes from "../navigations/routes";
 i18n.use(initReactI18next).init({
 	lng:
 		Localization.locale.substring(0, 2) === "zh"
-			? lang.includes("Hant")
+			? Localization.locale.includes("Hant")
 				? "hk"
 				: "cn"
 			: "en",
