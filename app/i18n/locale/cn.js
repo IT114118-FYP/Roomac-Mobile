@@ -124,4 +124,7 @@ export default {
 		campusTitle: "{{value}} 院校",
 		searchPlaceholder: "在{{value}}学院上搜索资源",
 	},
+	[routes.screens.CAMPUS_LOCATIONS]: {
+		campusResources: "院校资源",
+	},
 };

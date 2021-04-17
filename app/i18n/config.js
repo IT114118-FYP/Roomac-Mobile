@@ -1,6 +1,5 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Localization from "expo-localization";
 
 import * as resources from "./locale/index";
@@ -29,6 +28,7 @@ i18n.use(initReactI18next).init({
 		routes.screens.CHECKIN,
 		routes.screens.SEARCH,
 		routes.screens.CAMPUS_RESOURCES,
+		routes.screens.CAMPUS_LOCATIONS,
 	],
 	resources,
 });

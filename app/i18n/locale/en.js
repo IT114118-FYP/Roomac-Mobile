@@ -127,4 +127,7 @@ export default {
 		campusTitle: "{{value}} Campus",
 		searchPlaceholder: "Search Resources on {{value}} campus",
 	},
+	[routes.screens.CAMPUS_LOCATIONS]: {
+		campusResources: "campus resources",
+	},
 };

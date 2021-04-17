@@ -28,7 +28,7 @@ import routes from "../navigations/routes";
 const { width, height } = Dimensions.get("screen");
 
 function CampusLocationsScreen({ navigation }) {
-	const { t, i18n } = useTranslation([routes.CampusLocationsScreen]);
+	const { t, i18n } = useTranslation([routes.screens.CAMPUS_LOCATIONS]);
 	const [isLoading, setLoading] = useState();
 	const [branches, setBranches] = useState([]);
 	const [selected, setSelected] = useState(1);
@@ -129,7 +129,22 @@ function CampusLocationsScreen({ navigation }) {
 										}[i18n.language]
 									}
 								</Text>
-								<Button title="Go to website" />
+								<Button
+									title={t("campusResources")}
+									onPress={() =>
+										navigation.navigate(
+											routes.navigators.HOME,
+											{
+												screen:
+													routes.screens
+														.CAMPUS_RESOURCES,
+												params: {
+													branch: branches[selected],
+												},
+											}
+										)
+									}
+								/>
 							</View>
 							<View
 								style={{

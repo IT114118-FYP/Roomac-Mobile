@@ -12,11 +12,11 @@ export default {
 		CHECKIN: "CheckIn",
 		SEARCH: "Search",
 		CAMPUS_RESOURCES: "CampusResources",
+		CAMPUS_LOCATIONS: "CampusLocations",
 	},
 	navigators: {
 		HOME: "Home",
 		BOOKINGS: "Bookings",
-		CAMPUS: "Campus",
 		SETTINGS: "Settings",
 	},
 };

@@ -139,7 +139,9 @@ function DrawerContent(props) {
 					)}
 					label={t("campuses")}
 					onPress={() => {
-						props.navigation.navigate(routes.navigators.CAMPUS);
+						props.navigation.navigate(
+							routes.screens.CAMPUS_LOCATIONS
+						);
 					}}
 				/>
 				<DrawerItem
