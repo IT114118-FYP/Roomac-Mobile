@@ -93,7 +93,7 @@ function CampusResourcesScreen({ route, navigation }) {
 		>
 			<StatusBar barStyle="light-content" animated={true} />
 			<ImageBackground
-				source={{ url: branch.image_url }}
+				source={{ uri: branch.image_url }}
 				imageStyle={styles.image}
 				style={styles.imageContainer}
 			>

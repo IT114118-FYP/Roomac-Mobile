@@ -16,7 +16,7 @@ function CampusItem({ imageUrl, title, onPress }) {
 	return (
 		<TouchableOpacity style={styles.container} onPress={onPress}>
 			<ImageBackground
-				source={{ url: imageUrl }}
+				source={{ uri: imageUrl }}
 				imageStyle={styles.image}
 				style={styles.imageContainer}
 			>

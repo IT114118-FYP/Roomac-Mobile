@@ -35,7 +35,7 @@ function DrawerContent(props) {
 			>
 				{Boolean(user.image_url) ? (
 					<Image
-						source={{ url: user.image_url }}
+						source={{ uri: user.image_url }}
 						style={{
 							height: 135,
 							width: 135,
