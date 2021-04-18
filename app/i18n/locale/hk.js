@@ -37,7 +37,7 @@ export default {
 	},
 	[routes.screens.HOME]: {
 		welcome: "歡迎， {{value}}",
-		searchTitle: "尋找資源",
+		searchTitle: "搜索資源",
 		today: "今天",
 		categories: "類別",
 		resources: "資源 ({{value}})",

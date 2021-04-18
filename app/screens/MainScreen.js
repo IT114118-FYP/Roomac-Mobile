@@ -53,37 +53,18 @@ function MainScreen({ navigation }) {
 	const fetchAllData = async () => {
 		setLoading(true);
 		try {
-			const [
-				categoriesData,
-				branchesData,
-				bookingsData,
-			] = await axios.all([
+			const [categoriesData, branchesData] = await axios.all([
 				getCategories(),
 				getBranches(),
-				getBookings(),
 			]);
-			//resources
-			const resourcesData = await getResources(categoriesData.data[0].id);
-			setResources(resourcesData.data);
+			// //resources
+			// const resourcesData = await getResources(categoriesData.data[0].id);
+			// setResources(resourcesData.data);
 			//categories
 			setCategories(categoriesData.data);
 			setSelectedCategory(categoriesData.data[0].id);
 			//branches
 			setBranches(branchesData.data);
-			//bookings
-			const current = moment();
-			var upcomingData = [];
-			bookingsData.data.forEach((booking) => {
-				if (moment().isBetween(booking.start_time, booking.end_time)) {
-					setActiveBooking(booking);
-				} else if (moment(booking.start_time).isAfter(current)) {
-					upcomingData.push(booking);
-				}
-			});
-			upcomingData.sort((a, b) =>
-				moment(a.start_time).isAfter(moment(b.start_time))
-			);
-			setUpcoming(upcomingData);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -92,8 +73,49 @@ function MainScreen({ navigation }) {
 	};
 
 	useEffect(() => {
+		getResources(selectedCategory).then(({ data }) => {
+			setResources(data);
+		});
+	}, [selectedCategory]);
+
+	useEffect(() => {
 		fetchAllData();
 	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", () => {
+			// The screen is focused
+			// Call any action
+			getBookings()
+				.then(({ data }) => {
+					//bookings
+					const current = moment();
+					var upcomingData = [];
+					data.forEach((booking) => {
+						if (
+							moment().isBetween(
+								booking.start_time,
+								booking.end_time
+							)
+						) {
+							setActiveBooking(booking);
+						} else if (
+							moment(booking.start_time).isAfter(current)
+						) {
+							upcomingData.push(booking);
+						}
+					});
+					upcomingData.sort((a, b) =>
+						moment(a.start_time).isAfter(moment(b.start_time))
+					);
+					setUpcoming(upcomingData);
+				})
+				.catch((error) => console.log(error));
+		});
+
+		// Return the function to unsubscribe from the event so it gets removed on unmount
+		return unsubscribe;
+	}, [navigation]);
 
 	return (
 		<Screen style={styles.container}>

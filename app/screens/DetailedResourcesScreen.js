@@ -58,10 +58,22 @@ function DetailedResourcesScreen({ route, navigation }) {
 		setDistance(Math.round((dist / 1000 + Number.EPSILON) * 100) / 100);
 	};
 
+	// useEffect(() => {
+	// 	getLocation();
+	// 	fetchTimeslot();
+	// }, []);
+
 	useEffect(() => {
-		getLocation();
-		fetchTimeslot();
-	}, []);
+		const unsubscribe = navigation.addListener("focus", () => {
+			// The screen is focused
+			// Call any action
+			getLocation();
+			fetchTimeslot();
+		});
+
+		// Return the function to unsubscribe from the event so it gets removed on unmount
+		return unsubscribe;
+	}, [navigation]);
 
 	const fetchTimeslot = () => {
 		setLoading(true);

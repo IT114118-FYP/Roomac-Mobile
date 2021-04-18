@@ -115,9 +115,20 @@ function ViewBookingsScreen({ navigation }) {
 			});
 	};
 
+	// useEffect(() => {
+	// 	fetchUserBookings();
+	// }, [historyOptionsIndex]);
+
 	useEffect(() => {
-		fetchUserBookings();
-	}, [historyOptionsIndex]);
+		const unsubscribe = navigation.addListener("focus", () => {
+			// The screen is focused
+			// Call any action
+			fetchUserBookings();
+		});
+
+		// Return the function to unsubscribe from the event so it gets removed on unmount
+		return unsubscribe;
+	}, [navigation, historyOptionsIndex]);
 
 	return (
 		<Screen>

@@ -160,7 +160,7 @@ function CampusLocationsScreen({ navigation }) {
 									}}
 									resizeMode="cover"
 									source={{
-										url: branches[selected]?.image_url,
+										uri: branches[selected]?.image_url,
 									}}
 								/>
 							</View>
