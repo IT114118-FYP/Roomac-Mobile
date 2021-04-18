@@ -171,7 +171,10 @@ function MainScreen({ navigation }) {
 				refreshControl={
 					<RefreshControl
 						refreshing={isLoading}
-						onRefresh={fetchAllData}
+						onRefresh={() => {
+							fetchAllData();
+							fetchBookings();
+						}}
 						title={t("common:pullToRefresh")}
 					/>
 				}

@@ -127,7 +127,7 @@ function SettingsScreen({ navigation }) {
 		<View>
 			{Boolean(user.image_url) ? (
 				<ImageBackground
-					source={{ url: user.image_url }}
+					source={{ uri: user.image_url }}
 					imageStyle={{
 						borderRadius: AVATAR,
 					}}

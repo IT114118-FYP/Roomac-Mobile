@@ -29,7 +29,7 @@ const { width, height } = Dimensions.get("screen");
 
 function CampusLocationsScreen({ navigation }) {
 	const { t, i18n } = useTranslation([routes.screens.CAMPUS_LOCATIONS]);
-	const [isLoading, setLoading] = useState();
+	const [isLoading, setLoading] = useState(true);
 	const [branches, setBranches] = useState([]);
 	const [selected, setSelected] = useState(1);
 
@@ -55,9 +55,9 @@ function CampusLocationsScreen({ navigation }) {
 			.then(({ data }) => {
 				setBranches(data);
 				console.log(data);
-				setLoading(false);
 			})
-			.catch((error) => console.log(error));
+			.catch((error) => console.log(error))
+			.finally(() => setLoading(false));
 	};
 
 	useEffect(() => {
@@ -71,6 +71,12 @@ function CampusLocationsScreen({ navigation }) {
 					<MapView
 						style={[StyleSheet.absoluteFill, styles.map]}
 						showsUserLocation
+						initialRegion={{
+							latitude: 22.15,
+							longitude: 114.1,
+							latitudeDelta: 0.75,
+							longitudeDelta: 0.3,
+						}}
 					>
 						{branches.map((branch, index) => (
 							<Marker
