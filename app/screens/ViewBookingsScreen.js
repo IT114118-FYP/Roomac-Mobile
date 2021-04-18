@@ -85,7 +85,6 @@ function ViewBookingsScreen({ navigation }) {
 				.format("YYYY-MM-DD")}`
 		)
 			.then(({ data: bookings }) => {
-				// console.log(bookings);
 				const current = moment();
 				var upcomingData = [];
 				var historyData = [];

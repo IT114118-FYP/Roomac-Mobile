@@ -53,8 +53,7 @@ export default {
 		availabilityDescriptoin:
 			"Press on the preferred timeslot to create your booking.",
 		campusLocation: "Campus Location ({{value}})",
-		contactAdmin: "Contact Admin",
-		contactAdminDescription: "Feel free to contact admin if help is needed",
+		resources: "Resources",
 	},
 	[routes.screens.CREATE_BOOKING]: {
 		selectTime: "Select Time",
@@ -62,6 +61,7 @@ export default {
 		confirmBooking: "Confirm Booking",
 		bookingResults: "Booking Results",
 		next: "Next",
+		back: "Back",
 		accept: "Accept",
 		submit: "Submit",
 		viewBookings: "View in My Bookings",

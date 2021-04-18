@@ -12,6 +12,7 @@ import {
 	TouchableOpacity,
 	RefreshControl,
 	Animated,
+	Button,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import * as Location from "expo-location";
@@ -35,7 +36,6 @@ const TIMESLOT_WIDTH = width * sizing(0.2);
 function DetailedResourcesScreen({ route, navigation }) {
 	const { t, i18n } = useTranslation([routes.screens.DETAILED_RESOURCES]);
 	const { item } = route.params;
-	console.log(item);
 	const [isLoading, setLoading] = useState(true);
 	const [timeslot, setTimeslot] = useState({});
 	const [distance, setDistance] = useState(null);
@@ -257,23 +257,26 @@ function DetailedResourcesScreen({ route, navigation }) {
 					/>
 				</>
 			)}
-			<Text
+			<View
 				style={[
 					presetStyles.marginHorizontal,
-					presetStyles.listHeader,
+					presetStyles.row,
 					{
 						marginTop: sizing(6),
 					},
 				]}
 			>
-				{t("campusLocation", {
-					value: {
-						en: item.branch.title_en,
-						hk: item.branch.title_hk,
-						cn: item.branch.title_cn,
-					}[i18n.language],
-				})}
-			</Text>
+				<Text style={[presetStyles.listHeader, { flex: 1 }]}>
+					{t("campusLocation", {
+						value: {
+							en: item.branch.title_en,
+							hk: item.branch.title_hk,
+							cn: item.branch.title_cn,
+						}[i18n.language],
+					})}
+				</Text>
+				<Button title={t("resources")} />
+			</View>
 			<View style={styles.mapContainer}>
 				<MapView
 					// scrollEnabled={false}
@@ -304,56 +307,6 @@ function DetailedResourcesScreen({ route, navigation }) {
 					/>
 				</MapView>
 			</View>
-			<TouchableOpacity
-				onPress={() => {
-					console.log(location);
-				}}
-				style={[
-					presetStyles.marginHorizontal,
-					presetStyles.row,
-					{
-						alignItems: "center",
-						marginVertical: sizing(6),
-						borderWidth: 1,
-						borderRadius: sizing(2),
-						borderColor: colors.textSecondary,
-						padding: sizing(4),
-					},
-				]}
-			>
-				<MaterialCommunityIcons
-					name="message-text"
-					size={sizing(6)}
-					color={colors.textSecondary}
-					style={{
-						marginRight: sizing(4),
-					}}
-				/>
-				<View style={{ flex: 1 }}>
-					<Text
-						style={[
-							presetStyles.listHeader,
-							{
-								color: colors.textPrimary,
-							},
-						]}
-					>
-						{t("contactAdmin")}
-					</Text>
-					<Text
-						style={{
-							color: colors.textSecondary,
-						}}
-					>
-						{t("contactAdminDescription")}
-					</Text>
-				</View>
-				<MaterialCommunityIcons
-					name="chevron-right"
-					size={sizing(6)}
-					color={colors.textSecondary}
-				/>
-			</TouchableOpacity>
 		</ScrollView>
 	);
 }
