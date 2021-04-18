@@ -72,6 +72,7 @@ function BookingDetailsScreen({ route }) {
 					}[i18n.language]
 				)}
 			</Text>
+
 			<Text
 				adjustsFontSizeToFit
 				numberOfLines={1}
@@ -79,12 +80,14 @@ function BookingDetailsScreen({ route }) {
 			>
 				{`${moment(item.start_time).format("H:mm")} - ${moment(
 					item.end_time
-				).format("H:mm")} • ${
-					{
-						en: item.resource.title_en,
-						hk: item.resource.title_hk,
-						cn: item.resource.title_cn,
-					}[i18n.language]
+				).format("H:mm")}${
+					Boolean(item.resource.title_en) &&
+					" • " +
+						{
+							en: item.resource.title_en,
+							hk: item.resource.title_hk,
+							cn: item.resource.title_cn,
+						}[i18n.language]
 				}`}
 			</Text>
 			<View style={presetStyles.marginHorizontal}>
@@ -212,12 +215,14 @@ function BookingDetailsScreen({ route }) {
 							)}`}
 							time={`${moment(item.start_time).format(
 								"H:mm"
-							)} - ${moment(item.end_time).format("H:mm")} • ${
-								{
-									en: item.resource.title_en,
-									hk: item.resource.title_hk,
-									cn: item.resource.title_cn,
-								}[i18n.language]
+							)} - ${moment(item.end_time).format("H:mm")}${
+								Boolean(item.resource.title_en) &&
+								" • " +
+									{
+										en: item.resource.title_en,
+										hk: item.resource.title_hk,
+										cn: item.resource.title_cn,
+									}[i18n.language]
 							}`}
 						/>
 					</SafeAreaView>

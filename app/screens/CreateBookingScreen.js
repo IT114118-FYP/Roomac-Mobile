@@ -203,7 +203,7 @@ function CreateBookingScreen({ route, navigation }) {
 											titleStyle={{
 												color: colors.primary,
 											}}
-											title="Back"
+											title={t("back")}
 											onPress={() => {
 												if (index === 0 || index === 3)
 													return navigation.goBack();

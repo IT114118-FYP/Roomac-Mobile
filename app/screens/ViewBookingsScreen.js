@@ -54,6 +54,7 @@ export const TimeSection = ({ data, title, children, navigation }) => (
 									routes.screens.BOOKING_DETAILS,
 									{
 										item,
+										checkInClicked: false,
 									}
 								)
 							}

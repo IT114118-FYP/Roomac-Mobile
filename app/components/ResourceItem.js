@@ -7,7 +7,7 @@ import {
 	TouchableOpacity,
 	Dimensions,
 } from "react-native";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import moment from "moment";
 
 import presetStyles, { sizing } from "../themes/presetStyles";
