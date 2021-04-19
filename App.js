@@ -66,16 +66,19 @@ export default function App() {
 				setUser(data);
 				setIsReady(true);
 			})
-			.catch((error) => {
-				console.log(error);
+			.catch(() => {
 				authStorage.removeToken();
 				Popup.show({
 					type: "Danger",
 					title: t("error"),
-					button: false,
+					// button: false,
 					textBody: t("errorDescription"),
 					buttonText: t("common:ok"),
-					callback: () => Popup.hide(),
+					callback: () => {
+						setUser(null);
+						setIsReady(true);
+						Popup.hide();
+					},
 				});
 			});
 
