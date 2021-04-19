@@ -23,7 +23,15 @@ import Button from "../components/Button";
 
 const historyOptions = [7, 30, 90];
 
-export const TimeSection = ({ data, title, children, navigation, t, i18n }) => (
+export const TimeSection = ({
+	data,
+	title,
+	children,
+	navigation,
+	t,
+	i18n,
+	showStatus,
+}) => (
 	<>
 		{data.length !== 0 && (
 			<Animatable.View animation="fadeInUp" style={styles.section}>
@@ -45,7 +53,8 @@ export const TimeSection = ({ data, title, children, navigation, t, i18n }) => (
 								"H:mm"
 							)} - ${moment(item.end_time).format("H:mm")}`}
 							status={
-								item.checkin_time != null
+								showStatus &&
+								(item.checkin_time != null
 									? t(
 											moment(item.checkin_time).isAfter(
 												moment(item.start_time).add(
@@ -61,16 +70,17 @@ export const TimeSection = ({ data, title, children, navigation, t, i18n }) => (
 												).format("HH:mm"),
 											}
 									  )
-									: t("common:notCheckIn")
+									: t("common:notCheckIn"))
 							}
 							statusLate={
-								item.checkin_time == null
+								showStatus &&
+								(item.checkin_time == null
 									? "na"
 									: moment(item.checkin_time).isAfter(
 											moment(item.start_time).add(15, "m")
 									  )
 									? "late"
-									: "no"
+									: "no")
 							}
 							location={
 								Boolean(item.resource.title_en)
@@ -345,6 +355,7 @@ function ViewBookingsScreen({ navigation }) {
 							t={t}
 							i18n={i18n}
 							checkInButton={true}
+							showStatus
 						>
 							<TouchableOpacity
 								style={presetStyles.row}
