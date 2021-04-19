@@ -187,7 +187,7 @@ function ViewBookingsScreen({ navigation }) {
 					<RefreshControl
 						refreshing={isLoading}
 						onRefresh={fetchUserBookings}
-						title="pull to refresh"
+						title={t("common:pullToRefresh")}
 					/>
 				}
 			>
