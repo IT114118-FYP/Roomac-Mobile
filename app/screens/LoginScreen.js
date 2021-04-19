@@ -14,6 +14,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import LottieView from "lottie-react-native";
 import { useTranslation } from "react-i18next";
+import { Popup } from "popup-ui";
 
 import LoginButton from "../components/LoginButton";
 import Screen from "../components/Screen";
@@ -22,6 +23,7 @@ import colors from "../themes/colors";
 import auth from "../api/auth";
 import useAuth from "../auth/useAuth";
 import { sizing } from "../themes/presetStyles";
+import moment from "moment";
 
 function LoginScreen(props) {
 	const { t, i18n } = useTranslation(["Login", "common"]);
@@ -40,12 +42,26 @@ function LoginScreen(props) {
 			.then(({ data }) => {
 				logIn(data);
 				setLoginFailed(false);
-				setLoading(false);
 			})
-			.catch(() => {
-				setLoginFailed(true);
-				setLoading(false);
-			});
+			.catch((error) => {
+				if (error.response.status == 402) {
+					setLoginFailed(false);
+					Popup.show({
+						type: "Warning",
+						title: t("banTitle"),
+						// button: false,
+						buttonText: t("common:ok"),
+						textBody: t("banDescription", {
+							value: error.response.data,
+						}),
+						callback: () => Popup.hide(),
+					});
+					setLoading(false);
+				} else {
+					setLoginFailed(true);
+				}
+			})
+			.finally(() => setLoading(false));
 	};
 
 	return (

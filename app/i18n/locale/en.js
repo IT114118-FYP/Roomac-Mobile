@@ -36,6 +36,8 @@ export default {
 		welcomeTo: "Welcome To",
 		failedDescription: "Email/CNA or password is incorrect.",
 		forgot: "Forgot your password?",
+		banTitle: "Account Banned",
+		banDescription: "Your account is banned until {{value}}.",
 	},
 	Drawer: {
 		home: "Home",

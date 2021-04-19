@@ -20,7 +20,8 @@
       "supportsTablet": true,
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app will optionally use Face ID or Touch ID to save login"
-      }
+      },
+      "bundleIdentifier": "com.mrggto.roomac"
     },
     "android": {
       "adaptiveIcon": {

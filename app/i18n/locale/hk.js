@@ -34,6 +34,8 @@ export default {
 		welcomeTo: "歡迎來到",
 		failedDescription: "電子郵件/CNA或密碼錯誤。",
 		forgot: "忘記密碼？",
+		banTitle: "帳戶被禁止",
+		banDescription: "您的帳戶被禁止使用，直到{{value}}。",
 	},
 	Drawer: {
 		home: "首頁",

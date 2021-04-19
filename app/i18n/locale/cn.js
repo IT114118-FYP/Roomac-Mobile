@@ -34,6 +34,8 @@ export default {
 		welcomeTo: "欢迎来到",
 		failedDescription: "电子邮件/CNA或密码不正确。",
 		forgot: "忘记密码？",
+		banTitle: "帐户被禁止",
+		banDescription: "您的帐户被禁止使用，直到{{value}}。",
 	},
 	Drawer: {
 		home: "首页",
