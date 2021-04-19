@@ -24,6 +24,7 @@ import { axiosInstance } from "../api/config";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useTranslation } from "react-i18next";
 import routes from "../navigations/routes";
+import branchesApi from "../api/branches";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -50,11 +51,10 @@ function CampusLocationsScreen({ navigation }) {
 
 	const fetchCampuses = () => {
 		setLoading(true);
-		axiosInstance
-			.get("/api/branches")
+		branchesApi
+			.fetchAll()
 			.then(({ data }) => {
 				setBranches(data);
-				console.log(data);
 			})
 			.catch((error) => console.log(error))
 			.finally(() => setLoading(false));

@@ -23,10 +23,10 @@ import moment from "moment";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import Timeslot from "../components/Timeslot";
-import { axiosInstance } from "../api/config";
 import { getDistance } from "geolib";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
+import resourcesApi from "../api/resources";
 const MAX_HEIGHT = 200;
 
 const { width } = Dimensions.get("window");
@@ -79,10 +79,9 @@ function DetailedResourcesScreen({ route, navigation }) {
 		setLoading(true);
 		const startDate = moment().format("YYYY-MM-DD");
 		const endDate = moment().add(10, "days").format("YYYY-MM-DD");
-		axiosInstance
-			.get(
-				`/api/resources/${item.id}/bookings?start=${startDate}&end=${endDate}`
-			)
+
+		resourcesApi
+			.fetchTimeslots(item.id, startDate, endDate)
 			.then(({ data }) => {
 				let events = [];
 				for (let i in data.allow_times) {

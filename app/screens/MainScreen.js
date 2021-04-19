@@ -15,7 +15,6 @@ import * as Animatable from "react-native-animatable";
 import moment from "moment";
 
 import { useTranslation } from "react-i18next";
-import { axiosInstance } from "../api/config";
 import CategoryItem from "../components/CategoryItem";
 import Screen from "../components/Screen";
 import ResourceItem from "../components/ResourceItem";
@@ -24,8 +23,12 @@ import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import routes from "../navigations/routes";
-import axios from "axios";
 import CampusItem from "../components/CampusItem";
+import axios from "axios";
+import branchesApi from "../api/branches";
+import categoriesApi from "../api/categories";
+import resourcesApi from "../api/resources";
+import bookingsApi from "../api/bookings";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
@@ -40,26 +43,40 @@ function MainScreen({ navigation }) {
 	const [branches, setBranches] = useState([]);
 	const [isCampusOpen, setCampusOpen] = useState(false);
 
-	const getCategories = () => axiosInstance.get("/api/categories");
-	const getResources = (id) => axiosInstance.get(`/api/categories/${id}`);
-	const getBranches = () => axiosInstance.get("/api/branches");
 	const getBookings = () =>
-		axiosInstance.get(
-			`/api/users/${user.id}/bookings?start=${moment().format(
-				"YYYY-MM-DD"
-			)}&end=${moment().format("YYYY-MM-DD")}`
-		);
+		bookingsApi
+			.fetchFromUser(
+				user.id,
+				moment().format("YYYY-MM-DD"),
+				moment().format("YYYY-MM-DD")
+			)
+			.then(({ data }) => {
+				//bookings
+				const current = moment();
+				var upcomingData = [];
+				data.forEach((booking) => {
+					if (
+						moment().isBetween(booking.start_time, booking.end_time)
+					) {
+						setActiveBooking(booking);
+					} else if (moment(booking.start_time).isAfter(current)) {
+						upcomingData.push(booking);
+					}
+				});
+				upcomingData.sort((a, b) =>
+					moment(a.start_time).isAfter(moment(b.start_time))
+				);
+				setUpcoming(upcomingData);
+			})
+			.catch((error) => console.log(error));
 
 	const fetchAllData = async () => {
 		setLoading(true);
 		try {
 			const [categoriesData, branchesData] = await axios.all([
-				getCategories(),
-				getBranches(),
+				categoriesApi.fetchAll(),
+				branchesApi.fetchAll(),
 			]);
-			// //resources
-			// const resourcesData = await getResources(categoriesData.data[0].id);
-			// setResources(resourcesData.data);
 			//categories
 			setCategories(categoriesData.data);
 			setSelectedCategory(categoriesData.data[0].id);
@@ -73,7 +90,7 @@ function MainScreen({ navigation }) {
 	};
 
 	useEffect(() => {
-		getResources(selectedCategory).then(({ data }) => {
+		resourcesApi.fetchFromCategory(selectedCategory).then(({ data }) => {
 			setResources(data);
 		});
 	}, [selectedCategory]);
@@ -86,33 +103,8 @@ function MainScreen({ navigation }) {
 		const unsubscribe = navigation.addListener("focus", () => {
 			// The screen is focused
 			// Call any action
-			getBookings()
-				.then(({ data }) => {
-					//bookings
-					const current = moment();
-					var upcomingData = [];
-					data.forEach((booking) => {
-						if (
-							moment().isBetween(
-								booking.start_time,
-								booking.end_time
-							)
-						) {
-							setActiveBooking(booking);
-						} else if (
-							moment(booking.start_time).isAfter(current)
-						) {
-							upcomingData.push(booking);
-						}
-					});
-					upcomingData.sort((a, b) =>
-						moment(a.start_time).isAfter(moment(b.start_time))
-					);
-					setUpcoming(upcomingData);
-				})
-				.catch((error) => console.log(error));
+			getBookings();
 		});
-
 		// Return the function to unsubscribe from the event so it gets removed on unmount
 		return unsubscribe;
 	}, [navigation]);

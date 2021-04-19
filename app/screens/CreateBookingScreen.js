@@ -13,7 +13,6 @@ import * as Animatable from "react-native-animatable";
 import Button from "../components/Button";
 import Screen from "../components/Screen";
 import ProgressStepper from "../components/ProgressStepper";
-import { axiosInstance } from "../api/config";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import {
@@ -24,6 +23,7 @@ import {
 } from "./create-booking-procedure";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
+import bookingsApi from "../api/bookings";
 
 const { width } = Dimensions.get("window");
 
@@ -104,12 +104,8 @@ function CreateBookingScreen({ route, navigation }) {
 
 	const addBooking = () => {
 		setLoading(true);
-		axiosInstance
-			.post(`/api/resources/${resource.id}/bookings`, {
-				date: date,
-				start: timeslot.start,
-				end: timeslot.end,
-			})
+		bookingsApi
+			.add(resource.id, date, timeslot.start, timeslot.end)
 			.then(({ data }) => {
 				setBookingRef(data);
 			})

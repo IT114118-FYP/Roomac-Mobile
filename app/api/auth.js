@@ -10,7 +10,14 @@ const login = (email, password) =>
 
 const getUser = () => axiosInstance.get(`/api/users/me`);
 
+const changePassword = (old_password, new_password) =>
+	axiosInstance.post(`/api/users/me/password`, {
+		old_password,
+		new_password,
+	});
+
 export default {
 	login,
 	getUser,
+	changePassword,
 };

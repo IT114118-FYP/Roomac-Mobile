@@ -20,6 +20,7 @@ import useAuth from "../auth/useAuth";
 import { Popup } from "popup-ui";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
+import auth from "../api/auth";
 
 const PasswordField = ({
 	name,
@@ -119,11 +120,7 @@ function ChangePasswordScreen(props) {
 	const handleSubmit = ({ old, password }) => {
 		setLoading(true);
 		Keyboard.dismiss();
-		axiosInstance
-			.post(`/api/users/me/password`, {
-				old_password: old,
-				new_password: password,
-			})
+		auth.changePassword(old, password)
 			.then(() => {
 				Popup.show({
 					type: "Success",

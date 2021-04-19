@@ -11,7 +11,6 @@ import moment from "moment";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import * as Animatable from "react-native-animatable";
 
-import { axiosInstance } from "../api/config";
 import Screen from "../components/Screen";
 import ViewBookingListItem from "../components/ViewBookingListItem";
 import colors from "../themes/colors";
@@ -20,6 +19,7 @@ import useAuth from "../auth/useAuth";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
 import Button from "../components/Button";
+import bookingsApi from "../api/bookings";
 
 const historyOptions = [7, 30, 90];
 
@@ -125,13 +125,14 @@ function ViewBookingsScreen({ navigation }) {
 
 	const fetchUserBookings = () => {
 		setLoading(true);
-		axiosInstance(
-			`/api/users/${user.id}/bookings?start=${moment()
-				.subtract(historyOptions[historyOptionsIndex], "days")
-				.format("YYYY-MM-DD")}&end=${moment()
-				.add(10, "days")
-				.format("YYYY-MM-DD")}`
-		)
+		bookingsApi
+			.fetchFromUser(
+				user.id,
+				moment()
+					.subtract(historyOptions[historyOptionsIndex], "days")
+					.format("YYYY-MM-DD"),
+				moment().add(10, "days").format("YYYY-MM-DD")
+			)
 			.then(({ data: bookings }) => {
 				const current = moment();
 				var upcomingData = [];

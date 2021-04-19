@@ -14,9 +14,9 @@ import * as Animatable from "react-native-animatable";
 
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
-import { axiosInstance } from "../api/config";
 import { useTranslation } from "react-i18next";
 import routes from "../navigations/routes";
+import bookingsApi from "../api/bookings";
 
 const { width } = Dimensions.get("window");
 const QRCodeSize = width * 0.8;
@@ -28,8 +28,8 @@ function CheckInScreen({ onClose, bookingId, date, time }) {
 
 	const fetchRef = () => {
 		setLoading(true);
-		axiosInstance
-			.get(`/api/resourcebookings/${bookingId}/code`)
+		bookingsApi
+			.fetchRef(bookingId)
 			.then(({ data }) => {
 				console.log(data);
 				setRefNumber(data.code);

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { axiosInstance } from "../api/config";
 import AuthContext from "./context";
 import authStorage from "./storage";
 import * as BioStorage from "../biometrics/storage";
+import auth from "../api/auth";
 
 export default function useAuth() {
 	const { user, setUser } = useContext(AuthContext);
@@ -19,7 +19,7 @@ export default function useAuth() {
 	};
 
 	const fetchUser = () =>
-		axiosInstance.get(`/api/users/me`).then(({ data }) => {
+		auth().getUser.then(({ data }) => {
 			setUser(data);
 		});
 

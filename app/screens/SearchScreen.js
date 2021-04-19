@@ -1,12 +1,11 @@
-import React, { useState } from "react";
-import { View, StyleSheet, Text, TextInput } from "react-native";
+import React from "react";
+import { StyleSheet, Text } from "react-native";
 import { useTranslation } from "react-i18next";
-import { Feather } from "@expo/vector-icons";
 import { InstantSearch, connectSearchBox } from "react-instantsearch-native";
 
 import Screen from "../components/Screen";
 import routes from "../navigations/routes";
-import presetStyles, { sizing } from "../themes/presetStyles";
+import { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
 import { searchClient } from "../InstantSearch/config";
 import InfiniteHits from "../InstantSearch/InfiniteHits";

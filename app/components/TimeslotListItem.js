@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, Text } from "react-native";
 import moment from "moment";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";

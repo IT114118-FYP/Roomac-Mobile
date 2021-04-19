@@ -7,7 +7,6 @@ import {
 	ImageBackground,
 	TouchableOpacity,
 } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import colors from "../themes/colors";
 import { sizing } from "../themes/presetStyles";

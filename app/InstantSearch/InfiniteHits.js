@@ -13,8 +13,8 @@ import { useTranslation } from "react-i18next";
 import routes from "../navigations/routes";
 import { sizing } from "../themes/presetStyles";
 import ResourceItem from "../components/ResourceItem";
-import { axiosInstance } from "../api/config";
 import colors from "../themes/colors";
+import branchesApi from "../api/branches";
 
 const InfiniteHits = ({ hits, hasMore, refineNext, navigation }) => {
 	const { t, i18n } = useTranslation([routes.screens.SEARCH]);
@@ -25,7 +25,7 @@ const InfiniteHits = ({ hits, hasMore, refineNext, navigation }) => {
 	const [lng, setLng] = useState({});
 
 	const fetchBranches = () => {
-		axiosInstance.get("/api/branches").then(({ data }) => {
+		branchesApi.fetchAll().then(({ data }) => {
 			const en = {};
 			const hk = {};
 			const cn = {};

@@ -1,5 +1,5 @@
 import * as SecureStore from "expo-secure-store";
-import { axiosInstance } from "../api/config";
+import auth from "../api/auth";
 
 const key = "authToken";
 
@@ -30,13 +30,11 @@ const removeToken = async () => {
 const getUser = async () => {
 	const token = await getToken();
 	if (token) {
-		const result = await fetchUser();
+		const result = await auth.getUser();
 		return result.data;
 	}
 	return null;
 };
-
-const fetchUser = () => axiosInstance.get(`/api/users/me`);
 
 export default {
 	storeToken,

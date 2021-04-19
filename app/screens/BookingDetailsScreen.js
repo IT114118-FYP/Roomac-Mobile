@@ -9,17 +9,11 @@ import {
 	ScrollView,
 	StatusBar,
 	Modal,
-	TouchableOpacity,
 	RefreshControl,
 } from "react-native";
 
-import {
-	MaterialIcons,
-	MaterialCommunityIcons,
-	FontAwesome5,
-} from "@expo/vector-icons";
+import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
-import Screen from "../components/Screen";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import { axiosInstance } from "../api/config";
@@ -31,6 +25,8 @@ import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CheckInScreen from "./CheckInScreen";
+import resourcesApi from "../api/resources";
+import bookingsApi from "../api/bookings";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -48,8 +44,8 @@ function BookingDetailsScreen({ route }) {
 	);
 
 	const fetchTOS = () => {
-		axiosInstance
-			.get(`/api/tos/${itemData.resource.tos_id}`)
+		resourcesApi
+			.fetchTOS(itemData.resource.tos_id)
 			.then(({ data }) => {
 				setTos(data);
 			})
@@ -58,8 +54,8 @@ function BookingDetailsScreen({ route }) {
 
 	const fetchBooking = () => {
 		setLoading(true);
-		axiosInstance
-			.get(`/api/resourcebookings/${item.id}`)
+		bookingsApi
+			.fetchOne(item.id)
 			.then(({ data }) => setItem(data))
 			.catch(console.log)
 			.finally(() => setLoading(false));
