@@ -13,6 +13,10 @@ function ViewBookingListItem({
 	location,
 	onPress,
 	onCheckIn,
+	buttonTitle,
+	disabled,
+	status,
+	statusLate,
 }) {
 	const { t, i18n } = useTranslation([routes.screens.VIEW_BOOKINGS]);
 	return (
@@ -67,6 +71,24 @@ function ViewBookingListItem({
 					{period}
 				</Text>
 			</View>
+			{Boolean(status) && (
+				<Text
+					style={[
+						styles.period,
+						{
+							color: {
+								no: "teal",
+								na: "red",
+								late: colors.Light_Orange,
+							}[statusLate],
+							flexDirection: "row-reverse",
+							marginTop: sizing(2),
+						},
+					]}
+				>
+					{status}
+				</Text>
+			)}
 			{active && (
 				<View
 					style={{
@@ -75,10 +97,23 @@ function ViewBookingListItem({
 					}}
 				>
 					<TouchableOpacity
-						style={styles.checkinButton}
+						style={
+							disabled
+								? styles.checkinButtonDisabled
+								: styles.checkinButton
+						}
 						onPress={onCheckIn}
+						disabled={disabled}
 					>
-						<Text style={styles.checkinText}>{t("checkIn")}</Text>
+						<Text
+							style={
+								disabled
+									? styles.checkinText
+									: styles.checkinTextDisabled
+							}
+						>
+							{buttonTitle}
+						</Text>
 					</TouchableOpacity>
 				</View>
 			)}
@@ -103,17 +138,31 @@ const styles = StyleSheet.create({
 	period: {
 		fontSize: sizing(4),
 		fontWeight: "500",
+		textAlign: "right",
+	},
+	checkinButtonDisabled: {
+		// borderWidth: 1,
+		// borderColor: colors.backgroundPrimary,
+		// backgroundColor: colors.backgroundSecondary,
+		borderRadius: sizing(2),
+		paddingVertical: sizing(1.5),
+		paddingHorizontal: sizing(3),
 	},
 	checkinButton: {
-		borderWidth: 1,
-		borderColor: colors.backgroundPrimary,
+		// borderWidth: 1,
+		// borderColor: colors.backgroundPrimary,
 		backgroundColor: colors.backgroundSecondary,
 		borderRadius: sizing(2),
 		paddingVertical: sizing(1.5),
 		paddingHorizontal: sizing(3),
 	},
-	checkinText: {
+	checkinTextDisabled: {
 		color: colors.Cyber_Grape,
+		fontWeight: "700",
+		fontSize: sizing(3.5),
+	},
+	checkinText: {
+		color: colors.backgroundPrimary,
 		fontWeight: "700",
 		fontSize: sizing(3.5),
 	},

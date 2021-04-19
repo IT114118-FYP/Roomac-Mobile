@@ -14,6 +14,12 @@ export default {
 		today: "Today",
 		now: "Now",
 		back: "Back",
+		checked: "Checked In",
+		checkedIn: "Checked In ({{value}})",
+		checkIn: "Check In",
+		lateCheckIn: "Check In ({{value}} minutes late)",
+		late: "Checked In (Late {{value}})",
+		notCheckIn: "Not Checked In",
 	},
 	app: {
 		noInternet: "No Internet connection!",
@@ -84,6 +90,7 @@ export default {
 	[routes.screens.BOOKING_DETAILS]: {
 		checkIn: "Check In",
 		checkInAvailable: "Check in available after {{value}}",
+		status: "Booking Status",
 		tos: "Terms & Conditions",
 	},
 	[routes.screens.SETTINGS]: {

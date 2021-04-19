@@ -23,7 +23,7 @@ import Button from "../components/Button";
 
 const historyOptions = [7, 30, 90];
 
-export const TimeSection = ({ data, title, children, navigation }) => (
+export const TimeSection = ({ data, title, children, navigation, t, i18n }) => (
 	<>
 		{data.length !== 0 && (
 			<Animatable.View animation="fadeInUp" style={styles.section}>
@@ -44,9 +44,43 @@ export const TimeSection = ({ data, title, children, navigation }) => (
 							period={`${moment(item.start_time).format(
 								"H:mm"
 							)} - ${moment(item.end_time).format("H:mm")}`}
+							status={
+								item.checkin_time != null
+									? t(
+											moment(item.checkin_time).isAfter(
+												moment(item.start_time).add(
+													15,
+													"minutes"
+												)
+											)
+												? "common:late"
+												: "common:checkedIn",
+											{
+												value: moment(
+													item.checkin_time
+												).format("HH:mm"),
+											}
+									  )
+									: t("common:notCheckIn")
+							}
+							statusLate={
+								item.checkin_time == null
+									? "na"
+									: moment(item.checkin_time).isAfter(
+											moment(item.start_time).add(15, "m")
+									  )
+									? "late"
+									: "no"
+							}
 							location={
 								Boolean(item.resource.title_en)
-									? `${item.resource.number} • ${item.resource.title_en}`
+									? `${item.resource.number} • ${
+											{
+												en: item.resource.title_en,
+												hk: item.resource.title_hk,
+												cn: item.resource.title_cn,
+											}[i18n.language]
+									  }`
 									: item.resource.number
 							}
 							onPress={() =>
@@ -58,6 +92,7 @@ export const TimeSection = ({ data, title, children, navigation }) => (
 									}
 								)
 							}
+							disabled={item.checkin_time == null ? false : true}
 						/>
 					</Animatable.View>
 				))}
@@ -67,7 +102,10 @@ export const TimeSection = ({ data, title, children, navigation }) => (
 );
 
 function ViewBookingsScreen({ navigation }) {
-	const { t, i18n } = useTranslation([routes.screens.VIEW_BOOKINGS]);
+	const { t, i18n } = useTranslation([
+		routes.screens.VIEW_BOOKINGS,
+		"common",
+	]);
 	const { user } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [historyOptionsIndex, setHistoryOptionsIndex] = useState(0);
@@ -216,6 +254,42 @@ function ViewBookingsScreen({ navigation }) {
 												}
 											)
 										}
+										buttonTitle={
+											activeBooking.checkin_time == null
+												? moment().isAfter(
+														moment(
+															activeBooking.start_time
+														).add(15, "m")
+												  )
+													? t("common:lateCheckIn", {
+															value: moment().diff(
+																moment(
+																	activeBooking.start_time
+																),
+																"m"
+															),
+													  })
+													: t("checkIn")
+												: t(
+														moment().isAfter(
+															moment(
+																activeBooking.start_time
+															).add(15, "m")
+														)
+															? "common:late"
+															: "common:checkedIn",
+														{
+															value: moment(
+																activeBooking.checkin_time
+															).format("HH:mm"),
+														}
+												  )
+										}
+										disabled={
+											activeBooking.checkin_time == null
+												? false
+												: true
+										}
 										onCheckIn={() =>
 											navigation.navigate(
 												routes.screens.BOOKING_DETAILS,
@@ -261,11 +335,16 @@ function ViewBookingsScreen({ navigation }) {
 							data={upcoming}
 							title={t("upcoming")}
 							navigation={navigation}
+							t={t}
+							i18n={i18n}
 						/>
 						<TimeSection
 							data={history}
 							title={t("history")}
 							navigation={navigation}
+							t={t}
+							i18n={i18n}
+							checkInButton={true}
 						>
 							<TouchableOpacity
 								style={presetStyles.row}

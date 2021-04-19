@@ -118,12 +118,16 @@ function CampusLocationsScreen({ navigation }) {
 								margin: sizing(2),
 							}}
 						>
-							<View style={presetStyles.row}>
+							<View
+								style={[
+									presetStyles.row,
+									presetStyles.marginHorizontal,
+								]}
+							>
 								<Text
 									style={{
 										fontSize: sizing(6),
 										fontWeight: "500",
-										marginLeft: sizing(5),
 										flex: 1,
 									}}
 								>

@@ -173,7 +173,7 @@ function MainScreen({ navigation }) {
 						refreshing={isLoading}
 						onRefresh={() => {
 							fetchAllData();
-							fetchBookings();
+							getBookings();
 						}}
 						title={t("common:pullToRefresh")}
 					/>
@@ -261,6 +261,42 @@ function MainScreen({ navigation }) {
 												}
 											);
 										}}
+										buttonTitle={
+											activeBooking.checkin_time == null
+												? moment().isAfter(
+														moment(
+															activeBooking.start_time
+														).add(15, "m")
+												  )
+													? t("common:lateCheckIn", {
+															value: moment().diff(
+																moment(
+																	activeBooking.start_time
+																),
+																"m"
+															),
+													  })
+													: t("common:checkIn")
+												: t(
+														moment().isAfter(
+															moment(
+																activeBooking.start_time
+															).add(15, "m")
+														)
+															? "common:late"
+															: "common:checkedIn",
+														{
+															value: moment(
+																activeBooking.checkin_time
+															).format("HH:mm"),
+														}
+												  )
+										}
+										disabled={
+											activeBooking.checkin_time == null
+												? false
+												: true
+										}
 										onCheckIn={() =>
 											navigation.navigate(
 												routes.navigators.BOOKINGS,

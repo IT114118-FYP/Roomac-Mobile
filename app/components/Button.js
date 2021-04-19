@@ -6,7 +6,11 @@ import { sizing } from "../themes/presetStyles";
 function Button({ title, onPress, style, titleStyle, children, disabled }) {
 	return (
 		<TouchableOpacity
-			style={[styles.container, style]}
+			style={[
+				styles.container,
+				style,
+				disabled && { backgroundColor: colors.textSecondary },
+			]}
 			onPress={onPress}
 			disabled={disabled}
 		>
