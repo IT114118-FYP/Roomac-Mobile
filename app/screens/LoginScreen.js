@@ -23,7 +23,6 @@ import colors from "../themes/colors";
 import auth from "../api/auth";
 import useAuth from "../auth/useAuth";
 import { sizing } from "../themes/presetStyles";
-import moment from "moment";
 
 function LoginScreen(props) {
 	const { t, i18n } = useTranslation(["Login", "common"]);
@@ -132,9 +131,6 @@ function LoginScreen(props) {
 					</TouchableWithoutFeedback>
 				</KeyboardAvoidingView>
 			</View>
-			{/* <View style={styles.classroomSvg}>
-				<ClassroomSvg />
-			</View> */}
 			<Modal
 				visible={isLoading}
 				animationType="fade"

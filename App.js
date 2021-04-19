@@ -72,7 +72,7 @@ export default function App() {
 					type: "Danger",
 					title: t("error"),
 					// button: false,
-					textBody: t("errorDescription"),
+					// textBody: t("errorDescription"),
 					buttonText: t("common:ok"),
 					callback: () => {
 						setUser(null);
