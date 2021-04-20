@@ -28,8 +28,17 @@ import bookingsApi from "../api/bookings";
 const { width } = Dimensions.get("window");
 
 function CreateBookingScreen({ route, navigation }) {
-	const { timeslot, item: resource, date } = route.params;
+	const {
+		timeslot: timeslotData,
+		item: resource,
+		date,
+		dateTimeslots,
+	} = route.params;
+	console.log("====================================");
+	console.log(timeslotData);
+	console.log("====================================");
 	const { t, i18n } = useTranslation([routes.screens.CREATE_BOOKING]);
+	const [timeslot, setTimeslot] = useState([timeslotData]);
 	const scrollX = React.useRef(new Animated.Value(0)).current;
 	const flatListRef = useRef(null);
 	const [listIndex, setListIndex] = useState(0);
@@ -175,6 +184,7 @@ function CreateBookingScreen({ route, navigation }) {
 									timeslot={timeslot}
 									tos={resource.tos}
 									date={date}
+									dateTimeslots={dateTimeslots}
 									isLoading={isLoading}
 									bookingRef={bookingRef}
 								/>

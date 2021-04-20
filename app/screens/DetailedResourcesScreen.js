@@ -39,7 +39,6 @@ function DetailedResourcesScreen({ route, navigation }) {
 	const [isLoading, setLoading] = useState(true);
 	const [timeslot, setTimeslot] = useState({});
 	const [distance, setDistance] = useState(null);
-	const [location, setLocation] = useState();
 
 	const getLocation = async () => {
 		const { status } = await Location.requestPermissionsAsync();
@@ -120,7 +119,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 				<RefreshControl
 					refreshing={isLoading}
 					onRefresh={fetchTimeslot}
-					title="pull to refresh"
+					title={t("common:pullToRefresh")}
 				/>
 			}
 		>
@@ -250,6 +249,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 								key={flatlistItem.id}
 							>
 								<Timeslot
+									// selectable={false}
 									data={flatlistItem}
 									navigation={navigation}
 									onPress={(timeslot) =>
@@ -259,6 +259,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 												timeslot,
 												item,
 												date: flatlistItem.date,
+												dateTimeslots: flatlistItem,
 											}
 										)
 									}

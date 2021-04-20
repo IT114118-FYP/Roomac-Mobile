@@ -7,8 +7,9 @@ import presetStyles, { sizing } from "../../themes/presetStyles";
 import TimeslotListItem from "../../components/TimeslotListItem";
 import { useTranslation } from "react-i18next";
 import routes from "../../navigations/routes";
+import Timeslot from "../../components/Timeslot";
 
-function SelectTime({ item, timeslot, resource, date }) {
+function SelectTime({ item, timeslot, resource, date, dateTimeslots }) {
 	const { t, i18n } = useTranslation([
 		routes.screens.CREATE_BOOKING,
 		"common",
@@ -24,8 +25,9 @@ function SelectTime({ item, timeslot, resource, date }) {
 					sameElse: "D/M",
 				})}
 			</Text>
+			{/* {timeslot.map(item => )} */}
 			<TimeslotListItem
-				timeslot={timeslot}
+				timeslot={timeslot[0]}
 				location={`${resource.number} • ${
 					i18n.language === "en"
 						? resource.branch.title_en
@@ -33,6 +35,11 @@ function SelectTime({ item, timeslot, resource, date }) {
 						? resource.branch.title_hk
 						: resource.branch.title_cn
 				}`}
+			/>
+			<Timeslot
+				data={dateTimeslots}
+				title={"Add more sections"}
+				onPress={(time) => console.log(time)}
 			/>
 		</View>
 	);

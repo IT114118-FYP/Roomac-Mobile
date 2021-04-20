@@ -10,6 +10,7 @@ import {
 	StatusBar,
 	Modal,
 	RefreshControl,
+	Alert,
 } from "react-native";
 
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -30,7 +31,7 @@ import bookingsApi from "../api/bookings";
 
 const { width, height } = Dimensions.get("screen");
 
-function BookingDetailsScreen({ route }) {
+function BookingDetailsScreen({ route, navigation }) {
 	const { item: itemData, checkInClicked } = route.params;
 	const { t, i18n } = useTranslation([
 		routes.screens.BOOKING_DETAILS,
@@ -142,6 +143,23 @@ function BookingDetailsScreen({ route }) {
 						style={{
 							marginRight: sizing(3),
 							backgroundColor: colors.Light_Orange,
+						}}
+						onPress={() => {
+							Alert.alert(t("editTitle"), t("editDescription"), [
+								{
+									text: t(
+										routes.screens.SETTINGS + ":cancel"
+									),
+									style: "cancel",
+								},
+								{
+									text: t("continue"),
+									onPress: () =>
+										navigation.replace(
+											routes.screens.EDIT_BOOKING
+										),
+								},
+							]);
 						}}
 					>
 						<MaterialIcons

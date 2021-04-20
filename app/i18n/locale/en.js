@@ -94,6 +94,10 @@ export default {
 		checkInAvailable: "Check in available after {{value}}",
 		status: "Booking Status",
 		tos: "Terms & Conditions",
+		editTitle: "Edit this booking",
+		editDescription:
+			"By editing this booking, you will lose the current booking.",
+		continue: "continue",
 	},
 	[routes.screens.SETTINGS]: {
 		settings: "Settings",

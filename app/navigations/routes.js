@@ -13,6 +13,7 @@ export default {
 		SEARCH: "Search",
 		CAMPUS_RESOURCES: "CampusResources",
 		CAMPUS_LOCATIONS: "CampusLocations",
+		EDIT_BOOKING: "EditBooking",
 	},
 	navigators: {
 		HOME: "Home",

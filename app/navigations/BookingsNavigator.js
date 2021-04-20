@@ -5,6 +5,7 @@ import routes from "./routes";
 import ViewBookingsScreen from "../screens/ViewBookingsScreen";
 import BookingDetailsScreen from "../screens/BookingDetailsScreen";
 import colors from "../themes/colors";
+import EditBookingScreen from "../screens/EditBookingScreen";
 
 const Stack = createStackNavigator();
 
@@ -26,6 +27,16 @@ export default function BookingsNavigator() {
 					headerTitle: false,
 					headerTransparent: true,
 					headerTintColor: colors.backgroundPrimary,
+				}}
+			/>
+			<Stack.Screen
+				name={routes.screens.EDIT_BOOKING}
+				component={EditBookingScreen}
+				options={{
+					headerBackTitleVisible: false,
+					headerTitle: false,
+					headerTransparent: true,
+					headerTintColor: colors.textPrimary,
 				}}
 			/>
 		</Stack.Navigator>

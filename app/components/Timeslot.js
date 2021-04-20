@@ -6,6 +6,7 @@ import {
 	Dimensions,
 	FlatList,
 	TouchableOpacity,
+	TouchableWithoutFeedback,
 } from "react-native";
 import moment from "moment";
 
@@ -17,56 +18,116 @@ const { width } = Dimensions.get("window");
 
 const WIDTH = width * sizing(0.2);
 
-function Timeslot({ data, onPress }) {
+function Timeslot({
+	data,
+	onPress,
+	title = "",
+	containerWidth = null,
+	selectable = true,
+}) {
 	const { t, i18n } = useTranslation(["common"]);
 	return (
-		<View style={styles.wrapper}>
-			<Text style={styles.date}>
-				{moment(data.date, "YYYY-MM-DD").calendar({
-					sameDay: t("timeslot_sameDay"),
-					nextDay: t("timeslot_nextDay"),
-					nextWeek: "D/M",
-					sameElse: "D/M",
-				})}
-			</Text>
-			<View style={[styles.container, presetStyles.shadow]}>
-				<FlatList
-					scrollEnabled={false}
-					showsVerticalScrollIndicator={false}
-					numColumns={6}
-					data={data.timeslot}
-					keyExtractor={(item) => `${item.id}`}
-					renderItem={({ item, index }) => (
-						<TouchableOpacity
-							style={[
-								styles.timeslot,
-								moment(
-									`${data.date} ${item.start}`,
-									"YYYY-MM-DD HH:mm:ss"
-								).isBefore(moment())
-									? styles.past
-									: item.available
-									? styles.available
-									: styles.unavailable,
-							]}
-							key={item.id}
-							onPress={() => onPress(item)}
-							disabled={
-								!item.available ||
-								moment(
-									`${data.date} ${item.start}`,
-									"YYYY-MM-DD HH:mm:ss"
-								).isBefore(moment())
-							}
-						>
-							<Text style={styles.timeslotTitle}>
-								{moment(item.start, "HH:mm:ss").format("H:mm")}
-							</Text>
-						</TouchableOpacity>
-					)}
-				/>
-			</View>
-		</View>
+		<>
+			{selectable ? (
+				<View style={styles.wrapper}>
+					<Text style={styles.date}>
+						{title === ""
+							? moment(data.date, "YYYY-MM-DD").calendar({
+									sameDay: t("timeslot_sameDay"),
+									nextDay: t("timeslot_nextDay"),
+									nextWeek: "D/M",
+									sameElse: "D/M",
+							  })
+							: title}
+					</Text>
+					<View style={[styles.container, presetStyles.shadow]}>
+						<FlatList
+							scrollEnabled={false}
+							showsVerticalScrollIndicator={false}
+							numColumns={6}
+							data={data.timeslot}
+							keyExtractor={(item) => `${item.id}`}
+							renderItem={({ item, index }) => (
+								<TouchableOpacity
+									disabled={selectable}
+									style={[
+										styles.timeslot,
+										moment(
+											`${data.date} ${item.start}`,
+											"YYYY-MM-DD HH:mm:ss"
+										).isBefore(moment())
+											? styles.past
+											: item.available
+											? styles.available
+											: styles.unavailable,
+									]}
+									key={item.id}
+									onPress={() => onPress(item)}
+									disabled={
+										!item.available ||
+										moment(
+											`${data.date} ${item.start}`,
+											"YYYY-MM-DD HH:mm:ss"
+										).isBefore(moment())
+									}
+								>
+									<Text style={styles.timeslotTitle}>
+										{moment(item.start, "HH:mm:ss").format(
+											"H:mm"
+										)}
+									</Text>
+								</TouchableOpacity>
+							)}
+						/>
+					</View>
+				</View>
+			) : (
+				<TouchableOpacity
+					style={styles.wrapper}
+					onPress={() => console.log(data)}
+				>
+					<Text style={styles.date}>
+						{moment(data.date, "YYYY-MM-DD").calendar({
+							sameDay: t("timeslot_sameDay"),
+							nextDay: t("timeslot_nextDay"),
+							nextWeek: "D/M",
+							sameElse: "D/M",
+						})}
+					</Text>
+					<View style={[styles.container, presetStyles.shadow]}>
+						<FlatList
+							scrollEnabled={false}
+							showsVerticalScrollIndicator={false}
+							numColumns={6}
+							data={data.timeslot}
+							keyExtractor={(item) => `${item.id}`}
+							renderItem={({ item, index }) => (
+								<View
+									style={[
+										styles.timeslot,
+										moment(
+											`${data.date} ${item.start}`,
+											"YYYY-MM-DD HH:mm:ss"
+										).isBefore(moment())
+											? styles.past
+											: item.available
+											? styles.available
+											: styles.unavailable,
+									]}
+									key={item.id}
+								>
+									<Text style={styles.timeslotTitle}>
+										{moment(item.start, "HH:mm:ss").format(
+											"H:mm"
+										)}
+									</Text>
+								</View>
+							)}
+						/>
+					</View>
+				</TouchableOpacity>
+			)}
+		</>
 	);
 }
 
