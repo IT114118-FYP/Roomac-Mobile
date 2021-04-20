@@ -78,6 +78,7 @@ function MainScreen({ navigation }) {
 				branchesApi.fetchAll(),
 			]);
 			//categories
+			console.log(categoriesData.data);
 			setCategories(categoriesData.data);
 			setSelectedCategory(categoriesData.data[0].id);
 			//branches

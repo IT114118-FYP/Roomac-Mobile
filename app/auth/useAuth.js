@@ -19,7 +19,7 @@ export default function useAuth() {
 	};
 
 	const fetchUser = () =>
-		auth().getUser.then(({ data }) => {
+		auth.getUser().then(({ data }) => {
 			setUser(data);
 		});
 
