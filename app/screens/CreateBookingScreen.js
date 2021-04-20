@@ -31,14 +31,16 @@ function CreateBookingScreen({ route, navigation }) {
 	const {
 		timeslot: timeslotData,
 		item: resource,
-		date,
+		date: dateData,
 		dateTimeslots,
+		dataSet,
 	} = route.params;
 	console.log("====================================");
 	console.log(timeslotData);
 	console.log("====================================");
 	const { t, i18n } = useTranslation([routes.screens.CREATE_BOOKING]);
 	const [timeslot, setTimeslot] = useState([timeslotData]);
+	const [date, setDate] = useState(dateData);
 	const scrollX = React.useRef(new Animated.Value(0)).current;
 	const flatListRef = useRef(null);
 	const [listIndex, setListIndex] = useState(0);
@@ -114,6 +116,11 @@ function CreateBookingScreen({ route, navigation }) {
 	const addNewSection = (time) => setTimeslot([...timeslot, time]);
 	const removeSection = (time) =>
 		setTimeslot(timeslot.filter((t) => t.id !== time.id));
+
+	const replaceSection = (item, date) => {
+		setTimeslot([item]);
+		setDate(date);
+	};
 
 	const addBooking = () => {
 		setLoading(true);
@@ -258,6 +265,8 @@ function CreateBookingScreen({ route, navigation }) {
 										dateTimeslots={dateTimeslots}
 										isLoading={isLoading}
 										bookingRef={bookingRef}
+										dataSet={dataSet}
+										replaceSection={replaceSection}
 									/>
 								</View>
 							</View>

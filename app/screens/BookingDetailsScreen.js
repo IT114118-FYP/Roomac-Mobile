@@ -139,35 +139,45 @@ function BookingDetailsScreen({ route, navigation }) {
 						},
 					]}
 				>
-					<Button
-						style={{
-							marginRight: sizing(3),
-							backgroundColor: colors.Light_Orange,
-						}}
-						onPress={() => {
-							Alert.alert(t("editTitle"), t("editDescription"), [
-								{
-									text: t(
-										routes.screens.SETTINGS + ":cancel"
-									),
-									style: "cancel",
-								},
-								{
-									text: t("continue"),
-									onPress: () =>
-										navigation.replace(
-											routes.screens.EDIT_BOOKING
-										),
-								},
-							]);
-						}}
-					>
-						<MaterialIcons
-							name="edit"
-							size={sizing(6)}
-							color={colors.backgroundPrimary}
-						/>
-					</Button>
+					{!moment().isBetween(
+						moment(item.start_time),
+						moment(item.end_time)
+					) && (
+						<Button
+							style={{
+								marginRight: sizing(3),
+								backgroundColor: colors.Light_Orange,
+							}}
+							onPress={() => {
+								Alert.alert(
+									t("editTitle"),
+									t("editDescription"),
+									[
+										{
+											text: t(
+												routes.screens.SETTINGS +
+													":cancel"
+											),
+											style: "cancel",
+										},
+										{
+											text: t("continue"),
+											onPress: () =>
+												navigation.replace(
+													routes.screens.EDIT_BOOKING
+												),
+										},
+									]
+								);
+							}}
+						>
+							<MaterialIcons
+								name="edit"
+								size={sizing(6)}
+								color={colors.backgroundPrimary}
+							/>
+						</Button>
+					)}
 					<Button
 						title={
 							moment().isBetween(

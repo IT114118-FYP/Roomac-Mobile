@@ -80,6 +80,7 @@ export default {
 		lastStep: "Last step, almost finish!",
 		deleteTime: "Delete Time Section",
 		extend: "Extend to {{value}}",
+		changeTime: "Select Time",
 	},
 	[routes.screens.VIEW_BOOKINGS]: {
 		myBookings: "My Bookings",

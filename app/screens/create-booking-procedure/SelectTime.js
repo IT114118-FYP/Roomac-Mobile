@@ -7,6 +7,8 @@ import {
 	Button,
 	Alert,
 	TouchableOpacity,
+	Modal,
+	FlatList,
 } from "react-native";
 import moment from "moment";
 import * as Animatable from "react-native-animatable";
@@ -27,17 +29,31 @@ function SelectTime({
 	dateTimeslots,
 	addNewSection,
 	removeSection,
+	dataSet,
+	replaceSection,
 }) {
+	const [isSelectTimeOpen, setSelectTimeOpen] = useState(false);
 	const { t, i18n } = useTranslation([
 		routes.screens.CREATE_BOOKING,
 		"common",
 	]);
-	const getNextSection = () =>
-		dateTimeslots.timeslot[dateTimeslots.timeslot.length - 1].id !==
-			timeslot[timeslot.length - 1].id &&
-		dateTimeslots.timeslot.find(
-			(time) => time.id === timeslot[timeslot.length - 1].id + 1
+
+	// const getNextSection = () =>
+	// 	dateTimeslots.timeslot[dateTimeslots.timeslot.length - 1].id !==
+	// 		timeslot[timeslot.length - 1].id &&
+	// 	dateTimeslots.timeslot.find(
+	// 		(time) => time.id === timeslot[timeslot.length - 1].id + 1
+	// 	);
+	const getNextSection = () => {
+		const timeslotsInDate = dataSet.find((data) => data.date === date);
+		return (
+			timeslotsInDate.timeslot[timeslotsInDate.timeslot.length - 1].id !==
+				timeslot[timeslot.length - 1].id &&
+			timeslotsInDate.timeslot.find(
+				(time) => time.id === timeslot[timeslot.length - 1].id + 1
+			)
 		);
+	};
 
 	return (
 		<ScrollView style={styles.container}>
@@ -89,34 +105,107 @@ function SelectTime({
 					/>
 				</Animatable.View>
 			))}
-			{getNextSection().available && (
-				<TouchableOpacity
-					style={[presetStyles.row, { marginTop: sizing(4) }]}
-					onPress={() => {
-						addNewSection(getNextSection());
-					}}
-				>
-					<MaterialCommunityIcons
-						name="plus-circle-outline"
-						size={sizing(5)}
-						color={colors.primary}
-					/>
-					<Text
-						style={{
-							marginLeft: sizing(2),
-							color: colors.primary,
-							fontSize: sizing(4),
+			<View
+				style={[presetStyles.row, { justifyContent: "space-between" }]}
+			>
+				{getNextSection().available && (
+					<TouchableOpacity
+						style={[presetStyles.row, { marginTop: sizing(4) }]}
+						onPress={() => {
+							addNewSection(getNextSection());
 						}}
 					>
-						{t("extend", {
-							value: moment(
-								getNextSection().end,
-								"HH:mm:ss"
-							).format("H:mm"),
-						})}
-					</Text>
-				</TouchableOpacity>
-			)}
+						<MaterialCommunityIcons
+							name="plus-circle-outline"
+							size={sizing(5)}
+							color={colors.primary}
+						/>
+						<Text
+							style={{
+								marginLeft: sizing(2),
+								color: colors.primary,
+								fontSize: sizing(4),
+							}}
+						>
+							{t("extend", {
+								value: moment(
+									getNextSection().end,
+									"HH:mm:ss"
+								).format("H:mm"),
+							})}
+						</Text>
+					</TouchableOpacity>
+				)}
+				{timeslot.length == 1 && (
+					<TouchableOpacity
+						style={[presetStyles.row, { marginTop: sizing(4) }]}
+						onPress={() => setSelectTimeOpen(true)}
+					>
+						<MaterialCommunityIcons
+							name="calendar"
+							size={sizing(5)}
+							color={colors.primary}
+						/>
+						<Text
+							style={{
+								marginLeft: sizing(2),
+								color: colors.primary,
+								fontSize: sizing(4),
+							}}
+						>
+							{t("changeTime")}
+						</Text>
+					</TouchableOpacity>
+				)}
+			</View>
+			<Modal
+				visible={isSelectTimeOpen}
+				animationType="slide"
+				presentationStyle="pageSheet"
+			>
+				<View
+					style={{
+						padding: sizing(4),
+						// paddingBottom: 0,
+					}}
+				>
+					<TouchableOpacity onPress={() => console.log(timeslot)}>
+						<MaterialCommunityIcons
+							name="close"
+							size={24}
+							color={colors.textSecondary}
+						/>
+					</TouchableOpacity>
+					<FlatList
+						data={dataSet}
+						keyExtractor={(item) => `${item.date}`}
+						renderItem={({ item, index }) => (
+							<Animatable.View
+								style={styles.wrapper}
+								animation={{
+									0: {
+										opacity: 0,
+									},
+									1: {
+										opacity: 1,
+									},
+								}}
+								delay={index * 150 + 100}
+								key={item.id}
+							>
+								<Timeslot
+									// selectable={false}
+									data={item}
+									onPress={(timeslot) => {
+										replaceSection(timeslot, item.date);
+										setSelectTimeOpen(false);
+									}}
+								/>
+							</Animatable.View>
+						)}
+					/>
+				</View>
+			</Modal>
 		</ScrollView>
 	);
 }

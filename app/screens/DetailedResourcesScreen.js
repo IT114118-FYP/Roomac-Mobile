@@ -252,14 +252,15 @@ function DetailedResourcesScreen({ route, navigation }) {
 									// selectable={false}
 									data={flatlistItem}
 									navigation={navigation}
-									onPress={(timeslot) =>
+									onPress={(time) =>
 										navigation.navigate(
 											routes.screens.CREATE_BOOKING,
 											{
-												timeslot,
+												timeslot: time,
 												item,
 												date: flatlistItem.date,
 												dateTimeslots: flatlistItem,
+												dataSet: timeslot,
 											}
 										)
 									}
@@ -287,7 +288,14 @@ function DetailedResourcesScreen({ route, navigation }) {
 						}[i18n.language],
 					})}
 				</Text>
-				<Button title={t("resources")} />
+				<Button
+					title={t("resources")}
+					onPress={() =>
+						navigation.navigate(routes.screens.CAMPUS_RESOURCES, {
+							branch: item.branch,
+						})
+					}
+				/>
 			</View>
 			<View style={styles.mapContainer}>
 				<MapView
