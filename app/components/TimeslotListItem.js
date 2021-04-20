@@ -1,12 +1,13 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import moment from "moment";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import colors from "../themes/colors";
 
-export default function TimeslotListItem({ timeslot, location }) {
+export default function TimeslotListItem({ start, end, location, onPress }) {
 	return (
-		<View
+		<TouchableOpacity
+			onPress={onPress}
 			style={[
 				presetStyles.shadow,
 				presetStyles.row,
@@ -23,18 +24,18 @@ export default function TimeslotListItem({ timeslot, location }) {
 					height: sizing(2),
 					width: sizing(2),
 					borderRadius: sizing(2),
-					backgroundColor: moment(
-						timeslot.start,
-						"HH:mm:ss"
-					).isBefore(moment("12:00", "H:mm"), "hour")
+					backgroundColor: moment(start, "HH:mm:ss").isBefore(
+						moment("12:00", "H:mm"),
+						"hour"
+					)
 						? colors.secondary
 						: colors.Light_Orange,
 					marginRight: sizing(2),
 				}}
 			/>
 			<Text style={{ flex: 1 }}>
-				{moment(timeslot.start, "HH:mm:ss").format("H:mm")} -{" "}
-				{moment(timeslot.end, "HH:mm:ss").format("H:mm")}
+				{moment(start, "HH:mm:ss").format("H:mm")} -{" "}
+				{moment(end, "HH:mm:ss").format("H:mm")}
 			</Text>
 			<Text
 				style={{
@@ -43,6 +44,6 @@ export default function TimeslotListItem({ timeslot, location }) {
 			>
 				{location}
 			</Text>
-		</View>
+		</TouchableOpacity>
 	);
 }

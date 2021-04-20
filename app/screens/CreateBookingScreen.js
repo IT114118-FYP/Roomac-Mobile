@@ -111,10 +111,19 @@ function CreateBookingScreen({ route, navigation }) {
 		},
 	];
 
+	const addNewSection = (time) => setTimeslot([...timeslot, time]);
+	const removeSection = (time) =>
+		setTimeslot(timeslot.filter((t) => t.id !== time.id));
+
 	const addBooking = () => {
 		setLoading(true);
 		bookingsApi
-			.add(resource.id, date, timeslot.start, timeslot.end)
+			.add(
+				resource.id,
+				date,
+				timeslot[0].start,
+				timeslot[timeslot.length - 1].end
+			)
 			.then(({ data }) => {
 				setBookingRef(data);
 			})
@@ -179,20 +188,11 @@ function CreateBookingScreen({ route, navigation }) {
 									margin: sizing(6),
 								}}
 							>
-								<item.component
-									resource={resource}
-									timeslot={timeslot}
-									tos={resource.tos}
-									date={date}
-									dateTimeslots={dateTimeslots}
-									isLoading={isLoading}
-									bookingRef={bookingRef}
-								/>
 								<View
 									style={[
 										presetStyles.row,
 										{
-											marginTop: sizing(10),
+											// marginTop: sizing(10),
 											justifyContent: "space-between",
 										},
 									]}
@@ -242,6 +242,23 @@ function CreateBookingScreen({ route, navigation }) {
 												}
 											/>
 										))}
+								</View>
+								<View
+									style={{
+										paddingTop: sizing(4),
+									}}
+								>
+									<item.component
+										addNewSection={addNewSection}
+										removeSection={removeSection}
+										resource={resource}
+										timeslot={timeslot}
+										tos={resource.tos}
+										date={date}
+										dateTimeslots={dateTimeslots}
+										isLoading={isLoading}
+										bookingRef={bookingRef}
+									/>
 								</View>
 							</View>
 						</View>

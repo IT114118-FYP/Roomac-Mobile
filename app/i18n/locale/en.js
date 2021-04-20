@@ -78,6 +78,8 @@ export default {
 		results_bookingRef: "Booking Reference: {{value}}",
 		confirm_description: "Please check and confirm the following booking.",
 		lastStep: "Last step, almost finish!",
+		deleteTime: "Delete Time Section",
+		extend: "Extend to {{value}}",
 	},
 	[routes.screens.VIEW_BOOKINGS]: {
 		myBookings: "My Bookings",

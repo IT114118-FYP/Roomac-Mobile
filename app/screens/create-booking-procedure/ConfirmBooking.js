@@ -32,7 +32,9 @@ function ConfirmBooking({ timeslot, resource, date }) {
 				})}
 			</Text>
 			<TimeslotListItem
-				timeslot={timeslot}
+				// timeslot={}
+				start={timeslot[0].start}
+				end={timeslot[timeslot.length - 1].end}
 				location={`${resource.number} • ${
 					{
 						en: resource.branch.title_en,
