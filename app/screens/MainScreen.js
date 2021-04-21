@@ -78,7 +78,6 @@ function MainScreen({ navigation }) {
 				branchesApi.fetchAll(),
 			]);
 			//categories
-			console.log(categoriesData.data);
 			setCategories(categoriesData.data);
 			setSelectedCategory(categoriesData.data[0].id);
 			//branches
@@ -248,6 +247,7 @@ function MainScreen({ navigation }) {
 													screen:
 														routes.screens
 															.BOOKING_DETAILS,
+													initial: false,
 													params: {
 														item: activeBooking,
 													},
@@ -297,6 +297,7 @@ function MainScreen({ navigation }) {
 													screen:
 														routes.screens
 															.BOOKING_DETAILS,
+													initial: false,
 													params: {
 														item: activeBooking,
 														checkInClicked: true,
@@ -351,6 +352,7 @@ function MainScreen({ navigation }) {
 														screen:
 															routes.screens
 																.BOOKING_DETAILS,
+														initial: false,
 														params: {
 															item,
 														},

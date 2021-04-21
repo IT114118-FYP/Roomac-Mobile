@@ -1,12 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import {
 	View,
 	StyleSheet,
 	Text,
-	FlatList,
 	Dimensions,
 	Animated,
-	Platform,
+	ActivityIndicator,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 
@@ -24,6 +23,10 @@ import {
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
 import bookingsApi from "../api/bookings";
+import resourcesApi from "../api/resources";
+import moment from "moment";
+import axios from "axios";
+import branchesApi from "../api/branches";
 
 const { width } = Dimensions.get("window");
 
@@ -32,20 +35,30 @@ function CreateBookingScreen({ route, navigation }) {
 		timeslot: timeslotData,
 		item: resource,
 		date: dateData,
-		dateTimeslots,
-		dataSet,
+		bookingId,
+		edit = false,
 	} = route.params;
-	console.log("====================================");
-	console.log(timeslotData);
-	console.log("====================================");
 	const { t, i18n } = useTranslation([routes.screens.CREATE_BOOKING]);
-	const [timeslot, setTimeslot] = useState([timeslotData]);
-	const [date, setDate] = useState(dateData);
 	const scrollX = React.useRef(new Animated.Value(0)).current;
 	const flatListRef = useRef(null);
+	console.log({
+		timeslot: timeslotData,
+		item: resource,
+		date: dateData,
+		bookingId,
+	});
+
+	const [timeslot, setTimeslot] = useState([timeslotData]);
+	const [date, setDate] = useState(dateData);
+	// const [dataSet, setDataSet] = useState(datasetData);
 	const [listIndex, setListIndex] = useState(0);
-	const [isLoading, setLoading] = useState(false);
+	const [isLoading, setLoading] = useState(true);
+	const [isBookingLoading, setBookingLoading] = useState(true);
 	const [bookingRef, setBookingRef] = useState("");
+	const [isSuccess, setSuccess] = useState(false);
+	const [tos, setTos] = useState({});
+	const [branch, setBranch] = useState({});
+	const [timeslotsinDays, setTimeslotsinDays] = useState([]);
 
 	const inputRange = [
 		(listIndex - 1) * width,
@@ -114,8 +127,15 @@ function CreateBookingScreen({ route, navigation }) {
 	];
 
 	const addNewSection = (time) => setTimeslot([...timeslot, time]);
-	const removeSection = (time) =>
-		setTimeslot(timeslot.filter((t) => t.id !== time.id));
+	const removeSection = (time) => {
+		const deleteTime = moment(time.start, "HH:mm:ss");
+		setTimeslot(
+			timeslot.filter((t) =>
+				moment(t.start, "HH:mm:ss").isBefore(deleteTime)
+			)
+		);
+		// setTimeslot(timeslot.filter((t) => t.id !== time.id));
+	};
 
 	const replaceSection = (item, date) => {
 		setTimeslot([item]);
@@ -123,110 +143,219 @@ function CreateBookingScreen({ route, navigation }) {
 	};
 
 	const addBooking = () => {
-		setLoading(true);
-		bookingsApi
-			.add(
-				resource.id,
-				date,
-				timeslot[0].start,
-				timeslot[timeslot.length - 1].end
-			)
-			.then(({ data }) => {
-				setBookingRef(data);
-			})
-			.catch((error) => {
-				console.log(error);
-			})
-			.finally(() => {
-				setLoading(false);
-			});
+		setBookingLoading(true);
+		console.log(edit);
+		if (edit) {
+			bookingsApi
+				.update(
+					bookingId,
+					date,
+					timeslot[0].start,
+					timeslot[timeslot.length - 1].end
+				)
+				.then((res) => {
+					console.log(res);
+					setSuccess(true);
+				})
+				.catch((error) => {
+					console.log(error);
+					setSuccess(false);
+				})
+				.finally(() => {
+					setBookingLoading(false);
+				});
+		} else {
+			bookingsApi
+				.add(
+					resource.id,
+					date,
+					timeslot[0].start,
+					timeslot[timeslot.length - 1].end
+				)
+				.then(({ data }) => {
+					setBookingRef(data);
+					setSuccess(true);
+				})
+				.catch((error) => {
+					console.log(error);
+					setSuccess(false);
+				})
+				.finally(() => {
+					setBookingLoading(false);
+				});
+		}
 	};
+
+	const fetchAll = async () => {
+		setLoading(true);
+		try {
+			const [tos, timeslotsinDays, branches] = await axios.all([
+				resourcesApi.fetchTOS(resource.tos_id),
+				edit
+					? resourcesApi.fetchTimeslotsWithException(
+							resource.id,
+							moment().format("YYYY-MM-DD"),
+							moment().add(10, "days").format("YYYY-MM-DD"),
+							bookingId
+					  )
+					: resourcesApi.fetchTimeslots(
+							resource.id,
+							moment().format("YYYY-MM-DD"),
+							moment().add(10, "days").format("YYYY-MM-DD")
+					  ),
+				branchesApi.fetchAll(),
+			]);
+			setTos(tos.data);
+			setBranch(
+				branches.data.find((branch) => branch.id === resource.branch_id)
+			);
+
+			let events = [];
+			for (let i in timeslotsinDays.data.allow_times) {
+				let allow_time = timeslotsinDays.data.allow_times[i];
+				for (let date in allow_time) {
+					let times = allow_time[date];
+					let eventSlot = [];
+					for (let j in times) {
+						eventSlot.push({
+							id: times[j].id,
+							start: times[j].start_time,
+							end: times[j].end_time,
+							available: times[j].available,
+						});
+					}
+					events.push({
+						date: date,
+						timeslot: eventSlot,
+					});
+				}
+			}
+			console.log(events);
+			setTimeslotsinDays(events);
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchAll();
+	}, []);
+
 	return (
 		<Screen>
-			<Animatable.View animation="fadeInUp" style={{ flex: 1 }}>
+			{isLoading ? (
 				<View style={styles.container}>
-					<Animated.View
-						style={{
-							opacity,
-							transform: [{ translateY }],
-						}}
-					>
-						<Text style={styles.title}>
-							{procedure[listIndex].title}
-						</Text>
-						<Text style={styles.next}>
-							{listIndex === 2
-								? t("lastStep")
-								: listIndex < procedure.length - 1
-								? `${t("next")}: ${
-										procedure[listIndex + 1].title
-								  }`
-								: ""}
-						</Text>
-					</Animated.View>
-					<ProgressStepper
-						containerStyle={styles.stepper}
-						currentStep={listIndex + 1}
-						steps={procedure.length}
-						height={sizing(2)}
-						color={colors.primary}
-					/>
+					<ActivityIndicator />
 				</View>
-				<Animated.FlatList
-					data={procedure}
-					horizontal
-					keyExtractor={(item) => `${item.step}`}
-					pagingEnabled
-					showsHorizontalScrollIndicator={false}
-					scrollEnabled={false}
-					ref={flatListRef}
-					onScroll={Animated.event(
-						[{ nativeEvent: { contentOffset: { x: scrollX } } }],
-						{ useNativeDriver: true }
-					)}
-					renderItem={({ item, index }) => (
-						<View
+			) : (
+				<Animatable.View animation="fadeInUp" style={{ flex: 1 }}>
+					<View style={styles.container}>
+						<Animated.View
 							style={{
-								width,
+								opacity,
+								transform: [{ translateY }],
 							}}
 						>
+							<Text style={styles.title}>
+								{procedure[listIndex].title}
+							</Text>
+							<Text style={styles.next}>
+								{listIndex === 2
+									? t("lastStep")
+									: listIndex < procedure.length - 1
+									? `${t("next")}: ${
+											procedure[listIndex + 1].title
+									  }`
+									: ""}
+							</Text>
+						</Animated.View>
+						<ProgressStepper
+							containerStyle={styles.stepper}
+							currentStep={listIndex + 1}
+							steps={procedure.length}
+							height={sizing(2)}
+							color={colors.primary}
+						/>
+					</View>
+					<Animated.FlatList
+						data={procedure}
+						horizontal
+						keyExtractor={(item) => `${item.step}`}
+						pagingEnabled
+						showsHorizontalScrollIndicator={false}
+						scrollEnabled={false}
+						ref={flatListRef}
+						onScroll={Animated.event(
+							[
+								{
+									nativeEvent: {
+										contentOffset: { x: scrollX },
+									},
+								},
+							],
+							{ useNativeDriver: true }
+						)}
+						renderItem={({ item, index }) => (
 							<View
 								style={{
-									margin: sizing(6),
+									width,
 								}}
 							>
 								<View
-									style={[
-										presetStyles.row,
-										{
-											// marginTop: sizing(10),
-											justifyContent: "space-between",
-										},
-									]}
+									style={{
+										margin: sizing(6),
+									}}
 								>
-									{index >= 0 && (
-										<Button
-											style={[
-												styles.button,
-												{
-													backgroundColor:
-														"transparent",
-												},
-											]}
-											titleStyle={{
-												color: colors.primary,
-											}}
-											title={t("back")}
-											onPress={() => {
-												if (index === 0 || index === 3)
-													return navigation.goBack();
-												scrollToIndex(index - 1);
-											}}
-										/>
-									)}
-									{index < procedure.length &&
-										(index === 3 ? (
-											bookingRef !== "" && (
+									<View
+										style={[
+											presetStyles.row,
+											{
+												// marginTop: sizing(10),
+												justifyContent: "space-between",
+											},
+										]}
+									>
+										{index >= 0 && (
+											<Button
+												style={[
+													styles.button,
+													{
+														backgroundColor:
+															"transparent",
+													},
+												]}
+												titleStyle={{
+													color: colors.primary,
+												}}
+												title={t("back")}
+												onPress={() => {
+													if (
+														index === 0 ||
+														index === 3
+													)
+														return navigation.goBack();
+													scrollToIndex(index - 1);
+												}}
+											/>
+										)}
+										{index < procedure.length &&
+											(index === 3 ? (
+												bookingRef !== "" && (
+													<Button
+														style={styles.button}
+														title={
+															item.preceedButtonText
+														}
+														onPress={() =>
+															handleOnMainPress(
+																index
+															)
+														}
+													/>
+												)
+											) : (
 												<Button
 													style={styles.button}
 													title={
@@ -236,44 +365,35 @@ function CreateBookingScreen({ route, navigation }) {
 														handleOnMainPress(index)
 													}
 												/>
-											)
-										) : (
-											<Button
-												style={styles.button}
-												title={item.preceedButtonText}
-												onPress={() =>
-													handleOnMainPress(index)
-												}
-												onPress={() =>
-													handleOnMainPress(index)
-												}
-											/>
-										))}
-								</View>
-								<View
-									style={{
-										paddingTop: sizing(4),
-									}}
-								>
-									<item.component
-										addNewSection={addNewSection}
-										removeSection={removeSection}
-										resource={resource}
-										timeslot={timeslot}
-										tos={resource.tos}
-										date={date}
-										dateTimeslots={dateTimeslots}
-										isLoading={isLoading}
-										bookingRef={bookingRef}
-										dataSet={dataSet}
-										replaceSection={replaceSection}
-									/>
+											))}
+									</View>
+									<View
+										style={{
+											paddingTop: sizing(4),
+										}}
+									>
+										<item.component
+											isLoading={isLoading}
+											isBookingLoading={isBookingLoading}
+											bookingRef={bookingRef}
+											addNewSection={addNewSection}
+											removeSection={removeSection}
+											replaceSection={replaceSection}
+											resource={resource}
+											branch={branch}
+											timeslot={timeslot}
+											date={date}
+											tos={tos}
+											dataSet={timeslotsinDays}
+											isSuccess={isSuccess}
+										/>
+									</View>
 								</View>
 							</View>
-						</View>
-					)}
-				/>
-			</Animatable.View>
+						)}
+					/>
+				</Animatable.View>
+			)}
 		</Screen>
 	);
 }

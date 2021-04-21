@@ -57,11 +57,6 @@ function DetailedResourcesScreen({ route, navigation }) {
 		setDistance(Math.round((dist / 1000 + Number.EPSILON) * 100) / 100);
 	};
 
-	// useEffect(() => {
-	// 	getLocation();
-	// 	fetchTimeslot();
-	// }, []);
-
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
 			// The screen is focused
@@ -107,7 +102,8 @@ function DetailedResourcesScreen({ route, navigation }) {
 			})
 			.catch((error) => {
 				console.log(error);
-			});
+			})
+			.finally(() => setLoading(false));
 	};
 
 	return (
@@ -252,18 +248,23 @@ function DetailedResourcesScreen({ route, navigation }) {
 									// selectable={false}
 									data={flatlistItem}
 									navigation={navigation}
-									onPress={(time) =>
+									onPress={(time) => {
+										// console.log({
+										// 	timeslot: time,
+										// 	item,
+										// 	date: flatlistItem.date,
+										// 	dataSet: timeslot,
+										// });
 										navigation.navigate(
 											routes.screens.CREATE_BOOKING,
 											{
 												timeslot: time,
 												item,
 												date: flatlistItem.date,
-												dateTimeslots: flatlistItem,
 												dataSet: timeslot,
 											}
-										)
-									}
+										);
+									}}
 								/>
 							</Animatable.View>
 						)}

@@ -14,7 +14,7 @@ function AppDrawer(props) {
 	return (
 		<Drawer.Navigator
 			drawerContent={(props) => <DrawerContent {...props} />}
-			lazy={false}
+			// lazy={false}
 		>
 			<Drawer.Screen
 				name={routes.navigators.HOME}

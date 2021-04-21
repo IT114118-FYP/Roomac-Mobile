@@ -25,8 +25,8 @@ function SelectTime({
 	item,
 	timeslot,
 	resource,
+	branch,
 	date,
-	dateTimeslots,
 	addNewSection,
 	removeSection,
 	dataSet,
@@ -38,26 +38,31 @@ function SelectTime({
 		"common",
 	]);
 
-	// const getNextSection = () =>
-	// 	dateTimeslots.timeslot[dateTimeslots.timeslot.length - 1].id !==
-	// 		timeslot[timeslot.length - 1].id &&
-	// 	dateTimeslots.timeslot.find(
-	// 		(time) => time.id === timeslot[timeslot.length - 1].id + 1
-	// 	);
 	const getNextSection = () => {
 		const timeslotsInDate = dataSet.find((data) => data.date === date);
+		// console.log("getNextSection==========================");
+		// console.log(timeslotsInDate);
+		// console.log(timeslot);
+		// console.log(
+		// 	timeslotsInDate.timeslot[
+		// 		timeslotsInDate.timeslot.find(
+		// 			(time) => time.start === timeslot[timeslot.length - 1].start
+		// 		).id
+		// 	]
+		// );
 		return (
-			timeslotsInDate.timeslot[timeslotsInDate.timeslot.length - 1].id !==
-				timeslot[timeslot.length - 1].id &&
-			timeslotsInDate.timeslot.find(
-				(time) => time.id === timeslot[timeslot.length - 1].id + 1
-			)
+			timeslotsInDate.timeslot[timeslotsInDate.timeslot.length - 1]
+				.end !== timeslot[timeslot.length - 1].end &&
+			timeslotsInDate.timeslot[
+				timeslotsInDate.timeslot.find(
+					(time) => time.start === timeslot[timeslot.length - 1].start
+				).id
+			]
 		);
 	};
 
 	return (
 		<ScrollView style={styles.container}>
-			{/* <Text style={presetStyles.listHeader}>Selected</Text> */}
 			<Text style={[presetStyles.listHeader]}>
 				{moment(date, "YYYY-MM-DD").calendar({
 					sameDay: t("common:timeslot_sameDay"),
@@ -66,18 +71,25 @@ function SelectTime({
 					sameElse: "D/M",
 				})}
 			</Text>
-			{timeslot.map((item) => (
-				<Animatable.View key={item.id} animation="fadeInRight">
+			{timeslot.map((item, index) => (
+				<Animatable.View key={index} animation="fadeInRight">
 					<TimeslotListItem
 						onPress={() =>
 							timeslot.length > 1 &&
 							Alert.alert(
 								t("deleteTime"),
-								`${moment(item.start, "HH:mm:ss").format(
-									"H:mm"
-								)} - ${moment(item.end, "HH:mm:ss").format(
-									"H:mm"
-								)}`,
+								t("deleteTimeDescription", {
+									value1: `${moment(
+										item.start,
+										"HH:mm:ss"
+									).format("H:mm")} - ${moment(
+										item.end,
+										"HH:mm:ss"
+									).format("H:mm")}`,
+									value2: moment(item.end, "HH:mm:ss").format(
+										"H:mm"
+									),
+								}),
 								[
 									{
 										text: t(
@@ -96,11 +108,11 @@ function SelectTime({
 						start={item.start}
 						end={item.end}
 						location={`${resource.number} • ${
-							i18n.language === "en"
-								? resource.branch.title_en
-								: i18n.language === "hk"
-								? resource.branch.title_hk
-								: resource.branch.title_cn
+							{
+								en: branch.title_en,
+								hk: branch.title_hk,
+								cn: branch.title_cn,
+							}[i18n.language]
 						}`}
 					/>
 				</Animatable.View>
@@ -169,7 +181,7 @@ function SelectTime({
 						// paddingBottom: 0,
 					}}
 				>
-					<TouchableOpacity onPress={() => console.log(timeslot)}>
+					<TouchableOpacity onPress={() => setSelectTimeOpen(false)}>
 						<MaterialCommunityIcons
 							name="close"
 							size={24}

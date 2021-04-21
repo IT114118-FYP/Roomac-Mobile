@@ -75,6 +75,10 @@ export default {
 		results_bookingRef: "登記編號: {{value}}",
 		confirm_description: "請檢查並確認以下預約。",
 		lastStep: "最後一步，快要完成了！",
+		deleteTime: "刪除時段",
+		deleteTimeDescription: "刪除時段({{value1}})也會在{{value2}}之後時段",
+		extend: "延長至{{value}}",
+		changeTime: "選擇時間",
 	},
 	[routes.screens.VIEW_BOOKINGS]: {
 		myBookings: "我的預約",

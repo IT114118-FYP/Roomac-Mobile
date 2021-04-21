@@ -14,6 +14,13 @@ const add = (id, date, start, end) =>
 
 const fetchRef = (id) => axiosInstance.get(`/api/resourcebookings/${id}/code`);
 
-const bookingsApi = { fetchFromUser, add, fetchRef, fetchOne };
+const update = (id, date, start, end) =>
+	axiosInstance.put(`/api/resourcebookings/${id}`, {
+		date,
+		start,
+		end,
+	});
+
+const bookingsApi = { fetchFromUser, add, fetchRef, fetchOne, update };
 
 export default bookingsApi;

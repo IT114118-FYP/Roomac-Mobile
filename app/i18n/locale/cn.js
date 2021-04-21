@@ -75,6 +75,10 @@ export default {
 		results_bookingRef: "登记编号: {{value}}",
 		confirm_description: "请检查并确认以下预约。",
 		lastStep: "最后一步，快要完成了！",
+		deleteTime: "删除时段",
+		deleteTimeDescription: "删除时段({{value1}})也会在{{value2}}之后时段",
+		extend: "延长至{{value}}",
+		changeTime: "选择时间",
 	},
 	[routes.screens.VIEW_BOOKINGS]: {
 		myBookings: "我的预约",

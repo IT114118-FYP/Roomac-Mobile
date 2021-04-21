@@ -9,17 +9,17 @@ import routes from "../../navigations/routes";
 import { useTranslation } from "react-i18next";
 const { width } = Dimensions.get("window");
 
-function BookingResults({ isLoading, bookingRef }) {
+function BookingResults({ isBookingLoading, isSuccesss, bookingRef }) {
 	const { t } = useTranslation([routes.screens.CREATE_BOOKING]);
 	return (
 		<View style={styles.container}>
-			{isLoading ? (
+			{isBookingLoading ? (
 				<LottieView
 					source={require("../../../assets/BookingLoader.json")}
 					style={styles.animation}
 					autoPlay
 				/>
-			) : bookingRef === "" ? (
+			) : isSuccesss ? (
 				<>
 					<LottieView
 						source={require("../../../assets/error.json")}

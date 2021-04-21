@@ -7,7 +7,7 @@ import presetStyles, { sizing } from "../../themes/presetStyles";
 import routes from "../../navigations/routes";
 import { useTranslation } from "react-i18next";
 
-function ConfirmBooking({ timeslot, resource, date }) {
+function ConfirmBooking({ timeslot, resource, date, branch }) {
 	const { t, i18n } = useTranslation([
 		routes.screens.CREATE_BOOKING,
 		"common",
@@ -37,9 +37,9 @@ function ConfirmBooking({ timeslot, resource, date }) {
 				end={timeslot[timeslot.length - 1].end}
 				location={`${resource.number} • ${
 					{
-						en: resource.branch.title_en,
-						hk: resource.branch.title_hk,
-						cn: resource.branch.title_cn,
+						en: branch.title_en,
+						hk: branch.title_hk,
+						cn: branch.title_cn,
 					}[i18n.language]
 				}`}
 			/>

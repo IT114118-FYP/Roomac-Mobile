@@ -7,8 +7,18 @@ const fetchTimeslots = (id, start, end) =>
 		`/api/resources/${id}/bookings?start=${start}&end=${end}`
 	);
 
+const fetchTimeslotsWithException = (id, start, end, exceptId) =>
+	axiosInstance.get(
+		`/api/resources/${id}/bookings?start=${start}&end=${end}&except=${exceptId}`
+	);
+
 const fetchTOS = (id) => axiosInstance.get(`/api/tos/${id}`);
 
-const resourcesApi = { fetchFromCategory, fetchTimeslots, fetchTOS };
+const resourcesApi = {
+	fetchFromCategory,
+	fetchTimeslots,
+	fetchTOS,
+	fetchTimeslotsWithException,
+};
 
 export default resourcesApi;

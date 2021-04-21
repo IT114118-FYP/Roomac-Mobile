@@ -126,7 +126,10 @@ function DrawerContent(props) {
 					)}
 					label={t("bookings")}
 					onPress={() => {
-						props.navigation.navigate(routes.navigators.BOOKINGS);
+						props.navigation.navigate(routes.navigators.BOOKINGS, {
+							screen: routes.screens.VIEW_BOOKINGS,
+							initial: true,
+						});
 					}}
 				/>
 				<DrawerItem

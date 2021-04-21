@@ -64,6 +64,7 @@ function BookingDetailsScreen({ route, navigation }) {
 
 	useEffect(() => {
 		fetchTOS();
+		console.log(item);
 	}, []);
 
 	return (
@@ -162,10 +163,36 @@ function BookingDetailsScreen({ route, navigation }) {
 										},
 										{
 											text: t("continue"),
-											onPress: () =>
-												navigation.replace(
-													routes.screens.EDIT_BOOKING
-												),
+											onPress: () => {
+												const resource = item.resource;
+												resource["tos"] = tos;
+												navigation.navigate(
+													routes.screens
+														.CREATE_BOOKING,
+													{
+														timeslot: {
+															start: moment(
+																item.start_time
+															).format(
+																"HH:mm:ss"
+															),
+															end: moment(
+																item.end_time
+															).format(
+																"HH:mm:ss"
+															),
+														},
+
+														item: resource,
+														date: moment(
+															item.start_time
+														).format("YYYY-MM-DD"),
+														// dataSet: datasetData,
+														bookingId: item.id,
+														edit: true,
+													}
+												);
+											},
 										},
 									]
 								);

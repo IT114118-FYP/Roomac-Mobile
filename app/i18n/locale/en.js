@@ -79,6 +79,8 @@ export default {
 		confirm_description: "Please check and confirm the following booking.",
 		lastStep: "Last step, almost finish!",
 		deleteTime: "Delete Time Section",
+		deleteTimeDescription:
+			"Deleting section({{value1}}) will also delete sections after {{value2}}",
 		extend: "Extend to {{value}}",
 		changeTime: "Select Time",
 	},
