@@ -210,12 +210,6 @@ function SettingsScreen({ navigation }) {
 
 	const data = [
 		{
-			id: 0,
-			title: t("language"),
-			RightComponent: LanguageChevron,
-			onPress: () => navigation.navigate(routes.screens.CHANGE_LANGUAGE),
-		},
-		{
 			id: 1,
 			title: t("password"),
 			RightComponent: ChevronRight,
