@@ -47,34 +47,22 @@ function LoginScreen(props) {
 				console.log("====================================");
 				console.log(error);
 				console.log("====================================");
-				// if (error.response.status == 402) {
-				// 	setLoginFailed(false);
-				// 	Popup.show({
-				// 		type: "Warning",
-				// 		title: t("banTitle"),
-				// 		// button: false,
-				// 		buttonText: t("common:ok"),
-				// 		textBody: t("banDescription", {
-				// 			value: error.response.data,
-				// 		}),
-				// 		callback: () => Popup.hide(),
-				// 	});
-				// 	setLoading(false);
-				// } else {
-				//     setLoginFailed(true);
-				// }
-
-				Popup.show({
-					type: "Warning",
-					title: t("banTitle"),
-					// button: false,
-					buttonText: t("common:ok"),
-					textBody: t("banDescription", {
-						value: "error.response.data,",
-					}),
-					callback: () => Popup.hide(),
-				});
-				setLoginFailed(true);
+				if (error.response.status === 402) {
+					setLoginFailed(false);
+					Popup.show({
+						type: "Warning",
+						title: t("banTitle"),
+						// button: false,
+						buttonText: t("common:ok"),
+						textBody: t("banDescription", {
+							value: error.response.data,
+						}),
+						callback: () => Popup.hide(),
+					});
+					setLoading(false);
+				} else {
+					setLoginFailed(true);
+				}
 			})
 			.finally(() => setLoading(false));
 	};

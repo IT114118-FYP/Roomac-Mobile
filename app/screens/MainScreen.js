@@ -388,6 +388,11 @@ function MainScreen({ navigation }) {
 							ItemSeparatorComponent={() => (
 								<View style={styles.horizontalSeparator} />
 							)}
+							ListEmptyComponent={() => (
+								<View>
+									<Text>{t("noResources")}</Text>
+								</View>
+							)}
 							renderItem={({ item, index }) => (
 								<Animatable.View
 									key={item.id}
