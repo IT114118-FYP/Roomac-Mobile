@@ -78,7 +78,8 @@ export default {
 		confirm_description: "請檢查並確認以下預約。",
 		lastStep: "最後一步，快要完成了！",
 		deleteTime: "刪除時段",
-		deleteTimeDescription: "刪除時段({{value1}})也會在{{value2}}之後時段",
+		deleteTimeDescription:
+			"刪除時段({{value1}})也會刪除在{{value2}}之後的時段",
 		extend: "延長至{{value}}",
 		changeTime: "選擇時間",
 	},
@@ -96,6 +97,8 @@ export default {
 		checkIn: "簽到",
 		checkInAvailable: "{{value}} 後可簽到",
 		tos: "條款及細則",
+		editDescription: "通過編輯此預約，您將失去目前的預約。",
+		continue: "繼續",
 	},
 	[routes.screens.SETTINGS]: {
 		settings: "設定",

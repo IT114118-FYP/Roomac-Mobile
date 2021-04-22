@@ -40,28 +40,28 @@ function DetailedResourcesScreen({ route, navigation }) {
 	const [timeslot, setTimeslot] = useState({});
 	const [distance, setDistance] = useState(null);
 
-	const getLocation = async () => {
-		const { status } = await Location.requestPermissionsAsync();
-		if (status !== "granted") return;
-		const { coords } = await Location.getLastKnownPositionAsync({});
-		const dist = getDistance(
-			{
-				latitude: Number(item.branch.lat),
-				longitude: Number(item.branch.lng),
-			},
-			{
-				latitude: coords.latitude,
-				longitude: coords.longitude,
-			}
-		);
-		setDistance(Math.round((dist / 1000 + Number.EPSILON) * 100) / 100);
-	};
+	// const getLocation = async () => {
+	// 	const { status } = await Location.requestPermissionsAsync();
+	// 	if (status !== "granted") return;
+	// 	const { coords } = await Location.getLastKnownPositionAsync({});
+	// 	const dist = getDistance(
+	// 		{
+	// 			latitude: Number(item.branch.lat),
+	// 			longitude: Number(item.branch.lng),
+	// 		},
+	// 		{
+	// 			latitude: coords.latitude,
+	// 			longitude: coords.longitude,
+	// 		}
+	// 	);
+	// 	setDistance(Math.round((dist / 1000 + Number.EPSILON) * 100) / 100);
+	// };
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
 			// The screen is focused
 			// Call any action
-			getLocation();
+			// getLocation();
 			fetchTimeslot();
 		});
 
@@ -155,8 +155,8 @@ function DetailedResourcesScreen({ route, navigation }) {
 								cn: item.branch.title_cn,
 							}[i18n.language]
 						}
-						{distance !== null &&
-							t("distance", { value: distance })}
+						{/* {distance !== null &&
+							t("distance", { value: distance })} */}
 					</Text>
 				</View>
 				<View style={[presetStyles.row, { marginTop: sizing(1.5) }]}>

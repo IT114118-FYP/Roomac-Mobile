@@ -78,7 +78,8 @@ export default {
 		confirm_description: "请检查并确认以下预约。",
 		lastStep: "最后一步，快要完成了！",
 		deleteTime: "删除时段",
-		deleteTimeDescription: "删除时段({{value1}})也会在{{value2}}之后时段",
+		deleteTimeDescription:
+			"删除时段({{value1}})也会删除在{{value2}}之后的时段",
 		extend: "延长至{{value}}",
 		changeTime: "选择时间",
 	},
@@ -96,6 +97,8 @@ export default {
 		checkIn: "签到",
 		checkInAvailable: "{{value}} 后可登记",
 		tos: "条款及细则",
+		editDescription: "通过编辑此预约，您将失去目前的预约。",
+		continue: "继续",
 	},
 	[routes.screens.SETTINGS]: {
 		settings: "设定",

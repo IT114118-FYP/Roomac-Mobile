@@ -8,7 +8,7 @@ import {
 	Keyboard,
 	Platform,
 	TouchableWithoutFeedback,
-	TouchableOpacity,
+	ScrollView,
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -23,9 +23,9 @@ import Textfield from "../components/Textfield";
 import colors from "../themes/colors";
 import auth from "../api/auth";
 import useAuth from "../auth/useAuth";
-import { sizing } from "../themes/presetStyles";
+import presetStyles, { sizing } from "../themes/presetStyles";
 
-function LoginScreen(props) {
+function LoginScreen() {
 	const { t, i18n } = useTranslation(["Login", "common"]);
 	const { logIn } = useAuth();
 	const [isLoading, setLoading] = useState(false);
@@ -80,8 +80,11 @@ function LoginScreen(props) {
 	};
 
 	return (
-		<Screen style={styles.container}>
-			<View style={styles.form}>
+		<Screen style={[presetStyles.marginHorizontal, styles.container]}>
+			<ScrollView
+				style={styles.form}
+				showsVerticalScrollIndicator={false}
+			>
 				<View style={styles.titleView}>
 					<Text style={styles.welcomeText}>{t("welcomeTo")}</Text>
 					<Text style={styles.title}>{t("roomac")}</Text>
@@ -129,7 +132,7 @@ function LoginScreen(props) {
 									<LoginButton title={t("common:signIn")} />
 								</View>
 							</Formik>
-							<TouchableOpacity
+							{/* <TouchableOpacity
 								style={{
 									alignItems: "center",
 								}}
@@ -142,11 +145,11 @@ function LoginScreen(props) {
 								>
 									{t("forgot")}
 								</Text>
-							</TouchableOpacity>
+							</TouchableOpacity> */}
 						</View>
 					</TouchableWithoutFeedback>
 				</KeyboardAvoidingView>
-			</View>
+			</ScrollView>
 			<Modal
 				visible={isLoading}
 				animationType="fade"
@@ -163,7 +166,7 @@ function LoginScreen(props) {
 
 const styles = StyleSheet.create({
 	container: {
-		padding: sizing(8),
+		marginTop: sizing(4),
 	},
 	welcomeText: {
 		fontSize: sizing(5),
