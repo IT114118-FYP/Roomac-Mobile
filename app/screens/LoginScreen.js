@@ -12,6 +12,7 @@ import {
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { setLocale } from "yup";
 import LottieView from "lottie-react-native";
 import { useTranslation } from "react-i18next";
 import { Popup } from "popup-ui";
@@ -29,6 +30,17 @@ function LoginScreen(props) {
 	const { logIn } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [loginFailed, setLoginFailed] = useState(false);
+
+	setLocale({
+		mixed: {
+			required: (required) =>
+				t("common:required", { label: required.label }),
+		},
+		string: {
+			min: (min) =>
+				t("common:short", { label: min.label, value: min.min }),
+		},
+	});
 
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().required().min(4).label(t("email")),

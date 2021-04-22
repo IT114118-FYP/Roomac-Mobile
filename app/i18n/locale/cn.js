@@ -19,6 +19,8 @@ export default {
 		lateCheckIn: "已签到 (迟了{{value}}分钟)",
 		late: "已签到 (迟了 {{value}})",
 		notCheckIn: "未签到",
+		short: "{{label}}应该至少要有{{value}}字母",
+		required: "{{label}}是必填的",
 	},
 	app: {
 		noInternet: "没有网络连接！",
@@ -29,7 +31,7 @@ export default {
 		errorDescription: "请重新启动应用程序，然后重试",
 	},
 	Login: {
-		email: "电子邮件/CNA",
+		email: "电子邮件，CNA",
 		password: "密码",
 		welcomeTo: "欢迎来到",
 		failedDescription: "电子邮件/CNA或密码不正确。",

@@ -15,7 +15,6 @@ import Screen from "../components/Screen";
 import Button from "../components/Button";
 import colors from "../themes/colors";
 import { sizing } from "../themes/presetStyles";
-import { axiosInstance } from "../api/config";
 import useAuth from "../auth/useAuth";
 import { Popup } from "popup-ui";
 import routes from "../navigations/routes";
@@ -101,6 +100,17 @@ function ChangePasswordScreen(props) {
 		"common",
 	]);
 	const [isLoading, setLoading] = useState(false);
+
+	Yup.setLocale({
+		mixed: {
+			required: (required) =>
+				t("common:required", { label: required.label }),
+		},
+		string: {
+			min: (min) =>
+				t("common:short", { label: min.label, value: min.min }),
+		},
+	});
 
 	const validationSchema = Yup.object().shape({
 		old: Yup.string().required().min(4).label(t("old")),

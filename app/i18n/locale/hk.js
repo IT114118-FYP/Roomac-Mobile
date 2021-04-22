@@ -19,6 +19,8 @@ export default {
 		lateCheckIn: "已簽到 (遲了{{value}}分鐘)",
 		late: "已簽到 (遲到 {{value}})",
 		notCheckIn: "未簽到",
+		short: "{{label}}應該至少要有{{value}}字母",
+		required: "{{label}}是必填的",
 	},
 	app: {
 		noInternet: "沒有網絡連接！",
@@ -29,7 +31,7 @@ export default {
 		errorDescription: "請重新啟動應用程式，並再次嘗試",
 	},
 	Login: {
-		email: "電子郵件/CNA",
+		email: "電子郵件，CNA",
 		password: "密碼",
 		welcomeTo: "歡迎來到",
 		failedDescription: "電子郵件/CNA或密碼錯誤。",

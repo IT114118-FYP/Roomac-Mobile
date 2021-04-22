@@ -20,6 +20,8 @@ export default {
 		lateCheckIn: "Check In ({{value}} minutes late)",
 		late: "Checked In (Late {{value}})",
 		notCheckIn: "Not Checked In",
+		short: "{{label}} should have at least {{value}} letters",
+		required: "{{label}} is a required field",
 	},
 	app: {
 		noInternet: "No Internet connection!",
@@ -31,7 +33,7 @@ export default {
 		errorDescription: "Restart the App and try again",
 	},
 	Login: {
-		email: "Email / CNA",
+		email: "Email, CNA",
 		password: "Password",
 		welcomeTo: "Welcome To",
 		failedDescription: "Email/CNA or password is incorrect.",
