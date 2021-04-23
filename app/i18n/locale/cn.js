@@ -62,6 +62,9 @@ export default {
 		availabilityDescriptoin: "请按下您想选取的时段已创建您的预约。",
 		campusLocation: "院校位置 ({{value}})",
 		resources: "资源",
+		available: "可用",
+		booked: "已预订",
+		past: "已过去",
 	},
 	[routes.screens.CREATE_BOOKING]: {
 		selectTime: "选择时间",

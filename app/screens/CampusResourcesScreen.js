@@ -7,7 +7,6 @@ import {
 	ScrollView,
 	StatusBar,
 	Dimensions,
-	ActivityIndicator,
 	RefreshControl,
 	TouchableWithoutFeedback,
 	Keyboard,

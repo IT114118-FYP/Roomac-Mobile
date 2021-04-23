@@ -13,9 +13,11 @@ import {
 	RefreshControl,
 	Animated,
 	Button,
+	ImageBackground,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import * as Location from "expo-location";
+import { LinearGradient } from "expo-linear-gradient";
 import MapView, { Marker } from "react-native-maps";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import moment from "moment";
@@ -27,10 +29,11 @@ import { getDistance } from "geolib";
 import routes from "../navigations/routes";
 import { useTranslation } from "react-i18next";
 import resourcesApi from "../api/resources";
-const MAX_HEIGHT = 200;
+import AvailabilityIndicator from "../components/AvailabilityIndicator";
 
-const { width } = Dimensions.get("window");
+const { width, height } = Dimensions.get("window");
 
+const MAX_HEIGHT = height / 3.5;
 const TIMESLOT_WIDTH = width * sizing(0.2);
 
 function DetailedResourcesScreen({ route, navigation }) {
@@ -107,9 +110,6 @@ function DetailedResourcesScreen({ route, navigation }) {
 	};
 
 	return (
-		// <View>
-		// 	<Text>HI</Text>
-		// </View>
 		<ScrollView
 			refreshControl={
 				<RefreshControl
@@ -119,12 +119,17 @@ function DetailedResourcesScreen({ route, navigation }) {
 				/>
 			}
 		>
-			<Image
+			<ImageBackground
 				source={{
 					uri: item.image_url,
 				}}
 				style={styles.image}
-			/>
+			>
+				<LinearGradient
+					colors={["rgba(0, 0, 0, 0.4)", "transparent"]}
+					style={styles.tint}
+				></LinearGradient>
+			</ImageBackground>
 			<StatusBar barStyle="light-content" animated={true} />
 			<View style={styles.detailContainer}>
 				<Text style={styles.title}>{`${item.number} ${
@@ -222,6 +227,31 @@ function DetailedResourcesScreen({ route, navigation }) {
 					>
 						{t("availabilityDescriptoin")}
 					</Animatable.Text>
+					<View
+						style={[
+							presetStyles.marginHorizontal,
+							presetStyles.row,
+							{
+								justifyContent: "flex-end",
+								marginTop: sizing(2),
+							},
+						]}
+					>
+						{[
+							{ color: "#32cd80", availability: t("Availabe") },
+							{ color: "#d24747", availability: t("Booked") },
+							{
+								color: colors.textSecondary,
+								availability: t("Past"),
+							},
+						].map((item, index) => (
+							<AvailabilityIndicator
+								key={index}
+								color={item.color}
+								availability={item.availability}
+							/>
+						))}
+					</View>
 					<FlatList
 						horizontal
 						snapToInterval={TIMESLOT_WIDTH + sizing(6)}
@@ -353,6 +383,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: sizing(6),
 		marginVertical: sizing(3),
 	},
+	tint: { flex: 1, justifyContent: "flex-end" },
 });
 
 export default DetailedResourcesScreen;

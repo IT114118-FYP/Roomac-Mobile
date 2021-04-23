@@ -65,6 +65,9 @@ export default {
 			"Press on the preferred timeslot to create your booking.",
 		campusLocation: "Campus Location ({{value}})",
 		resources: "Resources",
+		available: "Available",
+		booked: "Booked",
+		past: "Past",
 	},
 	[routes.screens.CREATE_BOOKING]: {
 		selectTime: "Select Time",
