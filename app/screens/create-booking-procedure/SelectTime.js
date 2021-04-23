@@ -41,8 +41,10 @@ function SelectTime({
 	const getNextSection = () => {
 		const timeslotsInDate = dataSet.find((data) => data.date === date);
 		// console.log("getNextSection==========================");
+		// console.log(dataSet);
 		// console.log(timeslotsInDate);
 		// console.log(timeslot);
+		// console.log(date);
 		// console.log(
 		// 	timeslotsInDate.timeslot[
 		// 		timeslotsInDate.timeslot.find(

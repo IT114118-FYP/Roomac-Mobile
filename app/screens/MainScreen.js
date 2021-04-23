@@ -342,7 +342,24 @@ function MainScreen({ navigation }) {
 											).format("H:mm")}`}
 											location={
 												Boolean(item.resource.title_en)
-													? `${item.resource.number} • ${item.resource.title_en}`
+													? `${
+															item.resource.number
+													  } • ${
+															{
+																en:
+																	item
+																		.resource
+																		.title_en,
+																hk:
+																	item
+																		.resource
+																		.title_hk,
+																cn:
+																	item
+																		.resource
+																		.title_cn,
+															}[i18n.language]
+													  }`
 													: item.resource.number
 											}
 											onPress={() =>
@@ -483,12 +500,13 @@ function MainScreen({ navigation }) {
 								<ResourceItem
 									item={item}
 									key={item.id}
-									onPress={() =>
+									onPress={() => {
+										console.log(item);
 										navigation.navigate(
 											routes.screens.DETAILED_RESOURCES,
 											{ item }
-										)
-									}
+										);
+									}}
 								/>
 							</Animatable.View>
 						);

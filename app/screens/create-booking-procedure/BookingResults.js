@@ -42,9 +42,11 @@ function BookingResults({ isBookingLoading, isSuccesss, bookingRef }) {
 					<Animable.Text animation="swing" style={styles.success}>
 						{t("results_successful")}
 					</Animable.Text>
-					<Animable.Text animation="fadeIn" style={styles.ref}>
-						{t("results_bookingRef", { value: bookingRef })}
-					</Animable.Text>
+					{bookingRef === null && (
+						<Animable.Text animation="fadeIn" style={styles.ref}>
+							{t("results_bookingRef", { value: bookingRef })}
+						</Animable.Text>
+					)}
 				</>
 			)}
 		</View>

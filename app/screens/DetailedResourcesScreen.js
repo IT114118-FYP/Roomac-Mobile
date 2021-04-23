@@ -248,13 +248,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 									// selectable={false}
 									data={flatlistItem}
 									navigation={navigation}
-									onPress={(time) => {
-										// console.log({
-										// 	timeslot: time,
-										// 	item,
-										// 	date: flatlistItem.date,
-										// 	dataSet: timeslot,
-										// });
+									onPress={(time) =>
 										navigation.navigate(
 											routes.screens.CREATE_BOOKING,
 											{
@@ -263,8 +257,8 @@ function DetailedResourcesScreen({ route, navigation }) {
 												date: flatlistItem.date,
 												dataSet: timeslot,
 											}
-										);
-									}}
+										)
+									}
 								/>
 							</Animatable.View>
 						)}

@@ -105,6 +105,7 @@ const InfiniteHits = ({ hits, hasMore, refineNext, navigation }) => {
 											title_en: item.title_en,
 											title_hk: item.title_hk,
 											title_cn: item.title_cn,
+											branch_id: item.branch_id,
 											branch: {
 												title_en:
 													branches_en[item.branch_id],
@@ -120,6 +121,7 @@ const InfiniteHits = ({ hits, hasMore, refineNext, navigation }) => {
 											max_user: item.max_user,
 											opening_time: item.opening_time,
 											closing_time: item.closing_time,
+											tos_id: item.tos_id,
 										},
 									}
 								)
