@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LogBox } from "react-native";
+import { LogBox, BackHandler, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -43,6 +43,20 @@ export default function App() {
 		}
 	};
 
+	const failedAlert = () => {
+		Alert.alert(
+			t("app:biometricsFailed"),
+			t("app:bioNeeded"),
+			[
+				{
+					text: t("retry"),
+					onPress: () => loadBiometrics(),
+				},
+			],
+			{ cancelable: false }
+		);
+	};
+
 	const loadBiometrics = async () => {
 		const biometricsEnabled = await BioStorage.getEnable();
 		if (biometricsEnabled) {
@@ -52,7 +66,7 @@ export default function App() {
 			if (result.success) {
 				fetchUser();
 			} else {
-				alert(t("app:biometricsFailed"));
+				failedAlert();
 			}
 		} else {
 			fetchUser();

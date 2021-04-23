@@ -27,6 +27,7 @@ export default {
 		noInternetDescription: "使用Roomac之前，请先打开网络连接。",
 		biometrics: "验证以继续身份验证",
 		biometricsFailed: "验证失败",
+		bioNeeded: "您需要使用身份验证登录。",
 		error: "发生错误了！",
 		errorDescription: "请重新启动应用程序，然后重试",
 	},

@@ -27,6 +27,7 @@ export default {
 		noInternetDescription: "在使用roomac前，請先連接網絡。",
 		biometrics: "驗證以繼續身份驗證.",
 		biometricsFailed: "驗證失敗",
+		bioNeeded: "您需要使用身份驗證登錄。",
 		error: "出現故障！",
 		errorDescription: "請重新啟動應用程式，並再次嘗試",
 	},

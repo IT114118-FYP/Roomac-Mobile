@@ -29,6 +29,7 @@ export default {
 			"Turn on Internet connection before using roomac.",
 		biometrics: "Verify to continue authentication.",
 		biometricsFailed: "Authentication Failed",
+		bioNeeded: "You are required to sign in with authentication.",
 		error: "Something went wrong!",
 		errorDescription: "Restart the App and try again",
 	},
