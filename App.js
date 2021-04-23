@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { LogBox } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import * as LocalAuthentication from "expo-local-authentication";
-import { Root as PopupRoot, Popup, Toast } from "popup-ui";
-import NetInfo, { useNetInfo } from "@react-native-community/netinfo";
-import { LogBox } from "react-native";
+import { Root as PopupRoot, Popup } from "popup-ui";
+import { useNetInfo } from "@react-native-community/netinfo";
 LogBox.ignoreLogs(["ReactNative.NativeModules.LottieAnimationView"]);
 
 import * as BioStorage from "./app/biometrics/storage";
@@ -71,8 +71,6 @@ export default function App() {
 				Popup.show({
 					type: "Danger",
 					title: t("error"),
-					// button: false,
-					// textBody: t("errorDescription"),
 					buttonText: t("common:ok"),
 					callback: () => {
 						setUser(null);
