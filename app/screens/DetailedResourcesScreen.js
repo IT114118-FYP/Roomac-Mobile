@@ -238,8 +238,8 @@ function DetailedResourcesScreen({ route, navigation }) {
 						]}
 					>
 						{[
-							{ color: "#32cd80", availability: t("Availabe") },
-							{ color: "#d24747", availability: t("Booked") },
+							{ color: "#32cd80", availability: t("available") },
+							{ color: "#d24747", availability: t("booked") },
 							{
 								color: colors.textSecondary,
 								availability: t("Past"),
