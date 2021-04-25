@@ -17,6 +17,7 @@ import AppDrawer from "./app/navigations/AppDrawer";
 
 import i18n from "./app/i18n/config";
 import { I18nextProvider, useTranslation } from "react-i18next";
+import bookingsApi from "./app/api/bookings";
 
 export default function App() {
 	const [user, setUser] = useState();
@@ -93,6 +94,29 @@ export default function App() {
 					},
 				});
 			});
+
+	const fetchHasActiveBooking = () => {
+		bookingsApi
+			.fetchFromUser(
+				user.id,
+				moment().format("YYYY-MM-DD"),
+				moment().format("YYYY-MM-DD")
+			)
+			.then(({ data }) => {
+				data.forEach((booking) => {
+					if (
+						moment().isBetween(booking.start_time, booking.end_time)
+					) {
+						Popup.show({
+							type: "Danger",
+							title: t("error"),
+							buttonText: t("common:ok"),
+							callback: () => {},
+						});
+					}
+				});
+			});
+	};
 
 	useEffect(() => {
 		restoreToken();

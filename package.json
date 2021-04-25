@@ -34,7 +34,7 @@
     "i18n-js": "^3.8.0",
     "i18next": "^19.9.2",
     "lottie-ios": "^2.5.3",
-    "lottie-react-native": "~2.6.1",
+    "lottie-react-native": "^3.5.0",
     "moment": "^2.29.1",
     "popup-ui": "^1.2.2",
     "punycode": "^2.1.1",

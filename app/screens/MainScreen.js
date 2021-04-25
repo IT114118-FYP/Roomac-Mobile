@@ -10,25 +10,26 @@ import {
 	TouchableOpacity,
 	SafeAreaView,
 } from "react-native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
-import * as Animatable from "react-native-animatable";
 import moment from "moment";
-
+import * as Animatable from "react-native-animatable";
+import axios from "axios";
 import { useTranslation } from "react-i18next";
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+
 import CategoryItem from "../components/CategoryItem";
 import Screen from "../components/Screen";
 import ResourceItem from "../components/ResourceItem";
 import ViewBookingListItem from "../components/ViewBookingListItem";
+import CampusItem from "../components/CampusItem";
 import useAuth from "../auth/useAuth";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 import routes from "../navigations/routes";
-import CampusItem from "../components/CampusItem";
-import axios from "axios";
 import branchesApi from "../api/branches";
 import categoriesApi from "../api/categories";
 import resourcesApi from "../api/resources";
 import bookingsApi from "../api/bookings";
+import { Popup } from "popup-ui";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
@@ -51,7 +52,6 @@ function MainScreen({ navigation }) {
 				moment().format("YYYY-MM-DD")
 			)
 			.then(({ data }) => {
-				//bookings
 				const current = moment();
 				var upcomingData = [];
 				data.forEach((booking) => {
@@ -90,22 +90,19 @@ function MainScreen({ navigation }) {
 	};
 
 	useEffect(() => {
+		fetchAllData();
+	}, []);
+
+	useEffect(() => {
 		resourcesApi.fetchFromCategory(selectedCategory).then(({ data }) => {
 			setResources(data);
 		});
 	}, [selectedCategory]);
 
 	useEffect(() => {
-		fetchAllData();
-	}, []);
-
-	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
-			// The screen is focused
-			// Call any action
 			getBookings();
 		});
-		// Return the function to unsubscribe from the event so it gets removed on unmount
 		return unsubscribe;
 	}, [navigation]);
 
