@@ -56,12 +56,13 @@ function ResourceItem({ item, onPress, dense }) {
 								hk: item.title_hk,
 								cn: item.title_cn,
 							}[i18n.language]
-						) &&
-						{
-							en: item.title_en,
-							hk: item.title_hk,
-							cn: item.title_cn,
-						}[i18n.language]
+						)
+							? {
+									en: item.title_en,
+									hk: item.title_hk,
+									cn: item.title_cn,
+							  }[i18n.language]
+							: ""
 					}`}</Text>
 
 					<View style={presetStyles.row}>
