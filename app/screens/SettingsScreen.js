@@ -8,6 +8,7 @@ import {
 	Alert,
 	ScrollView,
 	ImageBackground,
+	TouchableWithoutFeedback,
 } from "react-native";
 import {
 	Feather,
@@ -262,18 +263,26 @@ function SettingsScreen({ navigation }) {
 				<View style={styles.profileContainer}>
 					<View style={[presetStyles.row]}>
 						<UserIcon />
-						<View style={styles.detailsContainer}>
-							<Text style={styles.username}>
-								{
+						<TouchableWithoutFeedback
+							onLongPress={() =>
+								navigation.navigate(
+									routes.screens.CHANGE_LANGUAGE
+								)
+							}
+						>
+							<View style={styles.detailsContainer}>
+								<Text style={styles.username}>
 									{
-										en: `${user.first_name}, ${user.last_name}`,
-										hk: user.chinese_name,
-										cn: user.chinese_name,
-									}[i18n.language]
-								}
-							</Text>
-							<Text style={styles.CNA}>{user.name}</Text>
-						</View>
+										{
+											en: `${user.first_name}, ${user.last_name}`,
+											hk: user.chinese_name,
+											cn: user.chinese_name,
+										}[i18n.language]
+									}
+								</Text>
+								<Text style={styles.CNA}>{user.name}</Text>
+							</View>
+						</TouchableWithoutFeedback>
 					</View>
 					<View style={styles.additionalDetailsContainer}>
 						<View
