@@ -1,8 +1,14 @@
 import React from "react";
+import {
+	View,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	Animated,
+} from "react-native";
 import { useTranslation } from "react-i18next";
-import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import routes from "../navigations/routes";
 
+import routes from "../navigations/routes";
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
 
@@ -122,7 +128,6 @@ function ViewBookingListItem({
 }
 
 const styles = StyleSheet.create({
-	container: {},
 	leftSide: {
 		flex: 1,
 	},

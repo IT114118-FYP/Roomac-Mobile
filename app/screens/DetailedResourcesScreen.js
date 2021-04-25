@@ -1,17 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	View,
 	StyleSheet,
-	Image,
 	Text,
 	StatusBar,
-	Platform,
 	ScrollView,
 	FlatList,
 	Dimensions,
-	TouchableOpacity,
 	RefreshControl,
-	Animated,
 	Button,
 	ImageBackground,
 } from "react-native";

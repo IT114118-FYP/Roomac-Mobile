@@ -10,7 +10,7 @@ import CampusLocationsScreen from "../screens/CampusLocationsScreen";
 
 const Drawer = createDrawerNavigator();
 
-function AppDrawer(props) {
+function AppDrawer() {
 	return (
 		<Drawer.Navigator
 			drawerContent={(props) => <DrawerContent {...props} />}

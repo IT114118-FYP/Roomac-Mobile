@@ -76,6 +76,7 @@ function SelectTime({
 			{timeslot.map((item, index) => (
 				<Animatable.View key={index} animation="fadeInRight">
 					<TimeslotListItem
+						deletable={timeslot.length > 1 && index != 0}
 						onPress={() =>
 							timeslot.length > 1 &&
 							Alert.alert(

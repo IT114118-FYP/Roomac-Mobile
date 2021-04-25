@@ -11,4 +11,5 @@ export default {
 	Powder_Blue: "#9ad4d6",
 	Oxford_Blue: "#101935",
 	Light_Orange: "#f1b90e",
+	danger: "#df3a09",
 };

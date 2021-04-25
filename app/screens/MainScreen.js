@@ -29,7 +29,7 @@ import branchesApi from "../api/branches";
 import categoriesApi from "../api/categories";
 import resourcesApi from "../api/resources";
 import bookingsApi from "../api/bookings";
-import { Popup } from "popup-ui";
+import { LinearGradient } from "expo-linear-gradient";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
@@ -579,28 +579,28 @@ const styles = StyleSheet.create({
 		marginRight: sizing(3),
 	},
 	username: {
-		fontSize: 20,
+		fontSize: sizing(5.5),
 		fontWeight: "600",
 	},
 	searchIcon: {
-		margin: 2,
-		marginRight: 8,
+		margin: sizing(0.5),
+		marginRight: sizing(2),
 	},
 	searchBar: {
 		flexDirection: "row",
 		alignItems: "center",
 		backgroundColor: colors.backgroundPrimary,
-		borderRadius: 8,
-		padding: 12,
-		marginVertical: 8,
-		marginHorizontal: 24,
+		borderRadius: sizing(2),
+		padding: sizing(3),
+		marginVertical: sizing(2),
+		marginHorizontal: sizing(6),
 	},
 	categories: {
-		marginTop: 8,
+		marginTop: sizing(2),
 	},
 	categoriesTitle: {
-		marginBottom: 10,
-		marginLeft: 24,
+		marginBottom: sizing(2.5),
+		marginLeft: sizing(6),
 	},
 	loadingAnimation: {
 		alignItems: "center",
@@ -630,15 +630,15 @@ const styles = StyleSheet.create({
 		marginHorizontal: 12,
 	},
 	number: {
-		fontSize: 18,
+		fontSize: sizing(5),
 		fontWeight: "600",
 	},
 	title: {
-		fontSize: 16,
+		fontSize: sizing(4),
 		fontWeight: "500",
 	},
 	icon: {
-		marginRight: 5,
+		marginRight: sizing(1),
 	},
 	capacity: {
 		flexDirection: "row",
