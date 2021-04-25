@@ -214,7 +214,17 @@ function MainScreen({ navigation }) {
 										).format("H:mm")}`}
 										location={
 											Boolean(
-												activeBooking.resource.title_en
+												{
+													en:
+														activeBooking.resource
+															.title_en,
+													hk:
+														activeBooking.resource
+															.title_hk,
+													cn:
+														activeBooking.resource
+															.title_cn,
+												}[i18n.language]
 											)
 												? `${
 														activeBooking.resource
@@ -338,7 +348,19 @@ function MainScreen({ navigation }) {
 												item.end_time
 											).format("H:mm")}`}
 											location={
-												Boolean(item.resource.title_en)
+												Boolean(
+													{
+														en:
+															item.resource
+																.title_en,
+														hk:
+															item.resource
+																.title_hk,
+														cn:
+															item.resource
+																.title_cn,
+													}[i18n.language]
+												)
 													? `${
 															item.resource.number
 													  } • ${

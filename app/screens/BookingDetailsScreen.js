@@ -107,7 +107,13 @@ function BookingDetailsScreen({ route, navigation }) {
 				numberOfLines={1}
 				style={[presetStyles.marginHorizontal, styles.title]}
 			>
-				{Boolean(itemData.resource.title_en)
+				{Boolean(
+					{
+						en: itemData.resource.title_en,
+						hk: itemData.resource.title_hk,
+						cn: itemData.resource.title_cn,
+					}[i18n.language]
+				)
 					? `${itemData.resource.number} • ${
 							{
 								en: itemData.resource.title_en,

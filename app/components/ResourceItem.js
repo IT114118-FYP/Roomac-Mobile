@@ -50,6 +50,13 @@ function ResourceItem({ item, onPress, dense }) {
 						}
 					</Text>
 					<Text style={styles.title}>{`${item.number} ${
+						Boolean(
+							{
+								en: item.title_en,
+								hk: item.title_hk,
+								cn: item.title_cn,
+							}[i18n.language]
+						) &&
 						{
 							en: item.title_en,
 							hk: item.title_hk,

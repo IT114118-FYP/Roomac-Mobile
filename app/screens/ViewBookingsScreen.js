@@ -83,7 +83,13 @@ export const TimeSection = ({
 									: "no")
 							}
 							location={
-								Boolean(item.resource.title_en)
+								Boolean(
+									{
+										en: item.resource.title_en,
+										hk: item.resource.title_hk,
+										cn: item.resource.title_cn,
+									}[i18n.language]
+								)
 									? `${item.resource.number} • ${
 											{
 												en: item.resource.title_en,
