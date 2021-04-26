@@ -1,5 +1,5 @@
 import moment from "moment";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	StyleSheet,
@@ -11,15 +11,13 @@ import {
 	Modal,
 	RefreshControl,
 	Alert,
+	Button as DefaultButton,
 } from "react-native";
 
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import colors from "../themes/colors";
 import presetStyles, { sizing } from "../themes/presetStyles";
-import { axiosInstance } from "../api/config";
-import { useState } from "react";
-import { useEffect } from "react";
 import Markdown from "react-native-markdown-display";
 import Button from "../components/Button";
 import routes from "../navigations/routes";
@@ -28,6 +26,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CheckInScreen from "./CheckInScreen";
 import resourcesApi from "../api/resources";
 import bookingsApi from "../api/bookings";
+import branchesApi from "../api/branches";
+import MapView, { Marker } from "react-native-maps";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -38,6 +38,7 @@ function BookingDetailsScreen({ route, navigation }) {
 		"common",
 	]);
 	const [item, setItem] = useState(itemData);
+	const [branch, setBranch] = useState();
 	const [isLoading, setLoading] = useState(false);
 	const [tos, setTos] = useState();
 	const [isCheckInClicked, setCheckInClicked] = useState(
@@ -62,9 +63,74 @@ function BookingDetailsScreen({ route, navigation }) {
 			.finally(() => setLoading(false));
 	};
 
+	const fetchBranch = () =>
+		branchesApi
+			.fetchOne(item.resource.branch_id)
+			.then(({ data }) => setBranch(data))
+			.catch(console.log);
+
+	const onEditHandler = () => {
+		Alert.alert(t("editTitle"), t("editDescription"), [
+			{
+				text: t("continue"),
+				onPress: () => {
+					const resource = item.resource;
+					resource["tos"] = tos;
+					navigation.navigate(routes.screens.CREATE_BOOKING, {
+						timeslot: {
+							start: moment(item.start_time).format("HH:mm:ss"),
+							end: moment(item.end_time).format("HH:mm:ss"),
+						},
+						item: resource,
+						date: moment(item.start_time).format("YYYY-MM-DD"),
+						// dataSet: datasetData,
+						bookingId: item.id,
+						edit: true,
+					});
+				},
+			},
+			{
+				text: t("cancel"),
+				style: "destructive",
+				onPress: () =>
+					Alert.alert(t("cancel"), t("cancelDescription"), [
+						{
+							text: t("cancel"),
+							style: "destructive",
+							onPress: () => {
+								deleteBooking();
+							},
+						},
+						{
+							text: t(routes.screens.SETTINGS + ":cancel"),
+							style: "cancel",
+						},
+					]),
+			},
+			{
+				text: t(routes.screens.SETTINGS + ":cancel"),
+				style: "cancel",
+			},
+		]);
+	};
+
+	const deleteBooking = () => {
+		setLoading(true);
+		bookingsApi
+			.deleteOne(item.id)
+			.then(() => {
+				navigation.goBack();
+			})
+			.catch((error) => {
+				console.log(error);
+				alert(t("common:failed"));
+			})
+			.finally(() => setLoading(false));
+	};
+
 	useEffect(() => {
 		fetchTOS();
-		console.log(item);
+		fetchBranch();
 	}, []);
 
 	return (
@@ -155,54 +221,7 @@ function BookingDetailsScreen({ route, navigation }) {
 								marginRight: sizing(3),
 								backgroundColor: colors.Light_Orange,
 							}}
-							onPress={() => {
-								Alert.alert(
-									t("editTitle"),
-									t("editDescription"),
-									[
-										{
-											text: t(
-												routes.screens.SETTINGS +
-													":cancel"
-											),
-											style: "cancel",
-										},
-										{
-											text: t("continue"),
-											onPress: () => {
-												const resource = item.resource;
-												resource["tos"] = tos;
-												navigation.navigate(
-													routes.screens
-														.CREATE_BOOKING,
-													{
-														timeslot: {
-															start: moment(
-																item.start_time
-															).format(
-																"HH:mm:ss"
-															),
-															end: moment(
-																item.end_time
-															).format(
-																"HH:mm:ss"
-															),
-														},
-
-														item: resource,
-														date: moment(
-															item.start_time
-														).format("YYYY-MM-DD"),
-														// dataSet: datasetData,
-														bookingId: item.id,
-														edit: true,
-													}
-												);
-											},
-										},
-									]
-								);
-							}}
+							onPress={onEditHandler}
 						>
 							<MaterialIcons
 								name="edit"
@@ -273,6 +292,7 @@ function BookingDetailsScreen({ route, navigation }) {
 					<Text style={presetStyles.listHeader}>{t("status")}</Text>
 					<Text
 						style={{
+							marginTop: sizing(1),
 							fontSize: sizing(6),
 							color: colors.textPrimary,
 							fontWeight: "bold",
@@ -345,6 +365,76 @@ function BookingDetailsScreen({ route, navigation }) {
 					</Markdown>
 				</View>
 			)}
+			{branch && (
+				<>
+					<View
+						style={[
+							presetStyles.marginHorizontal,
+							presetStyles.row,
+							{
+								marginTop: sizing(6),
+							},
+						]}
+					>
+						<Text style={[presetStyles.listHeader, { flex: 1 }]}>
+							{t(
+								routes.screens.DETAILED_RESOURCES +
+									":campusLocation",
+								{
+									value: {
+										en: branch.title_en,
+										hk: branch.title_hk,
+										cn: branch.title_cn,
+									}[i18n.language],
+								}
+							)}
+						</Text>
+						<DefaultButton
+							title={t(
+								routes.screens.DETAILED_RESOURCES + ":resources"
+							)}
+							onPress={() =>
+								navigation.navigate(
+									routes.screens.CAMPUS_RESOURCES,
+									{
+										branch,
+									}
+								)
+							}
+						/>
+					</View>
+					<View style={styles.mapContainer}>
+						<MapView
+							// scrollEnabled={false}
+							showsUserLocation
+							style={{
+								width: "100%",
+								height: 200,
+							}}
+							initialRegion={{
+								latitude: Number(branch.lat),
+								longitude: Number(branch.lng),
+								latitudeDelta: 0.0922,
+								longitudeDelta: 0.0421,
+							}}
+						>
+							<Marker
+								coordinate={{
+									latitude: Number(branch.lat),
+									longitude: Number(branch.lng),
+								}}
+								title={
+									{
+										en: branch.title_en,
+										hk: branch.title_hk,
+										cn: branch.title_cn,
+									}[i18n.language]
+								}
+							/>
+						</MapView>
+					</View>
+				</>
+			)}
 
 			{isCheckInClicked && (
 				<Modal
@@ -409,6 +499,14 @@ const styles = StyleSheet.create({
 		fontSize: sizing(4),
 		color: colors.textSecondary,
 		marginLeft: sizing(2),
+	},
+	marginHorizontal: {
+		marginHorizontal: sizing(6),
+	},
+	mapContainer: {
+		alignItems: "center",
+		marginHorizontal: sizing(6),
+		marginVertical: sizing(3),
 	},
 });
 

@@ -101,8 +101,14 @@ export default {
 		checkIn: "簽到",
 		checkInAvailable: "{{value}} 後可簽到",
 		tos: "條款及細則",
-		editDescription: "通過編輯此預約，您將失去目前的預約。",
 		continue: "繼續",
+		status: "預約狀態",
+		editTitle: "編輯此預約",
+		editDescription:
+			"通過編輯此預約，您將失去目前的預約。 您也可以取消預約。",
+		continue: "編輯",
+		cancel: "取消預約",
+		cancelDescription: "取消預約後，預約將無法恢復。",
 	},
 	[routes.screens.SETTINGS]: {
 		settings: "設定",

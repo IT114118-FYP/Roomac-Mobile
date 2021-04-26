@@ -103,6 +103,13 @@ export default {
 		tos: "条款及细则",
 		editDescription: "通过编辑此预约，您将失去目前的预约。",
 		continue: "继续",
+		status: "预约状态",
+		editTitle: "编辑此预约",
+		editDescription:
+			"通过编辑此预约，您将失去目前的预约。您也可以取消预约。",
+		continue: "编辑",
+		cancel: "取消预约",
+		cancelDescription: "取消预约后，预约将无法恢复。",
 	},
 	[routes.screens.SETTINGS]: {
 		settings: "设定",

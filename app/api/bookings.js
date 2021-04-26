@@ -21,6 +21,15 @@ const update = (id, date, start, end) =>
 		end,
 	});
 
-const bookingsApi = { fetchFromUser, add, fetchRef, fetchOne, update };
+const deleteOne = (id) => axiosInstance.delete(`/api/resourcebookings/${id}`);
+
+const bookingsApi = {
+	fetchFromUser,
+	add,
+	fetchRef,
+	fetchOne,
+	update,
+	deleteOne,
+};
 
 export default bookingsApi;

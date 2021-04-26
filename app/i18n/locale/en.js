@@ -107,8 +107,11 @@ export default {
 		tos: "Terms & Conditions",
 		editTitle: "Edit this booking",
 		editDescription:
-			"By editing this booking, you will lose the current booking.",
-		continue: "continue",
+			"By editing this booking, you will lose the current booking. You can also cancel the booking.",
+		continue: "Edit This Booking",
+		cancel: "Cancel This Booking",
+		cancelDescription:
+			"Upon cancellation, the booking will not be recoverable.",
 	},
 	[routes.screens.SETTINGS]: {
 		settings: "Settings",
