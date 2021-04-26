@@ -84,9 +84,9 @@ export default {
 		results_bookingRef: "Booking Reference: {{value}}",
 		confirm_description: "Please check and confirm the following booking.",
 		lastStep: "Last step, almost finish!",
-		deleteTime: "Delete Time Section",
+		deleteTime: "Delete Time Session",
 		deleteTimeDescription:
-			"Deleting section({{value1}}) will also delete sections after {{value2}}",
+			"Deleting session({{value1}}) will also delete sessions after {{value2}}",
 		extend: "Extend to {{value}}",
 		changeTime: "Select Time",
 	},
