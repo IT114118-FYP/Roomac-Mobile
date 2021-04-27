@@ -16,6 +16,7 @@
     "@react-navigation/drawer": "^5.12.5",
     "@react-navigation/native": "^5.9.4",
     "@react-navigation/stack": "^5.14.4",
+    "@unimodules/core": "^7.1.0",
     "algoliasearch": "^4.9.0",
     "axios": "^0.21.1",
     "expo": "~40.0.0",
