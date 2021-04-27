@@ -3,6 +3,7 @@
     "name": "roomac",
     "slug": "roomac",
     "version": "1.0.0",
+    "privacy": "public",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -21,7 +22,8 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app will optionally use Face ID or Touch ID to save login"
       },
-      "bundleIdentifier": "com.mrggto.roomac"
+      "bundleIdentifier": "com.mrggto.roomac",
+      "buildNumber": "1.0.0"
     },
     "android": {
       "adaptiveIcon": {
