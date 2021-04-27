@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, useColorScheme } from "react-native";
 import { useTranslation } from "react-i18next";
 import { InstantSearch, connectSearchBox } from "react-instantsearch-native";
 
@@ -27,6 +27,18 @@ const RefineSearchBox = connectSearchBox(({ currentRefinement, refine }) => {
 
 function SearchScreen({ navigation }) {
 	const { t } = useTranslation([routes.screens.SEARCH]);
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		title: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+			marginTop: sizing(14),
+			marginBottom: sizing(2),
+			paddingHorizontal: sizing(6),
+		},
+	});
 
 	return (
 		<Screen style={styles.container}>
@@ -38,34 +50,5 @@ function SearchScreen({ navigation }) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {},
-	title: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-		marginTop: sizing(14),
-		marginBottom: sizing(2),
-		paddingHorizontal: sizing(6),
-	},
-	searchIcon: {
-		margin: 2,
-		marginRight: 8,
-	},
-	searchBar: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: colors.backgroundPrimary,
-		borderRadius: sizing(2),
-		paddingHorizontal: sizing(3),
-		marginVertical: sizing(2),
-		marginHorizontal: sizing(6),
-	},
-	searchInput: {
-		flex: 1,
-		paddingVertical: sizing(3),
-	},
-});
 
 export default SearchScreen;

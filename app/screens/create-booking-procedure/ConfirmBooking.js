@@ -1,26 +1,29 @@
 import React from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, useColorScheme } from "react-native";
 import moment from "moment";
 
 import TimeslotListItem from "../../components/TimeslotListItem";
 import presetStyles, { sizing } from "../../themes/presetStyles";
 import routes from "../../navigations/routes";
 import { useTranslation } from "react-i18next";
+import colors from "../../themes/colors";
 
 function ConfirmBooking({ timeslot, resource, date, branch }) {
 	const { t, i18n } = useTranslation([
 		routes.screens.CREATE_BOOKING,
 		"common",
 	]);
+	const colorScheme = useColorScheme();
 
 	return (
-		<View style={styles.container}>
+		<View>
 			<Text>{t("confirm_description")}</Text>
 			<Text
 				style={[
 					presetStyles.listHeader,
 					{
 						marginTop: sizing(4),
+						color: colors(colorScheme).textPrimary,
 					},
 				]}
 			>
@@ -46,9 +49,5 @@ function ConfirmBooking({ timeslot, resource, date, branch }) {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {},
-});
 
 export default ConfirmBooking;

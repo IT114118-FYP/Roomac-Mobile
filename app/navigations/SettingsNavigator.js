@@ -1,4 +1,5 @@
 import React from "react";
+import { useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import routes from "./routes";
@@ -10,6 +11,7 @@ import ChangeLanguageScreen from "../screens/ChangeLanguageScreen";
 const Stack = createStackNavigator();
 
 export default function SettingsNavigator() {
+	const colorScheme = useColorScheme();
 	return (
 		<Stack.Navigator initialRouteName={routes.screens.SETTINGS}>
 			<Stack.Screen
@@ -26,7 +28,10 @@ export default function SettingsNavigator() {
 					headerBackTitleVisible: false,
 					headerTitle: false,
 					headerTransparent: true,
-					headerTintColor: colors.textPrimary,
+					headerTintColor:
+						colorScheme === "light"
+							? colors().backgroundPrimary
+							: colors(colorScheme).textPrimary,
 				}}
 			/>
 			<Stack.Screen
@@ -36,7 +41,10 @@ export default function SettingsNavigator() {
 					headerBackTitleVisible: false,
 					headerTitle: false,
 					headerTransparent: true,
-					headerTintColor: colors.textPrimary,
+					headerTintColor:
+						colorScheme === "light"
+							? colors().backgroundPrimary
+							: colors(colorScheme).textPrimary,
 				}}
 			/>
 		</Stack.Navigator>

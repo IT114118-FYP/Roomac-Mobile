@@ -13,6 +13,7 @@ import {
 	TouchableOpacity,
 	Image,
 	Button,
+	useColorScheme,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import MapView, { Marker } from "react-native-maps";
@@ -30,11 +31,42 @@ const { width, height } = Dimensions.get("screen");
 
 function CampusLocationsScreen({ navigation }) {
 	const { t, i18n } = useTranslation([routes.screens.CAMPUS_LOCATIONS]);
+	const colorScheme = useColorScheme();
 	const [isLoading, setLoading] = useState(true);
 	const [branches, setBranches] = useState([]);
 	const [selected, setSelected] = useState(1);
 
 	const bottomSheetRef = useRef(null);
+
+	const styles = StyleSheet.create({
+		container: {
+			flex: 1,
+		},
+		map: {
+			height,
+			width,
+		},
+		drawerToggle: {
+			position: "absolute",
+			top: Constants.statusBarHeight,
+			margin: sizing(3),
+			padding: sizing(3),
+			borderRadius: sizing(6),
+			backgroundColor: colors(colorScheme).backgroundPrimary,
+		},
+		contentContainer: {
+			flex: 1,
+			alignItems: "center",
+		},
+		list: {
+			position: "absolute",
+			bottom: sizing(10),
+		},
+		sheetContainer: {
+			// flexDirection: "row",
+			padding: sizing(2),
+		},
+	});
 
 	// variables
 	const snapPoints = useMemo(() => ["7%", "40%"], []);
@@ -102,7 +134,7 @@ function CampusLocationsScreen({ navigation }) {
 					>
 						<Feather
 							name="menu"
-							color={colors.textPrimary}
+							color={colors(colorScheme).textPrimary}
 							size={sizing(5.5)}
 						/>
 					</TouchableOpacity>
@@ -112,12 +144,7 @@ function CampusLocationsScreen({ navigation }) {
 						snapPoints={snapPoints}
 						onChange={handleSheetChanges}
 					>
-						<View
-							style={{
-								// flexDirection: "row",
-								margin: sizing(2),
-							}}
-						>
+						<View style={styles.sheetContainer}>
 							<View
 								style={[
 									presetStyles.row,
@@ -181,31 +208,5 @@ function CampusLocationsScreen({ navigation }) {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	map: {
-		height,
-		width,
-	},
-	drawerToggle: {
-		position: "absolute",
-		top: Constants.statusBarHeight,
-		margin: sizing(3),
-		padding: sizing(3),
-		borderRadius: sizing(6),
-		backgroundColor: colors.backgroundPrimary,
-	},
-	contentContainer: {
-		flex: 1,
-		alignItems: "center",
-	},
-	list: {
-		position: "absolute",
-		bottom: sizing(10),
-	},
-});
 
 export default CampusLocationsScreen;

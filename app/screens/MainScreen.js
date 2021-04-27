@@ -9,6 +9,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	SafeAreaView,
+	useColorScheme,
 } from "react-native";
 import moment from "moment";
 import * as Animatable from "react-native-animatable";
@@ -29,11 +30,11 @@ import branchesApi from "../api/branches";
 import categoriesApi from "../api/categories";
 import resourcesApi from "../api/resources";
 import bookingsApi from "../api/bookings";
-import { LinearGradient } from "expo-linear-gradient";
 
 function MainScreen({ navigation }) {
 	const { user } = useAuth();
 	const { t, i18n } = useTranslation([routes.screens.HOME, "common"]);
+	const colorScheme = useColorScheme();
 
 	const [isLoading, setLoading] = useState(false);
 	const [selectedCategory, setSelectedCategory] = useState(1);
@@ -106,25 +107,108 @@ function MainScreen({ navigation }) {
 		return unsubscribe;
 	}, [navigation]);
 
+	const styles = StyleSheet.create({
+		menuContainer: {
+			marginBottom: sizing(2.5),
+			marginLeft: sizing(6),
+			paddingTop: sizing(6),
+		},
+		drawerToggle: {
+			marginRight: sizing(3),
+			padding: sizing(2),
+		},
+		username: {
+			fontSize: sizing(5.5),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+		},
+		searchIcon: {
+			margin: sizing(0.5),
+			marginRight: sizing(2),
+		},
+		searchBar: {
+			flexDirection: "row",
+			alignItems: "center",
+			backgroundColor:
+				colorScheme === "light"
+					? colors(colorScheme).backgroundPrimary
+					: colors(colorScheme).backgroundSecondary,
+			borderRadius: sizing(2),
+			padding: sizing(3),
+			marginVertical: sizing(2),
+			marginHorizontal: sizing(6),
+		},
+		categories: {
+			marginTop: sizing(2),
+			color: colors(colorScheme).textPrimary,
+		},
+		categoriesTitle: {
+			color: colors(colorScheme).textPrimary,
+			marginBottom: sizing(2.5),
+			marginLeft: sizing(6),
+		},
+		loadingAnimation: {
+			alignItems: "center",
+			justifyContent: "center",
+			flex: 1,
+		},
+		horizontalSeparator: {
+			width: sizing(0.5),
+		},
+		resourceHeaderRow: {
+			marginHorizontal: sizing(6),
+			flexDirection: "row",
+		},
+		resourcesContainer: {
+			marginTop: sizing(4),
+		},
+		resourcesTitle: {
+			color: colors(colorScheme).textPrimary,
+			flex: 1,
+		},
+		image: {
+			height: sizing(38),
+			borderRadius: sizing(4),
+			resizeMode: "cover",
+		},
+		infoContainer: {
+			marginVertical: 10,
+			marginHorizontal: 12,
+		},
+		number: {
+			fontSize: sizing(5),
+			fontWeight: "600",
+		},
+		title: {
+			fontSize: sizing(4),
+			fontWeight: "500",
+		},
+		icon: {
+			marginRight: sizing(1),
+		},
+		capacity: {
+			flexDirection: "row",
+			alignItems: "center",
+		},
+		branchTitle: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			marginTop: sizing(4),
+			marginBottom: sizing(8),
+			color: colors(colorScheme).textPrimary,
+		},
+	});
+
 	return (
 		<Screen style={styles.container}>
-			<View
-				style={[
-					presetStyles.row,
-					{
-						marginBottom: sizing(2.5),
-						marginLeft: sizing(6),
-						paddingTop: sizing(6),
-					},
-				]}
-			>
+			<View style={[presetStyles.row, styles.menuContainer]}>
 				<TouchableOpacity
 					style={styles.drawerToggle}
 					onPress={navigation.toggleDrawer}
 				>
 					<Feather
 						name="menu"
-						color={colors.textPrimary}
+						color={colors(colorScheme).textPrimary}
 						size={sizing(5.5)}
 					/>
 				</TouchableOpacity>
@@ -145,12 +229,12 @@ function MainScreen({ navigation }) {
 				<Feather
 					name="search"
 					size={16}
-					color={colors.textSecondary}
+					color={colors(colorScheme).textSecondary}
 					style={styles.searchIcon}
 				/>
 				<Text
 					style={{
-						color: colors.textSecondary,
+						color: colors(colorScheme).textSecondary,
 					}}
 				>
 					{t("searchTitle")}
@@ -188,6 +272,8 @@ function MainScreen({ navigation }) {
 										presetStyles.listHeader,
 										{
 											marginBottom: sizing(2),
+											color: colors(colorScheme)
+												.textPrimary,
 										},
 									]}
 								>
@@ -319,7 +405,15 @@ function MainScreen({ navigation }) {
 						{upcoming.length !== 0 && (
 							<View>
 								<View style={presetStyles.row}>
-									<Text style={presetStyles.listHeader}>
+									<Text
+										style={[
+											presetStyles.listHeader,
+											{
+												color: colors(colorScheme)
+													.textPrimary,
+											},
+										]}
+									>
 										{t("common:today")}
 									</Text>
 								</View>
@@ -406,8 +500,8 @@ function MainScreen({ navigation }) {
 					<View style={styles.categories}>
 						<Text
 							style={[
-								styles.categoriesTitle,
 								presetStyles.listHeader,
+								styles.categoriesTitle,
 							]}
 						>
 							{t("categories")}
@@ -473,8 +567,8 @@ function MainScreen({ navigation }) {
 					<View style={styles.resourceHeaderRow}>
 						<Text
 							style={[
-								styles.resourcesTitle,
 								presetStyles.listHeader,
+								styles.resourcesTitle,
 							]}
 						>
 							{t("resources", { value: resources.length })}
@@ -486,12 +580,12 @@ function MainScreen({ navigation }) {
 							<MaterialCommunityIcons
 								name="office-building"
 								size={24}
-								color={colors.textSecondary}
+								color={colors(colorScheme).textSecondary}
 							/>
 							<Text
 								style={{
 									fontSize: sizing(3),
-									color: colors.textSecondary,
+									color: colors(colorScheme).textSecondary,
 									fontWeight: "500",
 								}}
 							>
@@ -542,8 +636,10 @@ function MainScreen({ navigation }) {
 						<ScrollView
 							showsVerticalScrollIndicator={false}
 							style={{
-								margin: sizing(4),
-								marginBottom: 0,
+								padding: sizing(4),
+								paddingBottom: 0,
+								backgroundColor: colors(colorScheme)
+									.backgroundSecondary,
 							}}
 						>
 							<TouchableOpacity
@@ -552,7 +648,7 @@ function MainScreen({ navigation }) {
 								<MaterialCommunityIcons
 									name="close"
 									size={24}
-									color={colors.textSecondary}
+									color={colors(colorScheme).textSecondary}
 								/>
 							</TouchableOpacity>
 							<View style={presetStyles.marginHorizontal}>
@@ -594,84 +690,5 @@ function MainScreen({ navigation }) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {},
-	drawerToggle: {
-		marginRight: sizing(3),
-	},
-	username: {
-		fontSize: sizing(5.5),
-		fontWeight: "600",
-	},
-	searchIcon: {
-		margin: sizing(0.5),
-		marginRight: sizing(2),
-	},
-	searchBar: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: colors.backgroundPrimary,
-		borderRadius: sizing(2),
-		padding: sizing(3),
-		marginVertical: sizing(2),
-		marginHorizontal: sizing(6),
-	},
-	categories: {
-		marginTop: sizing(2),
-	},
-	categoriesTitle: {
-		marginBottom: sizing(2.5),
-		marginLeft: sizing(6),
-	},
-	loadingAnimation: {
-		alignItems: "center",
-		justifyContent: "center",
-		flex: 1,
-	},
-	horizontalSeparator: {
-		width: sizing(0.5),
-	},
-	resourceHeaderRow: {
-		marginHorizontal: sizing(6),
-		flexDirection: "row",
-	},
-	resourcesContainer: {
-		marginTop: sizing(4),
-	},
-	resourcesTitle: {
-		flex: 1,
-	},
-	image: {
-		height: 150,
-		borderRadius: 15,
-		resizeMode: "cover",
-	},
-	infoContainer: {
-		marginVertical: 10,
-		marginHorizontal: 12,
-	},
-	number: {
-		fontSize: sizing(5),
-		fontWeight: "600",
-	},
-	title: {
-		fontSize: sizing(4),
-		fontWeight: "500",
-	},
-	icon: {
-		marginRight: sizing(1),
-	},
-	capacity: {
-		flexDirection: "row",
-		alignItems: "center",
-	},
-	branchTitle: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		marginTop: sizing(4),
-		marginBottom: sizing(8),
-	},
-});
 
 export default MainScreen;

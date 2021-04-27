@@ -6,6 +6,7 @@ import {
 	Dimensions,
 	Animated,
 	ActivityIndicator,
+	useColorScheme,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 
@@ -39,14 +40,9 @@ function CreateBookingScreen({ route, navigation }) {
 		edit = false,
 	} = route.params;
 	const { t, i18n } = useTranslation([routes.screens.CREATE_BOOKING]);
+	const colorScheme = useColorScheme();
 	const scrollX = React.useRef(new Animated.Value(0)).current;
 	const flatListRef = useRef(null);
-	console.log({
-		timeslot: timeslotData,
-		item: resource,
-		date: dateData,
-		bookingId,
-	});
 
 	const [timeslot, setTimeslot] = useState([timeslotData]);
 	const [date, setDate] = useState(dateData);
@@ -78,12 +74,10 @@ function CreateBookingScreen({ route, navigation }) {
 		inputRange: inputRangeOpacity,
 		outputRange: [0, 1, 0],
 	});
-
 	const scrollToIndex = (index) => {
 		flatListRef.current.scrollToIndex({ animated: true, index: index });
 		setListIndex(index);
 	};
-
 	const handleOnMainPress = (i) => {
 		switch (i) {
 			case 2:
@@ -98,7 +92,6 @@ function CreateBookingScreen({ route, navigation }) {
 				break;
 		}
 	};
-
 	const procedure = [
 		{
 			step: 1,
@@ -125,7 +118,6 @@ function CreateBookingScreen({ route, navigation }) {
 			preceedButtonText: t("viewBookings"),
 		},
 	];
-
 	const addNewSection = (time) => setTimeslot([...timeslot, time]);
 	const removeSection = (time) => {
 		const deleteTime = moment(time.start, "HH:mm:ss");
@@ -136,7 +128,6 @@ function CreateBookingScreen({ route, navigation }) {
 		);
 		// setTimeslot(timeslot.filter((t) => t.id !== time.id));
 	};
-
 	const replaceSection = (item, date) => {
 		setTimeslot([item]);
 		setDate(date);
@@ -243,6 +234,30 @@ function CreateBookingScreen({ route, navigation }) {
 		fetchAll();
 	}, []);
 
+	const styles = StyleSheet.create({
+		container: {
+			marginHorizontal: sizing(8),
+			marginTop: sizing(12),
+		},
+		title: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+			marginBottom: sizing(2),
+		},
+		next: {
+			color: colors(colorScheme).textSecondary,
+			fontWeight: "400",
+		},
+		stepper: {
+			marginTop: sizing(4),
+		},
+		button: {
+			paddingVertical: sizing(2),
+			paddingHorizontal: sizing(4),
+		},
+	});
+
 	return (
 		<Screen>
 			{isLoading ? (
@@ -276,7 +291,7 @@ function CreateBookingScreen({ route, navigation }) {
 							currentStep={listIndex + 1}
 							steps={procedure.length}
 							height={sizing(2)}
-							color={colors.primary}
+							color={colors(colorScheme).primary}
 						/>
 					</View>
 					<Animated.FlatList
@@ -327,7 +342,8 @@ function CreateBookingScreen({ route, navigation }) {
 													},
 												]}
 												titleStyle={{
-													color: colors.primary,
+													color: colors(colorScheme)
+														.primary,
 												}}
 												title={t("back")}
 												onPress={() => {
@@ -397,29 +413,5 @@ function CreateBookingScreen({ route, navigation }) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		marginHorizontal: sizing(8),
-		marginTop: sizing(12),
-	},
-	title: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-		marginBottom: sizing(2),
-	},
-	next: {
-		color: colors.textSecondary,
-		fontWeight: "400",
-	},
-	stepper: {
-		marginTop: sizing(4),
-	},
-	button: {
-		paddingVertical: sizing(2),
-		paddingHorizontal: sizing(4),
-	},
-});
 
 export default CreateBookingScreen;

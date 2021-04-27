@@ -10,6 +10,7 @@ import {
 	RefreshControl,
 	TouchableWithoutFeedback,
 	Keyboard,
+	useColorScheme,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
@@ -28,6 +29,7 @@ const valuesToString = (object) =>
 	Object.values(object).join(" ").toLowerCase();
 
 function CampusResourcesScreen({ route, navigation }) {
+	const colorScheme = useColorScheme();
 	const { branch } = route.params;
 	const { t, i18n } = useTranslation([
 		routes.screens.CAMPUS_RESOURCES,
@@ -80,6 +82,26 @@ function CampusResourcesScreen({ route, navigation }) {
 		fetchResources();
 	}, []);
 
+	const styles = StyleSheet.create({
+		container: {
+			marginTop: sizing(4),
+		},
+		imageContainer: {
+			height: height / 4,
+		},
+		tint: { flex: 1, justifyContent: "flex-end" },
+		title: {
+			fontSize: sizing(7),
+			fontWeight: "bold",
+			color:
+				colorScheme === "light"
+					? colors(colorScheme).backgroundPrimary
+					: colors(colorScheme).textPrimary,
+			textShadowColor: colors(colorScheme).textPrimary,
+			padding: sizing(6),
+		},
+	});
+
 	return (
 		<ScrollView
 			refreshControl={
@@ -89,6 +111,9 @@ function CampusResourcesScreen({ route, navigation }) {
 					title={t("common:pullToRefresh")}
 				/>
 			}
+			style={{
+				backgroundColor: colors(colorScheme).backgroundPrimary,
+			}}
 		>
 			<StatusBar barStyle="light-content" animated={true} />
 			<ImageBackground
@@ -151,22 +176,5 @@ function CampusResourcesScreen({ route, navigation }) {
 		</ScrollView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		marginTop: sizing(4),
-	},
-	imageContainer: {
-		height: height / 4,
-	},
-	tint: { flex: 1, justifyContent: "flex-end" },
-	title: {
-		fontSize: sizing(7),
-		fontWeight: "bold",
-		color: colors.backgroundPrimary,
-		textShadowColor: colors.textPrimary,
-		padding: sizing(6),
-	},
-});
 
 export default CampusResourcesScreen;

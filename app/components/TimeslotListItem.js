@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, useColorScheme } from "react-native";
 import moment from "moment";
 import Swipeable from "react-native-gesture-handler/Swipeable";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -14,6 +14,8 @@ export default function TimeslotListItem({
 	onPress,
 	deletable,
 }) {
+	const colorScheme = useColorScheme();
+
 	return (
 		<Swipeable
 			enabled={deletable}
@@ -30,15 +32,15 @@ export default function TimeslotListItem({
 							// padding: sizing(2),
 							marginLeft: sizing(2),
 							borderRadius: sizing(12),
-							// backgroundColor: colors.Light_Orange + "33",
+							// backgroundColor: colors(colorScheme).Light_Orange + "33",
 							alignItems: "center",
 							justifyContent: "center",
 						}}
 					>
 						<MaterialCommunityIcons
-							name="close"
+							name="minus"
 							size={sizing(7.5)}
-							color={colors.danger}
+							color={colors(colorScheme).danger}
 						/>
 					</TouchableOpacity>
 				</View>
@@ -51,7 +53,10 @@ export default function TimeslotListItem({
 					presetStyles.row,
 					{
 						padding: sizing(3),
-						backgroundColor: colors.backgroundPrimary,
+						backgroundColor:
+							colorScheme === "light"
+								? colors(colorScheme).backgroundPrimary
+								: colors(colorScheme).backgroundSecondary,
 						borderRadius: sizing(2),
 						marginTop: sizing(2),
 					},
@@ -66,18 +71,20 @@ export default function TimeslotListItem({
 							moment("12:00", "H:mm"),
 							"hour"
 						)
-							? colors.secondary
-							: colors.Light_Orange,
+							? colors().secondary
+							: colors().Light_Orange,
 						marginRight: sizing(2),
 					}}
 				/>
-				<Text style={{ flex: 1 }}>
+				<Text
+					style={{ flex: 1, color: colors(colorScheme).textPrimary }}
+				>
 					{moment(start, "HH:mm:ss").format("H:mm")} -{" "}
 					{moment(end, "HH:mm:ss").format("H:mm")}
 				</Text>
 				<Text
 					style={{
-						color: colors.textSecondary,
+						color: colors(colorScheme).textSecondary,
 					}}
 				>
 					{location}

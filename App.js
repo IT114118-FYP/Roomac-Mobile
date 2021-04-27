@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LogBox, BackHandler, Alert } from "react-native";
+import { LogBox, Alert } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -22,8 +22,8 @@ import bookingsApi from "./app/api/bookings";
 export default function App() {
 	const [user, setUser] = useState();
 	const [isReady, setIsReady] = useState(false);
-	const netInfo = useNetInfo();
 	const { t } = useTranslation(["app", "common"]);
+	const netInfo = useNetInfo();
 
 	if (netInfo.type !== "unknown" && netInfo.isInternetReachable === false) {
 		Popup.show({
@@ -94,29 +94,6 @@ export default function App() {
 					},
 				});
 			});
-
-	const fetchHasActiveBooking = () => {
-		bookingsApi
-			.fetchFromUser(
-				user.id,
-				moment().format("YYYY-MM-DD"),
-				moment().format("YYYY-MM-DD")
-			)
-			.then(({ data }) => {
-				data.forEach((booking) => {
-					if (
-						moment().isBetween(booking.start_time, booking.end_time)
-					) {
-						Popup.show({
-							type: "Danger",
-							title: t("error"),
-							buttonText: t("common:ok"),
-							callback: () => {},
-						});
-					}
-				});
-			});
-	};
 
 	useEffect(() => {
 		restoreToken();

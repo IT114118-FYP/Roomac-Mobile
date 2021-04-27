@@ -1,15 +1,16 @@
 import React from "react";
+import { useColorScheme } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import routes from "./routes";
 import ViewBookingsScreen from "../screens/ViewBookingsScreen";
 import BookingDetailsScreen from "../screens/BookingDetailsScreen";
 import colors from "../themes/colors";
-import EditBookingScreen from "../screens/EditBookingScreen";
 
 const Stack = createStackNavigator();
 
 export default function BookingsNavigator() {
+	const colorScheme = useColorScheme();
 	return (
 		<Stack.Navigator initialRouteName={routes.screens.VIEW_BOOKINGS}>
 			<Stack.Screen
@@ -26,17 +27,10 @@ export default function BookingsNavigator() {
 					headerBackTitleVisible: false,
 					headerTitle: false,
 					headerTransparent: true,
-					headerTintColor: colors.backgroundPrimary,
-				}}
-			/>
-			<Stack.Screen
-				name={routes.screens.EDIT_BOOKING}
-				component={EditBookingScreen}
-				options={{
-					headerBackTitleVisible: false,
-					headerTitle: false,
-					headerTransparent: true,
-					headerTintColor: colors.textPrimary,
+					headerTintColor:
+						colorScheme === "light"
+							? colors().backgroundPrimary
+							: colors(colorScheme).textPrimary,
 				}}
 			/>
 		</Stack.Navigator>

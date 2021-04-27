@@ -6,6 +6,7 @@ import {
 	ScrollView,
 	TouchableOpacity,
 	RefreshControl,
+	useColorScheme,
 } from "react-native";
 import moment from "moment";
 import { Feather, FontAwesome } from "@expo/vector-icons";
@@ -31,91 +32,116 @@ export const TimeSection = ({
 	t,
 	i18n,
 	showStatus,
-}) => (
-	<>
-		{data.length !== 0 && (
-			<Animatable.View animation="fadeInUp" style={styles.section}>
-				<View style={presetStyles.row}>
-					<Text style={styles.header}>{title}</Text>
-					{children}
-				</View>
-				{data.map((item, index) => (
-					<Animatable.View
-						animation="fadeInUp"
-						delay={index * 100}
-						key={item.id}
-						style={styles.bookingListItem}
-					>
-						<ViewBookingListItem
-							bookingData={item}
-							date={moment(item.start_time).format("LL")}
-							period={`${moment(item.start_time).format(
-								"H:mm"
-							)} - ${moment(item.end_time).format("H:mm")}`}
-							status={
-								showStatus &&
-								(item.checkin_time != null
-									? t(
-											moment(item.checkin_time).isAfter(
+}) => {
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		header: {
+			fontSize: sizing(3.5),
+			color: colors(colorScheme).textSecondary,
+			flex: 1,
+		},
+		section: {
+			marginBottom: sizing(4),
+		},
+		bookingListItem: {
+			marginTop: sizing(3),
+		},
+	});
+
+	return (
+		<>
+			{data.length !== 0 && (
+				<Animatable.View animation="fadeInUp" style={styles.section}>
+					<View style={presetStyles.row}>
+						<Text style={styles.header}>{title}</Text>
+						{children}
+					</View>
+					{data.map((item, index) => (
+						<Animatable.View
+							animation="fadeInUp"
+							delay={index * 100}
+							key={item.id}
+							style={styles.bookingListItem}
+						>
+							<ViewBookingListItem
+								bookingData={item}
+								date={moment(item.start_time).format("LL")}
+								period={`${moment(item.start_time).format(
+									"H:mm"
+								)} - ${moment(item.end_time).format("H:mm")}`}
+								status={
+									showStatus &&
+									(item.checkin_time != null
+										? t(
+												moment(
+													item.checkin_time
+												).isAfter(
+													moment(item.start_time).add(
+														15,
+														"minutes"
+													)
+												)
+													? "common:late"
+													: "common:checkedIn",
+												{
+													value: moment(
+														item.checkin_time
+													).format("HH:mm"),
+												}
+										  )
+										: t("common:notCheckIn"))
+								}
+								statusLate={
+									showStatus &&
+									(item.checkin_time == null
+										? "na"
+										: moment(item.checkin_time).isAfter(
 												moment(item.start_time).add(
 													15,
-													"minutes"
+													"m"
 												)
-											)
-												? "common:late"
-												: "common:checkedIn",
-											{
-												value: moment(
-													item.checkin_time
-												).format("HH:mm"),
-											}
-									  )
-									: t("common:notCheckIn"))
-							}
-							statusLate={
-								showStatus &&
-								(item.checkin_time == null
-									? "na"
-									: moment(item.checkin_time).isAfter(
-											moment(item.start_time).add(15, "m")
-									  )
-									? "late"
-									: "no")
-							}
-							location={
-								Boolean(
-									{
-										en: item.resource.title_en,
-										hk: item.resource.title_hk,
-										cn: item.resource.title_cn,
-									}[i18n.language]
-								)
-									? `${item.resource.number} • ${
-											{
-												en: item.resource.title_en,
-												hk: item.resource.title_hk,
-												cn: item.resource.title_cn,
-											}[i18n.language]
-									  }`
-									: item.resource.number
-							}
-							onPress={() =>
-								navigation.navigate(
-									routes.screens.BOOKING_DETAILS,
-									{
-										item,
-										checkInClicked: false,
-									}
-								)
-							}
-							disabled={item.checkin_time == null ? false : true}
-						/>
-					</Animatable.View>
-				))}
-			</Animatable.View>
-		)}
-	</>
-);
+										  )
+										? "late"
+										: "no")
+								}
+								location={
+									Boolean(
+										{
+											en: item.resource.title_en,
+											hk: item.resource.title_hk,
+											cn: item.resource.title_cn,
+										}[i18n.language]
+									)
+										? `${item.resource.number} • ${
+												{
+													en: item.resource.title_en,
+													hk: item.resource.title_hk,
+													cn: item.resource.title_cn,
+												}[i18n.language]
+										  }`
+										: item.resource.number
+								}
+								onPress={() =>
+									navigation.navigate(
+										routes.screens.BOOKING_DETAILS,
+										{
+											item,
+											checkInClicked: false,
+										}
+									)
+								}
+								disabled={
+									item.checkin_time == null ? false : true
+								}
+							/>
+						</Animatable.View>
+					))}
+				</Animatable.View>
+			)}
+		</>
+	);
+};
 
 function ViewBookingsScreen({ navigation }) {
 	const { t, i18n } = useTranslation([
@@ -123,6 +149,7 @@ function ViewBookingsScreen({ navigation }) {
 		"common",
 	]);
 	const { user } = useAuth();
+	const colorScheme = useColorScheme();
 	const [isLoading, setLoading] = useState(false);
 	const [historyOptionsIndex, setHistoryOptionsIndex] = useState(0);
 	const [activeBooking, setActiveBooking] = useState(null);
@@ -170,9 +197,9 @@ function ViewBookingsScreen({ navigation }) {
 			});
 	};
 
-	// useEffect(() => {
-	// 	fetchUserBookings();
-	// }, [historyOptionsIndex]);
+	useEffect(() => {
+		fetchUserBookings();
+	}, [historyOptionsIndex]);
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -183,7 +210,35 @@ function ViewBookingsScreen({ navigation }) {
 
 		// Return the function to unsubscribe from the event so it gets removed on unmount
 		return unsubscribe;
-	}, [navigation, historyOptionsIndex]);
+	}, [navigation]);
+
+	const styles = StyleSheet.create({
+		container: {
+			paddingHorizontal: sizing(6),
+		},
+		drawerToggle: {
+			marginTop: sizing(5),
+			paddingHorizontal: sizing(6),
+		},
+		title: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+			marginVertical: sizing(6),
+			paddingHorizontal: sizing(6),
+		},
+		header: {
+			fontSize: sizing(3.5),
+			color: colors(colorScheme).textSecondary,
+			flex: 1,
+		},
+		section: {
+			marginBottom: sizing(4),
+		},
+		bookingListItem: {
+			marginTop: sizing(3),
+		},
+	});
 
 	return (
 		<Screen>
@@ -193,7 +248,7 @@ function ViewBookingsScreen({ navigation }) {
 			>
 				<Feather
 					name="menu"
-					color={colors.textPrimary}
+					color={colors(colorScheme).textPrimary}
 					size={sizing(5.5)}
 				/>
 			</TouchableOpacity>
@@ -328,7 +383,8 @@ function ViewBookingsScreen({ navigation }) {
 							>
 								<Text
 									style={{
-										color: colors.textSecondary,
+										color: colors(colorScheme)
+											.textSecondary,
 									}}
 								>
 									{t("noBookings")}
@@ -336,7 +392,8 @@ function ViewBookingsScreen({ navigation }) {
 								<Button
 									title={t("browse")}
 									style={{
-										backgroundColor: colors.Cyber_Grape,
+										backgroundColor: colors(colorScheme)
+											.Cyber_Grape,
 										paddingVertical: sizing(2),
 										marginVertical: sizing(4),
 									}}
@@ -378,12 +435,13 @@ function ViewBookingsScreen({ navigation }) {
 								<FontAwesome
 									name="exchange"
 									size={sizing(3)}
-									color={colors.textSecondary}
+									color={colors(colorScheme).textSecondary}
 								/>
 								<Text
 									style={{
 										marginLeft: sizing(2),
-										color: colors.textSecondary,
+										color: colors(colorScheme)
+											.textSecondary,
 										fontSize: sizing(3.5),
 									}}
 								>
@@ -400,33 +458,5 @@ function ViewBookingsScreen({ navigation }) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: sizing(6),
-	},
-	drawerToggle: {
-		marginTop: sizing(5),
-		paddingHorizontal: sizing(6),
-	},
-	title: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-		marginVertical: sizing(6),
-		paddingHorizontal: sizing(6),
-	},
-	header: {
-		fontSize: sizing(3.5),
-		color: colors.textSecondary,
-		flex: 1,
-	},
-	section: {
-		marginBottom: sizing(4),
-	},
-	bookingListItem: {
-		marginTop: sizing(3),
-	},
-});
 
 export default ViewBookingsScreen;

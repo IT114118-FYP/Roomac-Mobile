@@ -9,6 +9,7 @@ import {
 	TouchableOpacity,
 	Modal,
 	FlatList,
+	useColorScheme,
 } from "react-native";
 import moment from "moment";
 import * as Animatable from "react-native-animatable";
@@ -33,6 +34,7 @@ function SelectTime({
 	replaceSection,
 }) {
 	const [isSelectTimeOpen, setSelectTimeOpen] = useState(false);
+	const colorScheme = useColorScheme();
 	const { t, i18n } = useTranslation([
 		routes.screens.CREATE_BOOKING,
 		"common",
@@ -65,7 +67,12 @@ function SelectTime({
 
 	return (
 		<ScrollView style={styles.container}>
-			<Text style={[presetStyles.listHeader]}>
+			<Text
+				style={[
+					presetStyles.listHeader,
+					{ color: colors(colorScheme).textPrimary },
+				]}
+			>
 				{moment(date, "YYYY-MM-DD").calendar({
 					sameDay: t("common:timeslot_sameDay"),
 					nextDay: t("common:timeslot_nextDay"),
@@ -79,6 +86,7 @@ function SelectTime({
 						deletable={timeslot.length > 1 && index != 0}
 						onPress={() =>
 							timeslot.length > 1 &&
+							index != 0 &&
 							Alert.alert(
 								t("deleteTime"),
 								t("deleteTimeDescription", {
@@ -133,12 +141,12 @@ function SelectTime({
 						<MaterialCommunityIcons
 							name="plus-circle-outline"
 							size={sizing(5)}
-							color={colors.primary}
+							color={colors(colorScheme).primary}
 						/>
 						<Text
 							style={{
 								marginLeft: sizing(2),
-								color: colors.primary,
+								color: colors(colorScheme).primary,
 								fontSize: sizing(4),
 							}}
 						>
@@ -159,12 +167,12 @@ function SelectTime({
 						<MaterialCommunityIcons
 							name="calendar"
 							size={sizing(5)}
-							color={colors.primary}
+							color={colors(colorScheme).primary}
 						/>
 						<Text
 							style={{
 								marginLeft: sizing(2),
-								color: colors.primary,
+								color: colors(colorScheme).primary,
 								fontSize: sizing(4),
 							}}
 						>
@@ -188,7 +196,7 @@ function SelectTime({
 						<MaterialCommunityIcons
 							name="close"
 							size={24}
-							color={colors.textSecondary}
+							color={colors(colorScheme).textSecondary}
 						/>
 					</TouchableOpacity>
 					<FlatList

@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "privacy": "public",
     "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/roomac.png",

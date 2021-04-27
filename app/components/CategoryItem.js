@@ -4,7 +4,7 @@ import {
 	Text,
 	Image,
 	TouchableOpacity,
-	Dimensions,
+	useColorScheme,
 } from "react-native";
 import colors from "../themes/colors";
 
@@ -15,12 +15,46 @@ function CategoryItem({
 	displayCard = true,
 	selected,
 }) {
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		container: {
+			alignItems: "center",
+			justifyContent: "center",
+			paddingHorizontal: 12,
+			paddingVertical: 6,
+			borderRadius: 25,
+		},
+		image: {
+			height: 184,
+			borderRadius: 30,
+			borderTopLeftRadius: 5,
+			resizeMode: "cover",
+		},
+		title: {
+			color: colors(colorScheme).textSecondary,
+			fontSize: 14,
+			fontWeight: "500",
+			// marginTop: 8,
+			marginHorizontal: 8,
+		},
+		listContainer: {
+			flexDirection: "row",
+		},
+		listImage: {
+			resizeMode: "cover",
+			height: 125,
+			width: 125,
+			borderRadius: 10,
+		},
+	});
+
 	return (
 		<TouchableOpacity
 			style={[
 				styles.container,
 				selected && {
-					backgroundColor: colors.Powder_Blue,
+					backgroundColor: colors().Powder_Blue,
 				},
 			]}
 			onPress={onPress}
@@ -38,7 +72,7 @@ function CategoryItem({
 				style={[
 					styles.title,
 					selected && {
-						color: colors.textPrimary,
+						color: colors().textPrimary,
 					},
 				]}
 			>
@@ -47,37 +81,5 @@ function CategoryItem({
 		</TouchableOpacity>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		justifyContent: "center",
-		paddingHorizontal: 12,
-		paddingVertical: 6,
-		borderRadius: 25,
-	},
-	image: {
-		height: 184,
-		borderRadius: 30,
-		borderTopLeftRadius: 5,
-		resizeMode: "cover",
-	},
-	title: {
-		color: colors.textSecondary,
-		fontSize: 14,
-		fontWeight: "500",
-		// marginTop: 8,
-		marginHorizontal: 8,
-	},
-	listContainer: {
-		flexDirection: "row",
-	},
-	listImage: {
-		resizeMode: "cover",
-		height: 125,
-		width: 125,
-		borderRadius: 10,
-	},
-});
 
 export default CategoryItem;

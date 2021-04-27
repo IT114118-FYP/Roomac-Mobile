@@ -6,6 +6,7 @@ import {
 	Image,
 	TouchableOpacity,
 	Dimensions,
+	useColorScheme,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import moment from "moment";
@@ -19,6 +20,43 @@ const { height } = Dimensions.get("window");
 
 function ResourceItem({ item, onPress, dense }) {
 	const { i18n } = useTranslation();
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		container: {
+			backgroundColor: colors(colorScheme).backgroundSecondary,
+			borderRadius: sizing(4),
+			marginVertical: sizing(4),
+			marginHorizontal: sizing(6),
+			padding: sizing(1.5),
+		},
+		denseImage: {
+			height: sizing(23),
+			width: sizing(23),
+			borderRadius: sizing(4),
+			resizeMode: "cover",
+		},
+		image: {
+			height: height / 5,
+			borderRadius: sizing(4),
+			resizeMode: "cover",
+		},
+		infoContainer: {
+			marginVertical: sizing(2.5),
+			marginHorizontal: sizing(3),
+		},
+		title: {
+			fontSize: sizing(4),
+			fontWeight: "500",
+			marginVertical: sizing(1),
+			color: colors(colorScheme).textPrimary,
+		},
+		descriptionTitle: {
+			color: colors(colorScheme).textSecondary,
+			marginLeft: sizing(2),
+			fontSize: sizing(3),
+		},
+	});
 
 	return (
 		<TouchableOpacity
@@ -36,7 +74,7 @@ function ResourceItem({ item, onPress, dense }) {
 				<View style={styles.infoContainer}>
 					<Text
 						style={{
-							color: colors.textSecondary,
+							color: colors(colorScheme).textSecondary,
 							fontSize: sizing(3),
 							fontWeight: "500",
 						}}
@@ -69,7 +107,7 @@ function ResourceItem({ item, onPress, dense }) {
 						<MaterialCommunityIcons
 							name="account-multiple"
 							size={sizing(4)}
-							color={colors.textSecondary}
+							color={colors(colorScheme).textSecondary}
 						/>
 						<Text
 							style={styles.descriptionTitle}
@@ -79,7 +117,7 @@ function ResourceItem({ item, onPress, dense }) {
 						<MaterialCommunityIcons
 							name="clock"
 							size={sizing(4)}
-							color={colors.textSecondary}
+							color={colors(colorScheme).textSecondary}
 						/>
 						<Text style={styles.descriptionTitle}>
 							{moment(item.opening_time, "HH:mm:ss").format(
@@ -96,40 +134,5 @@ function ResourceItem({ item, onPress, dense }) {
 		</TouchableOpacity>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		backgroundColor: "#fff",
-		borderRadius: sizing(4),
-		marginVertical: sizing(4),
-		marginHorizontal: sizing(6),
-		padding: sizing(1.5),
-	},
-	denseImage: {
-		height: sizing(23),
-		width: sizing(23),
-		borderRadius: sizing(4),
-		resizeMode: "cover",
-	},
-	image: {
-		height: height / 5,
-		borderRadius: sizing(4),
-		resizeMode: "cover",
-	},
-	infoContainer: {
-		marginVertical: sizing(2.5),
-		marginHorizontal: sizing(3),
-	},
-	title: {
-		fontSize: sizing(4),
-		fontWeight: "500",
-		marginVertical: sizing(1),
-	},
-	descriptionTitle: {
-		color: colors.textSecondary,
-		marginLeft: sizing(2),
-		fontSize: sizing(3),
-	},
-});
 
 export default ResourceItem;

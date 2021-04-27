@@ -7,6 +7,7 @@ import {
 	FlatList,
 	TouchableOpacity,
 	TouchableWithoutFeedback,
+	useColorScheme,
 } from "react-native";
 import moment from "moment";
 
@@ -26,6 +27,53 @@ function Timeslot({
 	selectable = true,
 }) {
 	const { t, i18n } = useTranslation(["common"]);
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		wrapper: {
+			marginLeft: sizing(6),
+			marginVertical: sizing(4),
+		},
+		container: {
+			paddingVertical: sizing(2),
+			backgroundColor:
+				colorScheme === "light"
+					? colors(colorScheme).backgroundPrimary
+					: colors(colorScheme).backgroundSecondary,
+			// width: "80%",
+			width: WIDTH,
+			borderRadius: sizing(2),
+			alignItems: "center",
+		},
+		date: {
+			fontSize: sizing(3),
+			fontWeight: "500",
+			marginBottom: sizing(1),
+			marginLeft: sizing(2),
+			color: colors(colorScheme).textPrimary,
+		},
+		timeslot: {
+			width: WIDTH / 6.5,
+			paddingVertical: sizing(0.5),
+			// marginHorizontal: sizing(0.5),
+			margin: sizing(0.25),
+			borderRadius: sizing(0.5),
+			alignItems: "center",
+			justifyContent: "center",
+		},
+		past: {
+			backgroundColor: colors().textSecondary,
+		},
+		available: {
+			backgroundColor: "#32cd80",
+		},
+		unavailable: {
+			backgroundColor: "#d24747",
+		},
+		timeslotTitle: {
+			color: colors().textPrimary,
+		},
+	});
 	return (
 		<>
 			{selectable ? (
@@ -130,47 +178,5 @@ function Timeslot({
 		</>
 	);
 }
-
-const styles = StyleSheet.create({
-	wrapper: {
-		marginLeft: sizing(6),
-		marginVertical: sizing(4),
-	},
-	container: {
-		paddingVertical: sizing(2),
-		backgroundColor: colors.backgroundPrimary,
-		// width: "80%",
-		width: WIDTH,
-		borderRadius: sizing(2),
-		alignItems: "center",
-	},
-	date: {
-		fontSize: sizing(3),
-		fontWeight: "500",
-		marginBottom: sizing(1),
-		marginLeft: sizing(2),
-	},
-	timeslot: {
-		width: WIDTH / 6.5,
-		paddingVertical: sizing(0.5),
-		// marginHorizontal: sizing(0.5),
-		margin: sizing(0.25),
-		borderRadius: sizing(0.5),
-		alignItems: "center",
-		justifyContent: "center",
-	},
-	past: {
-		backgroundColor: colors.textSecondary,
-	},
-	available: {
-		backgroundColor: "#32cd80",
-	},
-	unavailable: {
-		backgroundColor: "#d24747",
-	},
-	timeslotTitle: {
-		color: colors.textPrimary,
-	},
-});
 
 export default Timeslot;

@@ -9,6 +9,7 @@ import {
 	Platform,
 	TouchableWithoutFeedback,
 	ScrollView,
+	useColorScheme,
 } from "react-native";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -27,6 +28,7 @@ import presetStyles, { sizing } from "../themes/presetStyles";
 
 function LoginScreen() {
 	const { t, i18n } = useTranslation(["Login", "common"]);
+	const colorScheme = useColorScheme();
 	const { logIn } = useAuth();
 	const [isLoading, setLoading] = useState(false);
 	const [loginFailed, setLoginFailed] = useState(false);
@@ -56,15 +58,12 @@ function LoginScreen() {
 				setLoginFailed(false);
 			})
 			.catch((error) => {
-				console.log("====================================");
 				console.log(error);
-				console.log("====================================");
 				if (error.response.status === 402) {
 					setLoginFailed(false);
 					Popup.show({
 						type: "Warning",
 						title: t("banTitle"),
-						// button: false,
 						buttonText: t("common:ok"),
 						textBody: t("banDescription", {
 							value: error.response.data,
@@ -79,8 +78,38 @@ function LoginScreen() {
 			.finally(() => setLoading(false));
 	};
 
+	const styles = StyleSheet.create({
+		container: {
+			paddingTop: sizing(4),
+			paddingHorizontal: sizing(6),
+		},
+		welcomeText: {
+			fontSize: sizing(5),
+			color: colors(colorScheme).textPrimary,
+		},
+		title: {
+			fontSize: sizing(14),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+		},
+		formContainer: {
+			marginVertical: sizing(6),
+		},
+		password: {
+			marginBottom: sizing(7),
+		},
+		loadingAnimation: {
+			alignItems: "center",
+			justifyContent: "center",
+			flex: 1,
+		},
+		form: {
+			flex: 1,
+		},
+	});
+
 	return (
-		<Screen style={[presetStyles.marginHorizontal, styles.container]}>
+		<Screen style={styles.container}>
 			<ScrollView
 				style={styles.form}
 				showsVerticalScrollIndicator={false}
@@ -139,7 +168,7 @@ function LoginScreen() {
 							>
 								<Text
 									style={{
-										color: colors.textSecondary,
+										color: colors(colorScheme).textSecondary,
 										fontSize: sizing(3),
 									}}
 								>
@@ -163,39 +192,5 @@ function LoginScreen() {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		marginTop: sizing(4),
-	},
-	welcomeText: {
-		fontSize: sizing(5),
-		color: colors.Oxford_Blue,
-	},
-	title: {
-		fontSize: sizing(14),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-	},
-	formContainer: {
-		marginVertical: sizing(6),
-	},
-	password: {
-		marginBottom: sizing(7),
-	},
-	loadingAnimation: {
-		alignItems: "center",
-		justifyContent: "center",
-		flex: 1,
-	},
-	classroomSvg: {
-		justifyContent: "center",
-		alignItems: "center",
-		marginBottom: 35,
-	},
-	form: {
-		flex: 1,
-	},
-});
 
 export default LoginScreen;

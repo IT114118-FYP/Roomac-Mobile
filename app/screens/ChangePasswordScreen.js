@@ -6,6 +6,7 @@ import {
 	TextInput,
 	Keyboard,
 	Modal,
+	useColorScheme,
 } from "react-native";
 import { Formik, useFormikContext } from "formik";
 import * as Yup from "yup";
@@ -36,6 +37,7 @@ const PasswordField = ({
 		touched,
 		values,
 	} = useFormikContext();
+	const colorScheme = useColorScheme();
 	return (
 		<View
 			style={[
@@ -50,7 +52,7 @@ const PasswordField = ({
 				<Text
 					style={{
 						fontSize: sizing(4),
-						color: colors.textSecondary,
+						color: colors(colorScheme).textPrimary,
 					}}
 				>
 					{title}
@@ -61,8 +63,9 @@ const PasswordField = ({
 				style={{
 					paddingTop: sizing(2),
 					borderBottomWidth: 1,
-					borderColor: colors.Oxford_Blue,
+					borderColor: colors(colorScheme).textPrimary,
 					fontSize: sizing(4),
+					color: colors(colorScheme).textPrimary,
 				}}
 				secureTextEntry
 				placeholder={placeholder}
@@ -76,7 +79,7 @@ const PasswordField = ({
 				<Text
 					style={{
 						fontSize: sizing(4),
-						color: "red",
+						color: colors(colorScheme).danger,
 						marginTop: sizing(1),
 					}}
 				>
@@ -99,7 +102,22 @@ function ChangePasswordScreen(props) {
 		routes.screens.CHANGE_PASSWORD,
 		"common",
 	]);
+	const colorScheme = useColorScheme();
 	const [isLoading, setLoading] = useState(false);
+
+	const styles = StyleSheet.create({
+		container: {
+			paddingHorizontal: sizing(6),
+		},
+		title: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+			marginTop: sizing(14),
+			marginBottom: sizing(4),
+			paddingHorizontal: sizing(6),
+		},
+	});
 
 	Yup.setLocale({
 		mixed: {
@@ -198,19 +216,5 @@ function ChangePasswordScreen(props) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: sizing(6),
-	},
-	title: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-		marginTop: sizing(14),
-		marginBottom: sizing(4),
-		paddingHorizontal: sizing(6),
-	},
-});
 
 export default ChangePasswordScreen;

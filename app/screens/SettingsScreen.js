@@ -9,6 +9,7 @@ import {
 	ScrollView,
 	ImageBackground,
 	TouchableWithoutFeedback,
+	useColorScheme,
 } from "react-native";
 import {
 	Feather,
@@ -32,6 +33,7 @@ const AVATAR = 90;
 
 function SettingsScreen({ navigation }) {
 	const { t, i18n } = useTranslation([routes.screens.SETTINGS]);
+	const colorScheme = useColorScheme();
 	const { user, logOut, fetchUser } = useAuth();
 	const [isBioAvailable, setBioAvailable] = useState(false);
 	const [isBioEnabled, setBioEnabled] = useState(false);
@@ -143,7 +145,7 @@ function SettingsScreen({ navigation }) {
 					>
 						<MaterialIcons
 							name="edit"
-							color={colors.backgroundPrimary}
+							color={colors(colorScheme).textPrimary}
 							size={sizing(4.5)}
 						/>
 					</TouchableOpacity>
@@ -151,7 +153,7 @@ function SettingsScreen({ navigation }) {
 			) : (
 				<View
 					style={{
-						backgroundColor: colors.Powder_Blue,
+						backgroundColor: colors(colorScheme).textPrimary,
 						height: AVATAR,
 						width: AVATAR,
 						marginBottom: sizing(4),
@@ -162,7 +164,7 @@ function SettingsScreen({ navigation }) {
 				>
 					<Text
 						style={{
-							color: colors.backgroundSecondary,
+							color: colors(colorScheme).backgroundSecondary,
 							fontSize: sizing(6),
 							fontWeight: "600",
 						}}
@@ -175,7 +177,7 @@ function SettingsScreen({ navigation }) {
 					>
 						<MaterialIcons
 							name="edit"
-							color={colors.backgroundPrimary}
+							color={colors(colorScheme).backgroundPrimary}
 							size={sizing(4.5)}
 						/>
 					</TouchableOpacity>
@@ -184,30 +186,69 @@ function SettingsScreen({ navigation }) {
 		</View>
 	);
 
-	const LanguageChevron = () => {
-		const { t, i18n } = useTranslation();
-
-		return (
-			<View style={presetStyles.row}>
-				<Text
-					style={{
-						color: colors.textSecondary,
-						fontSize: sizing(4),
-						marginRight: sizing(2),
-					}}
-				>
-					{
-						{
-							en: "English",
-							cn: "简体中文",
-							hk: "繁體中文",
-						}[i18n.language]
-					}
-				</Text>
-				<ChevronRight />
-			</View>
-		);
-	};
+	const styles = StyleSheet.create({
+		profileContainer: {
+			paddingHorizontal: sizing(6),
+		},
+		editImageIcon: {
+			position: "absolute",
+			bottom: sizing(-1.5),
+			right: sizing(-1.5),
+			alignItems: "center",
+			justifyContent: "center",
+			backgroundColor: "#000000c0",
+			padding: sizing(2),
+			borderRadius: sizing(10),
+			borderWidth: sizing(0.5),
+			borderColor: colors(colorScheme).textPrimary,
+		},
+		detailsContainer: {
+			marginLeft: sizing(4),
+		},
+		username: {
+			fontSize: sizing(7),
+			color: colors(colorScheme).textPrimary,
+			fontWeight: "600",
+		},
+		CNA: {
+			marginTop: sizing(1),
+			fontSize: sizing(4),
+			color: colors(colorScheme).textSecondary,
+		},
+		additionalDetailsContainer: {
+			marginTop: sizing(5),
+		},
+		additionalDetails: {
+			marginBottom: sizing(3),
+		},
+		additionalDetailsFont: {
+			marginLeft: sizing(3),
+			fontSize: sizing(4),
+			color: colors(colorScheme).textSecondary,
+		},
+		container: {
+			paddingHorizontal: sizing(6),
+		},
+		drawerToggle: {
+			marginTop: sizing(5),
+			paddingHorizontal: sizing(6),
+		},
+		title: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+			marginVertical: sizing(6),
+			paddingHorizontal: sizing(6),
+		},
+		header: {
+			fontSize: sizing(3.5),
+			color: colors(colorScheme).textSecondary,
+			flex: 1,
+		},
+		section: {
+			marginBottom: sizing(4),
+		},
+	});
 
 	const data = [
 		{
@@ -228,7 +269,7 @@ function SettingsScreen({ navigation }) {
 			id: 3,
 			title: t("logout"),
 			titleStyle: {
-				color: "red",
+				color: colors(colorScheme).danger,
 				fontWeight: "500",
 			},
 			onPress: () => {
@@ -254,7 +295,7 @@ function SettingsScreen({ navigation }) {
 			>
 				<Feather
 					name="menu"
-					color={colors.textPrimary}
+					color={colors(colorScheme).textPrimary}
 					size={sizing(5.5)}
 				/>
 			</TouchableOpacity>
@@ -291,7 +332,7 @@ function SettingsScreen({ navigation }) {
 							<MaterialCommunityIcons
 								name="email"
 								size={sizing(4)}
-								color={colors.textSecondary}
+								color={colors(colorScheme).textSecondary}
 							/>
 							<Text style={styles.additionalDetailsFont}>
 								{user.email}
@@ -303,7 +344,7 @@ function SettingsScreen({ navigation }) {
 							<MaterialCommunityIcons
 								name="book-open-page-variant"
 								size={sizing(4)}
-								color={colors.textSecondary}
+								color={colors(colorScheme).textSecondary}
 							/>
 							<Text style={styles.additionalDetailsFont}>
 								{`${user.program_id} (${user.branch_id})`}
@@ -320,7 +361,8 @@ function SettingsScreen({ navigation }) {
 									<View
 										style={{
 											height: 1,
-											backgroundColor: "#d0d0d0",
+											backgroundColor: colors(colorScheme)
+												.textSecondary,
 										}}
 									/>
 								)}
@@ -332,69 +374,5 @@ function SettingsScreen({ navigation }) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	profileContainer: {
-		paddingHorizontal: sizing(6),
-	},
-	editImageIcon: {
-		position: "absolute",
-		bottom: sizing(-1.5),
-		right: sizing(-1.5),
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "#000000c0",
-		padding: sizing(2),
-		borderRadius: sizing(10),
-		borderWidth: sizing(0.5),
-		borderColor: colors.backgroundSecondary,
-	},
-	detailsContainer: {
-		marginLeft: sizing(4),
-	},
-	username: {
-		fontSize: sizing(7),
-		color: colors.textPrimary,
-		fontWeight: "600",
-	},
-	CNA: {
-		marginTop: sizing(1),
-		fontSize: sizing(4),
-		color: colors.textSecondary,
-	},
-	additionalDetailsContainer: {
-		marginTop: sizing(5),
-	},
-	additionalDetails: {
-		marginBottom: sizing(3),
-	},
-	additionalDetailsFont: {
-		marginLeft: sizing(3),
-		fontSize: sizing(4),
-		color: colors.textSecondary,
-	},
-	container: {
-		paddingHorizontal: sizing(6),
-	},
-	drawerToggle: {
-		marginTop: sizing(5),
-		paddingHorizontal: sizing(6),
-	},
-	title: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-		marginVertical: sizing(6),
-		paddingHorizontal: sizing(6),
-	},
-	header: {
-		fontSize: sizing(3.5),
-		color: colors.textSecondary,
-		flex: 1,
-	},
-	section: {
-		marginBottom: sizing(4),
-	},
-});
 
 export default SettingsScreen;

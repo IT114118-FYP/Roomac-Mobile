@@ -5,6 +5,7 @@ import {
 	Text,
 	TouchableOpacity,
 	View,
+	useColorScheme,
 } from "react-native";
 import * as Localization from "expo-localization";
 
@@ -35,6 +36,7 @@ const LanguageOptions = [
 
 const LanguageItem = ({ item, selected, onPress }) => {
 	const { t, i18n } = useTranslation([routes.screens.CHANGE_LANGUAGE]);
+	const colorScheme = useColorScheme();
 	return (
 		<TouchableOpacity
 			onPress={onPress}
@@ -47,8 +49,10 @@ const LanguageItem = ({ item, selected, onPress }) => {
 					marginTop: sizing(4),
 					borderRadius: sizing(2),
 					backgroundColor: selected
-						? colors.Cyber_Grape
-						: colors.backgroundPrimary,
+						? colors(colorScheme).Cyber_Grape
+						: colorScheme === "light"
+						? colors(colorScheme).backgroundPrimary
+						: colors(colorScheme).backgroundSecondary,
 				},
 			]}
 		>
@@ -56,8 +60,8 @@ const LanguageItem = ({ item, selected, onPress }) => {
 				style={{
 					fontSize: sizing(4),
 					color: selected
-						? colors.backgroundPrimary
-						: colors.textPrimary,
+						? colors(colorScheme).backgroundPrimary
+						: colors(colorScheme).textPrimary,
 					fontWeight: selected ? "600" : "400",
 				}}
 			>
@@ -73,8 +77,8 @@ const LanguageItem = ({ item, selected, onPress }) => {
 							style={{
 								fontSize: sizing(4),
 								color: selected
-									? colors.backgroundPrimary
-									: colors.textSecondary,
+									? colors(colorScheme).backgroundPrimary
+									: colors(colorScheme).textSecondary,
 								fontWeight: "300",
 							}}
 						>
@@ -87,6 +91,7 @@ const LanguageItem = ({ item, selected, onPress }) => {
 
 function ChangeLanguageScreen(props) {
 	const { t, i18n } = useTranslation([routes.screens.CHANGE_LANGUAGE]);
+	const colorScheme = useColorScheme();
 	const [selected, setSelected] = useState(
 		LanguageOptions.find((lang) => lang.key === i18n.language)
 	);
@@ -95,6 +100,20 @@ function ChangeLanguageScreen(props) {
 		i18n.changeLanguage(selected.key);
 		storeLanguagePreference(selected);
 	}, [selected]);
+
+	const styles = StyleSheet.create({
+		container: {
+			paddingHorizontal: sizing(6),
+		},
+		title: {
+			fontSize: sizing(8),
+			fontWeight: "600",
+			color: colors(colorScheme).textPrimary,
+			marginTop: sizing(14),
+			marginBottom: sizing(2),
+			paddingHorizontal: sizing(6),
+		},
+	});
 
 	return (
 		<Screen>
@@ -119,7 +138,7 @@ function ChangeLanguageScreen(props) {
 					>
 						<Text
 							style={{
-								color: colors.textSecondary,
+								color: colors(colorScheme).textSecondary,
 								fontSize: sizing(4),
 								fontWeight: "300",
 							}}
@@ -132,19 +151,5 @@ function ChangeLanguageScreen(props) {
 		</Screen>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		paddingHorizontal: sizing(6),
-	},
-	title: {
-		fontSize: sizing(8),
-		fontWeight: "600",
-		color: colors.Oxford_Blue,
-		marginTop: sizing(14),
-		marginBottom: sizing(2),
-		paddingHorizontal: sizing(6),
-	},
-});
 
 export default ChangeLanguageScreen;

@@ -12,6 +12,7 @@ import {
 	RefreshControl,
 	Alert,
 	Button as DefaultButton,
+	useColorScheme,
 } from "react-native";
 
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
@@ -33,6 +34,7 @@ const { width, height } = Dimensions.get("screen");
 
 function BookingDetailsScreen({ route, navigation }) {
 	const { item: itemData, checkInClicked } = route.params;
+	const colorScheme = useColorScheme();
 	const { t, i18n } = useTranslation([
 		routes.screens.BOOKING_DETAILS,
 		"common",
@@ -133,6 +135,47 @@ function BookingDetailsScreen({ route, navigation }) {
 		fetchBranch();
 	}, []);
 
+	const styles = StyleSheet.create({
+		container: {
+			backgroundColor: colors(colorScheme).backgroundPrimary,
+		},
+		image: {
+			width,
+			height: height * 0.3,
+		},
+		date: {
+			fontSize: sizing(4),
+			paddingTop: sizing(6),
+			fontWeight: "400",
+			color: colors(colorScheme).textSecondary,
+		},
+		time: {
+			fontSize: sizing(6),
+			paddingTop: sizing(1),
+			fontWeight: "800",
+			color: colors(colorScheme).textPrimary,
+		},
+		title: {
+			fontSize: sizing(7),
+			paddingTop: sizing(1),
+			fontWeight: "500",
+			color: colors(colorScheme).textPrimary,
+		},
+		capacity: {
+			fontSize: sizing(4),
+			color: colors(colorScheme).textSecondary,
+			marginLeft: sizing(2),
+		},
+		marginHorizontal: {
+			marginHorizontal: sizing(6),
+		},
+		mapContainer: {
+			alignItems: "center",
+			marginHorizontal: sizing(6),
+			marginVertical: sizing(3),
+		},
+	});
+
 	return (
 		<ScrollView
 			style={styles.container}
@@ -194,7 +237,7 @@ function BookingDetailsScreen({ route, navigation }) {
 					<MaterialCommunityIcons
 						name="account-multiple"
 						size={sizing(4)}
-						color={colors.textSecondary}
+						color={colors(colorScheme).textSecondary}
 						style={styles.icon}
 					/>
 					<Text
@@ -219,14 +262,15 @@ function BookingDetailsScreen({ route, navigation }) {
 						<Button
 							style={{
 								marginRight: sizing(3),
-								backgroundColor: colors.Light_Orange,
+								backgroundColor: colors(colorScheme)
+									.Light_Orange,
 							}}
 							onPress={onEditHandler}
 						>
 							<MaterialIcons
 								name="edit"
-								size={sizing(6)}
-								color={colors.backgroundPrimary}
+								size={sizing(5)}
+								color={colors().backgroundPrimary}
 							/>
 						</Button>
 					)}
@@ -269,6 +313,7 @@ function BookingDetailsScreen({ route, navigation }) {
 								  })
 						}
 						style={{ flex: 1 }}
+						titleStyle={{ color: colors().backgroundPrimary }}
 						onPress={() => setCheckInClicked(true)}
 						disabled={
 							moment().isBetween(
@@ -289,12 +334,19 @@ function BookingDetailsScreen({ route, navigation }) {
 						{ marginTop: sizing(4) },
 					]}
 				>
-					<Text style={presetStyles.listHeader}>{t("status")}</Text>
+					<Text
+						style={[
+							presetStyles.listHeader,
+							{ color: colors(colorScheme).textPrimary },
+						]}
+					>
+						{t("status")}
+					</Text>
 					<Text
 						style={{
 							marginTop: sizing(1),
 							fontSize: sizing(6),
-							color: colors.textPrimary,
+							color: colors(colorScheme).textPrimary,
 							fontWeight: "bold",
 							color:
 								item.checkin_time == null
@@ -302,7 +354,7 @@ function BookingDetailsScreen({ route, navigation }) {
 									: moment(item.checkin_time).isAfter(
 											moment(item.start_time).add(15, "m")
 									  )
-									? colors.Light_Orange
+									? colors(colorScheme).Light_Orange
 									: "teal",
 						}}
 					>
@@ -337,6 +389,7 @@ function BookingDetailsScreen({ route, navigation }) {
 							presetStyles.listHeader,
 							{
 								marginBottom: sizing(4),
+								color: colors(colorScheme).textPrimary,
 							},
 						]}
 					>
@@ -346,9 +399,10 @@ function BookingDetailsScreen({ route, navigation }) {
 						style={{
 							text: {
 								fontSize: sizing(4),
-								color: colors.textSecondary,
+								color: colors(colorScheme).textSecondary,
 							},
 							list_item: {
+								color: colors(colorScheme).textSecondary,
 								flexDirection: "row",
 								justifyContent: "flex-start",
 								marginBottom: sizing(4),
@@ -376,7 +430,15 @@ function BookingDetailsScreen({ route, navigation }) {
 							},
 						]}
 					>
-						<Text style={[presetStyles.listHeader, { flex: 1 }]}>
+						<Text
+							style={[
+								presetStyles.listHeader,
+								{
+									flex: 1,
+									color: colors(colorScheme).textPrimary,
+								},
+							]}
+						>
 							{t(
 								routes.screens.DETAILED_RESOURCES +
 									":campusLocation",
@@ -471,43 +533,5 @@ function BookingDetailsScreen({ route, navigation }) {
 		</ScrollView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {},
-	image: {
-		width,
-		height: height * 0.3,
-	},
-	date: {
-		fontSize: sizing(4),
-		paddingTop: sizing(6),
-		fontWeight: "400",
-		color: colors.textSecondary,
-	},
-	time: {
-		fontSize: sizing(6),
-		paddingTop: sizing(1),
-		fontWeight: "800",
-		color: colors.textSecondary,
-	},
-	title: {
-		fontSize: sizing(7),
-		paddingTop: sizing(1),
-		fontWeight: "500",
-	},
-	capacity: {
-		fontSize: sizing(4),
-		color: colors.textSecondary,
-		marginLeft: sizing(2),
-	},
-	marginHorizontal: {
-		marginHorizontal: sizing(6),
-	},
-	mapContainer: {
-		alignItems: "center",
-		marginHorizontal: sizing(6),
-		marginVertical: sizing(3),
-	},
-});
 
 export default BookingDetailsScreen;

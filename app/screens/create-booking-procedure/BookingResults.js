@@ -1,5 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Text, Dimensions } from "react-native";
+import {
+	View,
+	StyleSheet,
+	Text,
+	Dimensions,
+	useColorScheme,
+} from "react-native";
 import LottieView from "lottie-react-native";
 import * as Animable from "react-native-animatable";
 
@@ -11,6 +17,32 @@ const { width } = Dimensions.get("window");
 
 function BookingResults({ isBookingLoading, isSuccesss, bookingRef }) {
 	const { t } = useTranslation([routes.screens.CREATE_BOOKING]);
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		container: {
+			alignItems: "center",
+		},
+		success: {
+			color: colors(colorScheme).secondary,
+			fontSize: sizing(7),
+			fontWeight: "800",
+		},
+		failed: {
+			color: "#CD5050",
+			fontSize: sizing(7),
+			fontWeight: "800",
+		},
+		ref: {
+			color: colors(colorScheme).Cyber_Grape,
+			margin: sizing(2),
+		},
+		animation: {
+			width: width * 0.4,
+			height: width * 0.4,
+		},
+	});
+
 	return (
 		<View style={styles.container}>
 			{isBookingLoading ? (
@@ -52,29 +84,5 @@ function BookingResults({ isBookingLoading, isSuccesss, bookingRef }) {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-	},
-	success: {
-		color: colors.secondary,
-		fontSize: sizing(7),
-		fontWeight: "800",
-	},
-	failed: {
-		color: "#CD5050",
-		fontSize: sizing(7),
-		fontWeight: "800",
-	},
-	ref: {
-		color: colors.Cyber_Grape,
-		margin: sizing(2),
-	},
-	animation: {
-		width: width * 0.4,
-		height: width * 0.4,
-	},
-});
 
 export default BookingResults;

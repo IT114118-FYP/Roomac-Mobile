@@ -4,7 +4,7 @@ import {
 	StyleSheet,
 	Text,
 	TouchableOpacity,
-	Animated,
+	useColorScheme,
 } from "react-native";
 import { useTranslation } from "react-i18next";
 
@@ -25,6 +25,59 @@ function ViewBookingListItem({
 	statusLate,
 }) {
 	const { t, i18n } = useTranslation([routes.screens.VIEW_BOOKINGS]);
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		leftSide: {
+			flex: 1,
+		},
+		date: {
+			fontSize: sizing(3),
+			marginBottom: sizing(1),
+			color: colors(colorScheme).textSecondary,
+		},
+		location: {
+			color: colors(colorScheme).textPrimary,
+			fontSize: sizing(4),
+			fontWeight: "500",
+		},
+		period: {
+			color: colors(colorScheme).textPrimary,
+			fontSize: sizing(4),
+			fontWeight: "500",
+			textAlign: "right",
+		},
+		checkinButtonDisabled: {
+			// borderWidth: 1,
+			// borderColor: colors(colorScheme).backgroundPrimary,
+			// backgroundColor: colors(colorScheme).backgroundSecondary,
+			borderRadius: sizing(2),
+			paddingVertical: sizing(1.5),
+			paddingHorizontal: sizing(3),
+		},
+		checkinButton: {
+			// borderWidth: 1,
+			// borderColor: colors(colorScheme).backgroundPrimary,
+			backgroundColor: colors().backgroundSecondary,
+			borderRadius: sizing(2),
+			paddingVertical: sizing(1.5),
+			paddingHorizontal: sizing(3),
+		},
+		checkinTextDisabled: {
+			color: colors(colorScheme).Cyber_Grape,
+			fontWeight: "700",
+			fontSize: sizing(3.5),
+		},
+		checkinText: {
+			color:
+				colorScheme === "light"
+					? colors(colorScheme).backgroundPrimary
+					: colors(colorScheme).textPrimary,
+			fontWeight: "700",
+			fontSize: sizing(3.5),
+		},
+	});
+
 	return (
 		<TouchableOpacity
 			onPress={onPress}
@@ -34,11 +87,13 @@ function ViewBookingListItem({
 					padding: sizing(3.5),
 					borderRadius: sizing(2),
 					backgroundColor: active
-						? colors.primary
-						: colors.backgroundPrimary,
+						? colors(colorScheme).primary
+						: colorScheme === "light"
+						? colors(colorScheme).backgroundPrimary
+						: colors(colorScheme).backgroundSecondary,
 				},
 				active && {
-					shadowColor: colors.primary,
+					shadowColor: colors(colorScheme).primary,
 				},
 			]}
 		>
@@ -48,7 +103,10 @@ function ViewBookingListItem({
 						style={[
 							styles.date,
 							active && {
-								color: colors.backgroundSecondary,
+								color:
+									colorScheme === "light"
+										? colors(colorScheme).backgroundPrimary
+										: colors(colorScheme).textPrimary,
 							},
 						]}
 					>
@@ -58,7 +116,10 @@ function ViewBookingListItem({
 						style={[
 							styles.location,
 							active && {
-								color: colors.backgroundSecondary,
+								color:
+									colorScheme === "light"
+										? colors(colorScheme).backgroundPrimary
+										: colors(colorScheme).textPrimary,
 							},
 						]}
 						numberOfLines={1}
@@ -70,7 +131,10 @@ function ViewBookingListItem({
 					style={[
 						styles.period,
 						active && {
-							color: colors.backgroundSecondary,
+							color:
+								colorScheme === "light"
+									? colors(colorScheme).backgroundPrimary
+									: colors(colorScheme).textPrimary,
 						},
 					]}
 				>
@@ -85,7 +149,7 @@ function ViewBookingListItem({
 							color: {
 								no: "teal",
 								na: "red",
-								late: colors.Light_Orange,
+								late: colors(colorScheme).Light_Orange,
 							}[statusLate],
 							flexDirection: "row-reverse",
 							marginTop: sizing(2),
@@ -126,51 +190,5 @@ function ViewBookingListItem({
 		</TouchableOpacity>
 	);
 }
-
-const styles = StyleSheet.create({
-	leftSide: {
-		flex: 1,
-	},
-	date: {
-		fontSize: sizing(3),
-		marginBottom: sizing(1),
-		color: colors.textSecondary,
-	},
-	location: {
-		fontSize: sizing(4),
-		fontWeight: "500",
-	},
-	period: {
-		fontSize: sizing(4),
-		fontWeight: "500",
-		textAlign: "right",
-	},
-	checkinButtonDisabled: {
-		// borderWidth: 1,
-		// borderColor: colors.backgroundPrimary,
-		// backgroundColor: colors.backgroundSecondary,
-		borderRadius: sizing(2),
-		paddingVertical: sizing(1.5),
-		paddingHorizontal: sizing(3),
-	},
-	checkinButton: {
-		// borderWidth: 1,
-		// borderColor: colors.backgroundPrimary,
-		backgroundColor: colors.backgroundSecondary,
-		borderRadius: sizing(2),
-		paddingVertical: sizing(1.5),
-		paddingHorizontal: sizing(3),
-	},
-	checkinTextDisabled: {
-		color: colors.Cyber_Grape,
-		fontWeight: "700",
-		fontSize: sizing(3.5),
-	},
-	checkinText: {
-		color: colors.backgroundPrimary,
-		fontWeight: "700",
-		fontSize: sizing(3.5),
-	},
-});
 
 export default ViewBookingListItem;

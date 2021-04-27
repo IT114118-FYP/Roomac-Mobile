@@ -1,12 +1,11 @@
 import React from "react";
 import {
 	View,
-	StyleSheet,
 	Text,
-	TouchableOpacity,
 	SafeAreaView,
 	Alert,
 	Image,
+	useColorScheme,
 } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
@@ -24,8 +23,15 @@ function DrawerContent(props) {
 		"common",
 		routes.screens.SETTINGS,
 	]);
+	const colorScheme = useColorScheme();
+
 	return (
-		<SafeAreaView style={{ flex: 1 }}>
+		<SafeAreaView
+			style={{
+				flex: 1,
+				backgroundColor: colors(colorScheme).backgroundSecondary,
+			}}
+		>
 			<View
 				style={{
 					alignItems: "center",
@@ -48,7 +54,7 @@ function DrawerContent(props) {
 				) : (
 					<View
 						style={{
-							backgroundColor: colors.Powder_Blue,
+							backgroundColor: colors(colorScheme).Powder_Blue,
 							height: 135,
 							width: 135,
 							marginVertical: sizing(4),
@@ -59,7 +65,7 @@ function DrawerContent(props) {
 					>
 						<Text
 							style={{
-								color: colors.backgroundSecondary,
+								color: colors(colorScheme).backgroundSecondary,
 								fontSize: sizing(10),
 								fontWeight: "600",
 							}}
@@ -72,7 +78,7 @@ function DrawerContent(props) {
 					style={{
 						fontSize: sizing(6),
 						fontWeight: "500",
-						color: colors.textPrimary,
+						color: colors(colorScheme).textPrimary,
 					}}
 				>
 					{
@@ -86,7 +92,7 @@ function DrawerContent(props) {
 				<Text
 					style={{
 						fontSize: sizing(3),
-						color: colors.textSecondary,
+						color: colors(colorScheme).textSecondary,
 						marginTop: sizing(2),
 					}}
 					numberOfLines={1}
@@ -107,11 +113,14 @@ function DrawerContent(props) {
 					icon={({ color, size }) => (
 						<MaterialCommunityIcons
 							name="home"
-							color={color}
+							color={colors(colorScheme).textPrimary}
 							size={size}
 						/>
 					)}
 					label={t("home")}
+					labelStyle={{
+						color: colors(colorScheme).textPrimary,
+					}}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.HOME);
 					}}
@@ -120,11 +129,14 @@ function DrawerContent(props) {
 					icon={({ color, size }) => (
 						<MaterialCommunityIcons
 							name="clipboard-text"
-							color={color}
+							color={colors(colorScheme).textPrimary}
 							size={size}
 						/>
 					)}
 					label={t("bookings")}
+					labelStyle={{
+						color: colors(colorScheme).textPrimary,
+					}}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.BOOKINGS, {
 							screen: routes.screens.VIEW_BOOKINGS,
@@ -136,11 +148,14 @@ function DrawerContent(props) {
 					icon={({ color, size }) => (
 						<MaterialCommunityIcons
 							name="map"
-							color={color}
+							color={colors(colorScheme).textPrimary}
 							size={size}
 						/>
 					)}
 					label={t("campuses")}
+					labelStyle={{
+						color: colors(colorScheme).textPrimary,
+					}}
 					onPress={() => {
 						props.navigation.navigate(
 							routes.screens.CAMPUS_LOCATIONS
@@ -151,11 +166,14 @@ function DrawerContent(props) {
 					icon={({ color, size }) => (
 						<Ionicons
 							name="ios-settings"
-							color={color}
+							color={colors(colorScheme).textPrimary}
 							size={size}
 						/>
 					)}
 					label={t("settings")}
+					labelStyle={{
+						color: colors(colorScheme).textPrimary,
+					}}
 					onPress={() => {
 						props.navigation.navigate(routes.navigators.SETTINGS);
 					}}
@@ -183,11 +201,14 @@ function DrawerContent(props) {
 				icon={({ color, size }) => (
 					<MaterialCommunityIcons
 						name="logout"
-						color={color}
+						color={colors(colorScheme).textPrimary}
 						size={size}
 					/>
 				)}
 				label={t("common:logout")}
+				labelStyle={{
+					color: colors(colorScheme).textPrimary,
+				}}
 				onPress={() => {
 					Alert.alert(
 						t("common:logout"),

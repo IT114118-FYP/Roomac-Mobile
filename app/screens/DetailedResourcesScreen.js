@@ -10,6 +10,7 @@ import {
 	RefreshControl,
 	Button,
 	ImageBackground,
+	useColorScheme,
 } from "react-native";
 import * as Animatable from "react-native-animatable";
 import * as Location from "expo-location";
@@ -35,6 +36,7 @@ const TIMESLOT_WIDTH = width * sizing(0.2);
 function DetailedResourcesScreen({ route, navigation }) {
 	const { t, i18n } = useTranslation([routes.screens.DETAILED_RESOURCES]);
 	const { item } = route.params;
+	const colorScheme = useColorScheme();
 	const [isLoading, setLoading] = useState(true);
 	const [timeslot, setTimeslot] = useState({});
 	const [distance, setDistance] = useState(null);
@@ -55,6 +57,38 @@ function DetailedResourcesScreen({ route, navigation }) {
 	// 	);
 	// 	setDistance(Math.round((dist / 1000 + Number.EPSILON) * 100) / 100);
 	// };
+
+	const styles = StyleSheet.create({
+		container: {
+			flex: 1,
+			backgroundColor: colors(colorScheme).backgroundPrimary,
+		},
+		detailContainer: {
+			marginHorizontal: sizing(6),
+			marginTop: sizing(4),
+			flexDirection: "row",
+		},
+		image: {
+			height: MAX_HEIGHT,
+			resizeMode: "cover",
+		},
+		title: {
+			fontSize: 24,
+			fontWeight: "500",
+			// margin: 15,
+			flex: 1,
+			color: colors(colorScheme).textPrimary,
+		},
+		marginHorizontal: {
+			marginHorizontal: sizing(6),
+		},
+		mapContainer: {
+			alignItems: "center",
+			marginHorizontal: sizing(6),
+			marginVertical: sizing(3),
+		},
+		tint: { flex: 1, justifyContent: "flex-end" },
+	});
 
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", () => {
@@ -114,6 +148,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 					title={t("common:pullToRefresh")}
 				/>
 			}
+			style={styles.container}
 		>
 			<ImageBackground
 				source={{
@@ -141,11 +176,11 @@ function DetailedResourcesScreen({ route, navigation }) {
 					<MaterialIcons
 						name="location-on"
 						size={sizing(4)}
-						color={colors.textSecondary}
+						color={colors(colorScheme).textSecondary}
 					/>
 					<Text
 						style={{
-							color: colors.textSecondary,
+							color: colors(colorScheme).textSecondary,
 							marginLeft: sizing(2),
 						}}
 					>
@@ -164,11 +199,11 @@ function DetailedResourcesScreen({ route, navigation }) {
 					<MaterialCommunityIcons
 						name="clock"
 						size={sizing(4)}
-						color={colors.textSecondary}
+						color={colors(colorScheme).textSecondary}
 					/>
 					<Text
 						style={{
-							color: colors.textSecondary,
+							color: colors(colorScheme).textSecondary,
 							marginLeft: sizing(1.5),
 						}}
 					>
@@ -186,12 +221,12 @@ function DetailedResourcesScreen({ route, navigation }) {
 					<MaterialCommunityIcons
 						name="account-multiple"
 						size={sizing(4)}
-						color={colors.textSecondary}
+						color={colors(colorScheme).textSecondary}
 						style={styles.icon}
 					/>
 					<Text
 						style={{
-							color: colors.textSecondary,
+							color: colors(colorScheme).textSecondary,
 							marginLeft: sizing(2),
 						}}
 					>{`${item.min_user} - ${item.max_user}`}</Text>
@@ -206,6 +241,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 							styles.marginHorizontal,
 							{
 								marginTop: sizing(4),
+								color: colors(colorScheme).textPrimary,
 							},
 						]}
 					>
@@ -217,7 +253,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 							styles.marginHorizontal,
 							{
 								marginTop: sizing(1),
-								color: colors.textSecondary,
+								color: colors(colorScheme).textSecondary,
 							},
 						]}
 					>
@@ -237,7 +273,7 @@ function DetailedResourcesScreen({ route, navigation }) {
 							{ color: "#32cd80", availability: t("available") },
 							{ color: "#d24747", availability: t("booked") },
 							{
-								color: colors.textSecondary,
+								color: colors(colorScheme).textSecondary,
 								availability: t("past"),
 							},
 						].map((item, index) => (
@@ -300,7 +336,12 @@ function DetailedResourcesScreen({ route, navigation }) {
 					},
 				]}
 			>
-				<Text style={[presetStyles.listHeader, { flex: 1 }]}>
+				<Text
+					style={[
+						presetStyles.listHeader,
+						{ flex: 1, color: colors(colorScheme).textPrimary },
+					]}
+				>
 					{t("campusLocation", {
 						value: {
 							en: item.branch.title_en,
@@ -351,35 +392,5 @@ function DetailedResourcesScreen({ route, navigation }) {
 		</ScrollView>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-	},
-	detailContainer: {
-		marginHorizontal: sizing(6),
-		marginTop: sizing(4),
-		flexDirection: "row",
-	},
-	image: {
-		height: MAX_HEIGHT,
-		resizeMode: "cover",
-	},
-	title: {
-		fontSize: 24,
-		fontWeight: "500",
-		// margin: 15,
-		flex: 1,
-	},
-	marginHorizontal: {
-		marginHorizontal: sizing(6),
-	},
-	mapContainer: {
-		alignItems: "center",
-		marginHorizontal: sizing(6),
-		marginVertical: sizing(3),
-	},
-	tint: { flex: 1, justifyContent: "flex-end" },
-});
 
 export default DetailedResourcesScreen;

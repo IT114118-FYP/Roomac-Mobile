@@ -3,6 +3,8 @@ import { View, StyleSheet, Text, TextInput } from "react-native";
 import { useFormikContext } from "formik";
 
 import colors from "../themes/colors";
+import { sizing } from "../themes/presetStyles";
+import useColorScheme from "react-native/Libraries/Utilities/useColorScheme";
 
 function Textfield({ name, title, helperText, placeholder, style, ...props }) {
 	const {
@@ -12,6 +14,27 @@ function Textfield({ name, title, helperText, placeholder, style, ...props }) {
 		touched,
 		values,
 	} = useFormikContext();
+	const colorScheme = useColorScheme();
+
+	const styles = StyleSheet.create({
+		container: {
+			marginVertical: sizing(3),
+		},
+		input: {
+			paddingTop: sizing(2),
+			borderBottomWidth: 1,
+			borderColor: colors(colorScheme).textPrimary,
+		},
+		text: {
+			color: colors(colorScheme).textPrimary,
+			fontSize: sizing(4.5),
+		},
+		helperText: {
+			fontSize: sizing(4),
+			color: colors(colorScheme).danger,
+			marginTop: sizing(1),
+		},
+	});
 
 	return (
 		<View style={[styles.container, style]}>
@@ -19,6 +42,7 @@ function Textfield({ name, title, helperText, placeholder, style, ...props }) {
 			<TextInput
 				id={name}
 				style={[styles.text, styles.input]}
+				placeholderTextColor={colors(colorScheme).textSecondary + "77"}
 				placeholder={placeholder}
 				onChangeText={(text) => setFieldValue(name, text)}
 				onBlur={() => setFieldTouched(name)}
@@ -32,25 +56,5 @@ function Textfield({ name, title, helperText, placeholder, style, ...props }) {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		marginVertical: 12,
-	},
-	input: {
-		paddingTop: 7,
-		borderBottomWidth: 1,
-		borderColor: colors.Oxford_Blue,
-	},
-	text: {
-		color: colors.Oxford_Blue,
-		fontSize: 18,
-	},
-	helperText: {
-		fontSize: 16,
-		color: "red",
-		marginTop: 5,
-	},
-});
 
 export default Textfield;

@@ -17,7 +17,7 @@ export default {
 		checkedIn: "已簽到 ({{value}})",
 		checkIn: "簽到",
 		lateCheckIn: "已簽到 (遲了{{value}}分鐘)",
-		late: "已簽到 (遲到 {{value}})",
+		late: "簽到 (遲到 {{value}})",
 		notCheckIn: "未簽到",
 		short: "{{label}}應該至少要有{{value}}字母",
 		required: "{{label}}是必填的",
