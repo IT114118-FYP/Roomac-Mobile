@@ -364,6 +364,19 @@ function CreateBookingScreen({ route, navigation }) {
 														title={
 															item.preceedButtonText
 														}
+														titleStyle={{
+															color:
+																colorScheme ===
+																"light"
+																	? colors(
+																			colorScheme
+																	  )
+																			.Languid_Lavende
+																	: colors(
+																			colorScheme
+																	  )
+																			.textSecondary,
+														}}
 														onPress={() =>
 															handleOnMainPress(
 																index

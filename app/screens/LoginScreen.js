@@ -187,6 +187,10 @@ function LoginScreen() {
 				<LottieView
 					source={require("../../assets/loading.json")}
 					autoPlay
+					style={{
+						flex: 1,
+						backgroundColor: colors(colorScheme).backgroundPrimary,
+					}}
 				/>
 			</Modal>
 		</Screen>

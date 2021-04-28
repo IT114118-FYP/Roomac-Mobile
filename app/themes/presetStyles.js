@@ -17,7 +17,7 @@ const presetStyles = StyleSheet.create({
 	listHeader: {
 		fontSize: 16,
 		fontWeight: "500",
-		color: colors.textPrimary,
+		color: colors().textPrimary,
 	},
 	row: {
 		flexDirection: "row",

@@ -22,7 +22,11 @@ function Button({ title, onPress, style, titleStyle, children, disabled }) {
 		title: {
 			fontSize: sizing(4),
 			fontWeight: "600",
-			color: colors(colorScheme).textPrimary,
+			// color: colors(colorScheme).textPrimary,
+			color:
+				colorScheme === "light"
+					? colors(colorScheme).backgroundPrimary
+					: colors(colorScheme).textSecondary,
 		},
 	});
 

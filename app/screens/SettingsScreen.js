@@ -145,7 +145,11 @@ function SettingsScreen({ navigation }) {
 					>
 						<MaterialIcons
 							name="edit"
-							color={colors(colorScheme).textPrimary}
+							color={
+								colorScheme === "light"
+									? colors(colorScheme).backgroundPrimary
+									: colors(colorScheme).textPrimary
+							}
 							size={sizing(4.5)}
 						/>
 					</TouchableOpacity>
@@ -200,7 +204,10 @@ function SettingsScreen({ navigation }) {
 			padding: sizing(2),
 			borderRadius: sizing(10),
 			borderWidth: sizing(0.5),
-			borderColor: colors(colorScheme).textPrimary,
+			borderColor:
+				colorScheme === "light"
+					? colors(colorScheme).backgroundPrimary
+					: colors(colorScheme).textPrimary,
 		},
 		detailsContainer: {
 			marginLeft: sizing(4),

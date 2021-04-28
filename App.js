@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LogBox, Alert } from "react-native";
+import { LogBox, Alert, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import LottieView from "lottie-react-native";
 import * as LocalAuthentication from "expo-local-authentication";
@@ -17,12 +17,13 @@ import AppDrawer from "./app/navigations/AppDrawer";
 
 import i18n from "./app/i18n/config";
 import { I18nextProvider, useTranslation } from "react-i18next";
-import bookingsApi from "./app/api/bookings";
+import colors from "./app/themes/colors";
 
 export default function App() {
 	const [user, setUser] = useState();
 	const [isReady, setIsReady] = useState(false);
 	const { t } = useTranslation(["app", "common"]);
+	const colorScheme = useColorScheme();
 	const netInfo = useNetInfo();
 
 	if (netInfo.type !== "unknown" && netInfo.isInternetReachable === false) {
@@ -112,6 +113,8 @@ export default function App() {
 							source={require("./assets/roomac-animation.json")}
 							style={{
 								flex: 1,
+								backgroundColor: colors(colorScheme)
+									.backgroundPrimary,
 							}}
 							autoPlay
 							loop
