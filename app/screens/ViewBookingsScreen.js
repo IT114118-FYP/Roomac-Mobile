@@ -170,16 +170,19 @@ function ViewBookingsScreen({ navigation }) {
 				const current = moment();
 				var upcomingData = [];
 				var historyData = [];
+				var activeBooking = null;
 				bookings.forEach((booking) => {
 					if (
 						moment().isBetween(booking.start_time, booking.end_time)
 					) {
+						activeBooking = booking;
 						setActiveBooking(booking);
 					} else if (moment(booking.start_time).isAfter(current)) {
 						upcomingData.push(booking);
 					} else {
 						historyData.push(booking);
 					}
+					if (!Boolean(activeBooking)) setActiveBooking(null);
 				});
 				upcomingData.sort((a, b) =>
 					moment(a.start_time).isAfter(moment(b.start_time))

@@ -23,7 +23,7 @@
       "infoPlist": {
         "NSFaceIDUsageDescription": "This app will optionally use Face ID or Touch ID to save login"
       },
-      "bundleIdentifier": "com.mrggto.roomac",
+      "bundleIdentifier": "com.it114118group6.roomac",
       "buildNumber": "1.0.0"
     },
     "android": {
@@ -31,7 +31,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.mrggto.roomac"
+      "package": "com.it114118group6.roomac"
     },
     "web": {
       "favicon": "./assets/favicon.png"
