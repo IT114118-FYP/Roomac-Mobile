@@ -164,11 +164,19 @@ function DetailedResourcesScreen({ route, navigation }) {
 			<StatusBar barStyle="light-content" animated={true} />
 			<View style={styles.detailContainer}>
 				<Text style={styles.title}>{`${item.number} ${
-					{
-						en: item.title_en,
-						hk: item.title_hk,
-						cn: item.title_cn,
-					}[i18n.language]
+					Boolean(
+						{
+							en: item.title_en,
+							hk: item.title_hk,
+							cn: item.title_cn,
+						}[i18n.language]
+					)
+						? {
+								en: item.title_en,
+								hk: item.title_hk,
+								cn: item.title_cn,
+						  }[i18n.language]
+						: ""
 				}`}</Text>
 			</View>
 			<View style={presetStyles.marginHorizontal}>
