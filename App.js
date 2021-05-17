@@ -18,6 +18,7 @@ import AppDrawer from "./app/navigations/AppDrawer";
 import i18n from "./app/i18n/config";
 import { I18nextProvider, useTranslation } from "react-i18next";
 import colors from "./app/themes/colors";
+import storage from "./app/auth/storage";
 
 export default function App() {
 	const [user, setUser] = useState();
@@ -53,6 +54,13 @@ export default function App() {
 				{
 					text: t("retry"),
 					onPress: () => loadBiometrics(),
+				},
+				{
+					text: t("Log out"),
+					onPress: () => {
+						storage.removeToken();
+						alert("Please reload the application");
+					},
 				},
 			],
 			{ cancelable: false }
@@ -113,8 +121,8 @@ export default function App() {
 							source={require("./assets/roomac-animation.json")}
 							style={{
 								flex: 1,
-								backgroundColor: colors(colorScheme)
-									.backgroundPrimary,
+								backgroundColor:
+									colors(colorScheme).backgroundPrimary,
 							}}
 							autoPlay
 							loop

@@ -148,6 +148,7 @@ function SelectTime({
 								marginLeft: sizing(2),
 								color: colors(colorScheme).primary,
 								fontSize: sizing(4),
+								fontWeight: "500",
 							}}
 						>
 							{t("extend", {
@@ -174,6 +175,7 @@ function SelectTime({
 								marginLeft: sizing(2),
 								color: colors(colorScheme).primary,
 								fontSize: sizing(4),
+								fontWeight: "500",
 							}}
 						>
 							{t("changeTime")}
@@ -190,6 +192,7 @@ function SelectTime({
 					style={{
 						padding: sizing(4),
 						// paddingBottom: 0,
+						backgroundColor: colors(colorScheme).backgroundPrimary,
 					}}
 				>
 					<TouchableOpacity onPress={() => setSelectTimeOpen(false)}>

@@ -375,7 +375,7 @@ function CreateBookingScreen({ route, navigation }) {
 																	: colors(
 																			colorScheme
 																	  )
-																			.textSecondary,
+																			.textPrimary,
 														}}
 														onPress={() =>
 															handleOnMainPress(
